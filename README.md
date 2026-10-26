@@ -48,7 +48,7 @@ Start at `fences/README.md` for the shared grammar: lines, cells, notes, attribu
 
 | Site | Repo | Theme or parser | Status |
 |---|---|---|---|
-| bruce-loves-to-cook.ca | `~/writing/not-a-chef` | Fugu (`robotpony/hugo-theme-fugu`) | Implements `formula` and `stack`, notes included |
+| bruce-loves-to-cook.ca | `~/writing/not-a-chef` | Fugu (`robotpony/hugo-theme-fugu`) | Implements `formula` and `stack`, with notes and warning codes (Fugu 9fc6950) |
 | warpedvisions.org | `~/projects/sites/w42` | w42 theme 0.7.3 | Implements `timeline`, `flow` and `tabs`, with warning codes; the tabs shortcode is on its way out |
 | Scorekeep | `~/projects/utilities/scorekeep` | Swift `RulesDocument` and the `site/` hooks | Moving from `@` placeholders to fences, with its parser rewritten to the spec |
 

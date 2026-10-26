@@ -16,7 +16,7 @@ Bruce, tick to approve, or write a change after the item.
 - [ ] A block with no valid lines shows its source as preformatted text, never nothing. w42's hooks change to match, and so does the formula hook's extra-cell gap (`formula.md`). See "Bad lines".
 - [ ] Project extensions stay outside the spec: Scorekeep's `@if` may wrap whole fences but never sits inside a body, `{key}` substitution runs before parsing, and w42's (i) source toggle is optional. See "Project extensions".
 - [ ] Card and dice tokens in `table.md`: die faces written `d1`–`d6` (easy to type) rather than `⚀`–`⚅` (pictures in plain text, but hard to type and tiny), `Joker` as a token, and `stack:7♣` for the topped stack (a plainer spelling is welcome). See `table.md`, "Tokens".
-- [ ] Tabs: design it next, with a longer outer fence (```` ````tabs ````) so a tab can hold another fence. See "Open".
+- [ ] Tabs as a fence (`tabs.md`): `tab: Label` lines start panels, each panel is ordinary Markdown, `{layout="side"}` or `{layout="stack"}` as today, and an outer fence with more backticks than any fence inside it. In Obsidian it reads as clear source text, which is enough (Bruce, 2026-10-26). warped-agent prefers `=== Label` to `tab: Label` as the panel line, since it can't be mistaken for prose; `tab:` matches `flow`'s `row:`. Pick one.
 
 ## Words used here
 
@@ -55,7 +55,7 @@ The table from above, then your hand up close.
 
 ## Kinds
 
-Every type is one of three kinds. Its kind decides what the body has to say on its own.
+Every type is one of four kinds. Its kind decides what the body has to say on its own.
 
 **Diagram** (`formula`, `stack`, `timeline`, `flow`) draws something the prose around it already states. It MUST NOT add anything the text doesn't say, so a reader who can't see the drawing loses nothing.
 
@@ -84,9 +84,21 @@ A hole's four hands turned face-up and totalled, the low one circled.
 ```
 ````
 
+**Layout** (`tabs`) arranges ordinary Markdown: each part of the body is Markdown the page would show anyway, and the type sets it side by side or switchable. Its fallback is that Markdown as source text, in order, which MUST read clearly. Images don't preview there; the site's local preview is where a layout is checked.
+
+`````markdown
+````tabs {layout="side"}
+tab: Pan
+Fry in 1 cm of oil at 175°C, 4 to 5 minutes a side.
+
+tab: Oven
+Bake on a rack at 220°C for 25 minutes, turning once.
+````
+`````
+
 ## Lines
 
-Whitespace at either end of a line is ignored, and blank lines are skipped. Every other line is a keyword line, a row, or a text line. Each type page says which of these it takes.
+Whitespace at either end of a line is ignored, and blank lines are skipped. Every other line is a keyword line, a row, or a text line. Each type page says which of these it takes. (Layout types are the exception: between their keyword lines the body is block Markdown, blank lines and all.)
 
 ````markdown
 ```flow
@@ -158,7 +170,7 @@ Attributes carry what a plain-text reader doesn't need. The body MUST make sense
 | `draw` | Which drawing a placeholder shows, from the drawings its target knows. Several words are an ordered list. | Lowercase words, space-separated. The type page lists them. | `{draw="table hand"}`: the table, then the hand. |
 | `class` | A styling hint for one site. | Any. | `{class="warped-graph"}` |
 
-`name` and `draw` do different jobs: `name` labels this block so it can be found, and `draw` picks something drawn elsewhere. Each type page says which keys it takes.
+`name` and `draw` do different jobs: `name` labels this block so it can be found, and `draw` picks something drawn elsewhere. Each type page says which keys it takes, and may define its own, like `tabs`'s `layout`. A type's own key means nothing on another type.
 
 A hook ignores an attribute it doesn't know, without a warning, so content moves between projects without changes. A new shared key is added to this table first.
 
@@ -257,13 +269,12 @@ A new type starts in one project. It gets its own page here when a second projec
 | `reminders` | data | one note per text line | Scorekeep | `reminders.md` |
 | `diagram`, `example` | placeholder | description line; `draw` | Scorekeep (planned) | `placeholders.md` |
 | `sheet`, `house-rules` | placeholder | description line | Scorekeep (planned) | `placeholders.md` |
-| `tabs` | **Open** | text beside a picture or source, replacing w42's `{{< tabs >}}` | w42, Not a Chef (both waiting) | to design |
+| `tabs` | layout | `tab: Label` then Markdown, per panel; `layout` | w42 (planned, replacing `{{< tabs >}}`), Not a Chef (wanted) | `tabs.md` |
 
 Highlighted source isn't a fence type. w42's `qgraph` ASCII sketches (styled by one CSS rule, with no hook) and the `formula` block shown as source in w42's manifesto are ordinary code blocks. Nothing in this spec applies to a code block that no hook draws.
 
 ## Open
 
-- **Tabs.** No syntax yet. The hard case is a tab that holds another fence (the manifesto's tabs hold ```` ```markdown ```` and ```` ```formula ````), so the outer fence needs longer backticks (```` ````tabs ````) or another way to embed source.
 - **Charts.** Nobody needs a drawn chart yet. If one comes, the first shape on record is a labelled bar list (label, bar, note), from w42's `qgraph` sketch.
 - **Home.** Every type's page lives in this folder (Bruce, 2026-10-26). `timeline.md` and `flow.md` came from w42's `themes/w42/docs/`, and `formula.md` and `stack.md` from `FORMAT.md`. The folder stays in Not a Chef for now and may move to a repo of its own.
 - **Tools.** A validator any project can run on its Markdown, with the same checks the hooks warn on, plus a reference hook per type to port. In Not a Chef it would replace the build-time `warnf` checks and `/lint` item 5 as the source of truth.

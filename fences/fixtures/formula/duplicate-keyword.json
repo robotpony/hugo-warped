@@ -1,0 +1,16 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["flour", "Flour", "100"], "marker": null, "icons": ["flour"], "swaps": []},
+    {"line": 3, "row": ["water", "Water", "75"], "marker": ":", "icons": ["water"], "swaps": []},
+    {"line": 4, "keyword": "caption", "value": "By weight"},
+    {"line": 5, "keyword": "bar", "value": "yes"}
+  ],
+  "warnings": [
+    {"line": 6, "code": "duplicate-keyword"},
+    {"line": 7, "code": "duplicate-keyword"}
+  ],
+  "fallback": false
+}

@@ -1,0 +1,13 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["wok", "Pan", "hot"], "marker": null, "icons": ["wok"], "swaps": []},
+    {"line": 3, "row": ["flame", "Sear", "2 min"], "marker": "→", "icons": ["flame"], "swaps": []}
+  ],
+  "warnings": [
+    {"line": 2, "code": "unknown-token"}
+  ],
+  "fallback": false
+}

@@ -1,0 +1,15 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["can", "Beans", "1 can"], "marker": null, "icons": ["can"], "swaps": []},
+    {"line": 3, "row": ["patty", "Patties", "6"], "marker": "=", "icons": ["patty"], "swaps": []},
+    {"line": 5, "keyword": "caption", "value": "Per can of beans"}
+  ],
+  "warnings": [
+    {"line": 4, "code": "out-of-order"},
+    {"line": 6, "code": "out-of-order"}
+  ],
+  "fallback": false
+}

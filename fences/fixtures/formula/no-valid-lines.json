@@ -1,0 +1,13 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 3, "keyword": "caption", "value": "Per can of beans"}
+  ],
+  "warnings": [
+    {"line": 2, "code": "missing-cell"},
+    {"line": 1, "code": "no-valid-lines"}
+  ],
+  "fallback": true
+}

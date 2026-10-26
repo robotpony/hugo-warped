@@ -1,0 +1,13 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["flour", "Flour", "100"], "marker": null, "icons": ["flour"], "swaps": []},
+    {"line": 3, "row": ["water", "Water", "75"], "marker": ":", "icons": ["water"], "swaps": []},
+    {"line": 4, "keyword": "caption", "value": "75% hydration, by weight"},
+    {"line": 5, "keyword": "bar", "value": "yes"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

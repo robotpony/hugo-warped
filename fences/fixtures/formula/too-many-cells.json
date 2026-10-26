@@ -1,0 +1,13 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["can", "Beans", "1 can", "black, pinto"], "marker": null, "icons": ["can"], "swaps": ["black", "pinto"]},
+    {"line": 3, "row": ["bowl", "Starch", "1 cup"], "marker": "+", "icons": ["bowl"], "swaps": []}
+  ],
+  "warnings": [
+    {"line": 2, "code": "too-many-cells"}
+  ],
+  "fallback": false
+}

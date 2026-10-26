@@ -1,0 +1,14 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["crumbs egg oats", "Binder", "½ cup"], "marker": null, "icons": ["crumbs", "egg", "oats"], "swaps": []},
+    {"line": 3, "row": ["bowl", "Starch", "1 cup", "rice, mash, quinoa, barley"], "marker": "+", "icons": ["bowl"], "swaps": ["rice", "mash", "quinoa", "barley"]}
+  ],
+  "warnings": [
+    {"line": 2, "code": "over-limit"},
+    {"line": 3, "code": "over-limit"}
+  ],
+  "fallback": false
+}

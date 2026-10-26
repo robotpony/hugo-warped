@@ -1,0 +1,13 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["can", "Beans", "1 can"], "marker": null, "icons": ["can"], "swaps": []},
+    {"line": 3, "row": ["bowl", "Starch", "1 cup"], "marker": "+", "icons": ["bowl"], "swaps": []}
+  ],
+  "warnings": [
+    {"line": 4, "code": "unknown-keyword"}
+  ],
+  "fallback": false
+}

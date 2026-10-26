@@ -1,0 +1,14 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["flour", "Flour", "3"], "marker": null, "icons": ["flour"], "swaps": []},
+    {"line": 3, "row": ["water", "Water", "2"], "marker": ":", "icons": ["water"], "swaps": []},
+    {"line": 4, "row": ["salt", "Salt", "pinch"], "marker": "+", "icons": ["salt"], "swaps": []}
+  ],
+  "warnings": [
+    {"line": 4, "code": "mixed-markers"}
+  ],
+  "fallback": false
+}

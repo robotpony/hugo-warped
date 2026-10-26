@@ -1,0 +1,13 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 4, "row": ["egg", "Egg", "1"], "marker": "+", "icons": ["egg"], "swaps": []}
+  ],
+  "warnings": [
+    {"line": 2, "code": "missing-cell"},
+    {"line": 3, "code": "missing-cell"}
+  ],
+  "fallback": false
+}

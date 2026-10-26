@@ -1,0 +1,12 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["oven", "Gentle", "doneness"], "marker": null, "icons": ["oven"], "swaps": []},
+    {"line": 3, "row": ["pan flame", "Hot", "crust"], "marker": "→", "icons": ["pan", "flame"], "swaps": []},
+    {"line": 4, "row": ["clock", "Rest"], "marker": "→", "icons": ["clock"], "swaps": []}
+  ],
+  "warnings": [],
+  "fallback": false
+}

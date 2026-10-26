@@ -1,0 +1,10 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [],
+  "warnings": [
+    {"line": 1, "code": "no-valid-lines"}
+  ],
+  "fallback": true
+}

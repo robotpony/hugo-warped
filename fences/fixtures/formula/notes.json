@@ -1,0 +1,12 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 3, "row": ["flour", "Flour", "100"], "marker": null, "icons": ["flour"], "swaps": []},
+    {"line": 4, "row": ["water", "Water", "75 ← ish"], "marker": ":", "icons": ["water"], "swaps": []},
+    {"line": 5, "keyword": "caption", "value": "By weight"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

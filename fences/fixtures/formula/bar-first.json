@@ -1,0 +1,13 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["jar", "Mayo", "2"], "marker": null, "icons": ["jar"], "swaps": []},
+    {"line": 3, "row": ["pickle", "Relish", "1"], "marker": ":", "icons": ["pickle"], "swaps": []},
+    {"line": 4, "keyword": "bar", "value": "yes"},
+    {"line": 5, "keyword": "caption", "value": "By volume"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

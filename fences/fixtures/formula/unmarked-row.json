@@ -1,0 +1,12 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["flour", "Flour", "3"], "marker": null, "icons": ["flour"], "swaps": []},
+    {"line": 3, "row": ["water", "Water", "2"], "marker": ":", "icons": ["water"], "swaps": []},
+    {"line": 4, "row": ["salt", "Salt", "0.1"], "marker": null, "icons": ["salt"], "swaps": []}
+  ],
+  "warnings": [],
+  "fallback": false
+}

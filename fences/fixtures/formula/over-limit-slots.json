@@ -1,0 +1,17 @@
+{
+  "type": "formula",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["can", "Beans", "1 can"], "marker": null, "icons": ["can"], "swaps": []},
+    {"line": 3, "row": ["bowl", "Starch", "1 cup"], "marker": "+", "icons": ["bowl"], "swaps": []},
+    {"line": 4, "row": ["crumbs", "Crumbs", "½ cup"], "marker": "+", "icons": ["crumbs"], "swaps": []},
+    {"line": 5, "row": ["egg", "Egg", "1"], "marker": "+", "icons": ["egg"], "swaps": []},
+    {"line": 6, "row": ["herb", "Herbs", "1 tbsp"], "marker": "+", "icons": ["herb"], "swaps": []},
+    {"line": 7, "row": ["patty", "Patties", "6"], "marker": "=", "icons": ["patty"], "swaps": []}
+  ],
+  "warnings": [
+    {"line": 7, "code": "over-limit"}
+  ],
+  "fallback": false
+}

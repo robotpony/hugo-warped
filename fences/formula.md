@@ -38,7 +38,7 @@ These warn:
 
 - An unknown icon key: drawn as a placeholder. `unknown-token`
 - A second operator kind in one block (`+` then `:`): the row draws with its own marker. `mixed-markers`
-- A marker on the first row (`+ can | Beans`): the marker is dropped and the row draws. `stray-marker`
+- A marker on the first drawn row (`+ can | Beans`), which is the next valid row when the ones before it are skipped: the marker is dropped and the row draws. `stray-marker`
 - More than five slots, counting the `=` row: drawn, and warned on the sixth, since they won't fit the sidebar. `over-limit`
 - More than two icon keys, or more than three swaps: drawn. `over-limit`
 - More than four cells in a row: the first four draw. `too-many-cells`

@@ -3,11 +3,12 @@
   "kind": "diagram",
   "attributes": {},
   "lines": [
-    {"line": 4, "row": ["egg", "Egg", "1"], "marker": "+", "icons": ["egg"], "swaps": []}
+    {"line": 4, "row": ["egg", "Egg", "1"], "marker": null, "icons": ["egg"], "swaps": []}
   ],
   "warnings": [
     {"line": 2, "code": "missing-cell"},
-    {"line": 3, "code": "missing-cell"}
+    {"line": 3, "code": "missing-cell"},
+    {"line": 4, "code": "stray-marker"}
   ],
   "fallback": false
 }

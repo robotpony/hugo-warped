@@ -205,7 +205,7 @@ Some problems still draw, with a warning:
 
 - An unknown token draws as a placeholder, in types that say so (`formula`, `stack`).
 - Too many rows for the space still draw: `formula` over five slots, `flow` over five steps.
-- A stray marker is dropped and the row draws (`→` on `flow`'s first step).
+- A stray marker is dropped and the row draws (`→` on `flow`'s first step). The first row is the first one drawn: when the lines before it are skipped, the next valid row is first, and its marker is the stray one.
 
 A block with no valid lines at all shows its source as preformatted text, plus a warning. It never draws nothing, so a reader still sees what was written.
 

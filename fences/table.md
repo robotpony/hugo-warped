@@ -73,9 +73,10 @@ WARN  table: skipped "K | 0 | free" (want "tokens | text") in "…/golf-4.md:31:
 These lines warn today:
 
 - Too many cells: `K | 0 | free` `too-many-cells`
-- One cell: `K` (no text), `| 0` (no tokens) `missing-cell`
+- One cell, or an empty one: `K` (no text), `| 0` (no tokens), `K |` `missing-cell`
 - A run that isn't ranks, or runs downward: `d1-d6`, `10-2` `bad-run`
-- A keyword before a row `out-of-order`, or one this type doesn't take `unknown-keyword`: `caption: …` then `K | 0`; `note: …`
+- A row after a trailer keyword (`caption: …` then `K | 0`), or `head:` after `caption:`: the later line is skipped `out-of-order`
+- A keyword this type doesn't take: `note: …` `unknown-keyword`
 - A second `head:` or `caption:` `duplicate-keyword`
 - `head:` without exactly two cells `bad-head`
 

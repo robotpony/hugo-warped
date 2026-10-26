@@ -10,7 +10,7 @@ This page is the grammar every fence shares. Each type has its own page for its 
 
 Bruce, tick to approve, or write a change after the item.
 
-- [ ] Three kinds of fence: **diagram** (illustrates the prose, carries nothing it doesn't say), **data** (is the content, complete as plain text), **placeholder** (drawn from elsewhere; the body is one plain description line, never empty). See "Kinds".
+- [ ] Four kinds of fence: **diagram** (illustrates the prose, carries nothing it doesn't say), **data** (is the content, complete as plain text), **placeholder** (drawn from elsewhere; the body is one plain description line, never empty), **layout** (arranges ordinary Markdown, like `tabs`). See "Kinds".
 - [ ] The shared line grammar: keyword lines are lowercase `key: value`; rows are `|` cells read by position, with no header row (`head:` when a type needs printed titles); markers before column 1; a row with too many cells is a bad line. See "Lines".
 - [ ] Attributes: `name` (this block's id, unique within its file once conditionals are resolved, so two `@if` versions of one table can share it; `table.md`), `draw` (which drawing a placeholder shows, kept apart from `name`), `class` (one site's styling hint). Unknown keys are ignored silently. See "Attributes".
 - [ ] A block with no valid lines shows its source as preformatted text, never nothing. w42's hooks change to match, and so does the formula hook's extra-cell gap (`formula.md`). See "Bad lines".

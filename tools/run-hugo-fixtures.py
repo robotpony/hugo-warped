@@ -15,6 +15,12 @@ compared with its <case>.json:
   `lines` for diagram types, one per `tab` keyword for tabs;
 - for tabs, each panel's label against its `value`, as rendered text.
 
+A theme that's an add-on to another (Fugu over Blowfish) names the
+themes behind it with --with, each a folder beside it:
+
+    tools/run-hugo-fixtures.py <themes>/fugu --with blowfish --types formula,stack,flow \
+        --item formula=f-slot --item stack=stack-label
+
 Item and label elements are found by class, w42's by default; a theme
 that names them differently passes --item TYPE=CLASS and --label
 TYPE=CLASS. Exits 1 when any case fails. Stdlib only.
@@ -60,6 +66,8 @@ def main():
     ap.add_argument("--types", default="timeline,flow,tabs", help="comma-separated fixture types")
     ap.add_argument("--item", action="append", metavar="TYPE=CLASS", help="class of one drawn item")
     ap.add_argument("--label", action="append", metavar="TYPE=CLASS", help="class of a panel label")
+    ap.add_argument("--with", action="append", default=[], metavar="THEME", dest="also",
+                    help="a theme stacked after this one, from the same folder (repeatable)")
     ap.add_argument("--hugo", default="hugo")
     ap.add_argument("--verbose", action="store_true", help="print passing cases and Hugo's errors")
     a = ap.parse_args()
@@ -72,7 +80,7 @@ def main():
     try:
         os.makedirs(os.path.join(site, "content"))
         with open(os.path.join(site, "hugo.toml"), "w") as f:
-            f.write(f'baseURL = "https://example.org/"\ntheme = "{os.path.basename(theme)}"\n'
+            f.write(f'baseURL = "https://example.org/"\ntheme = {json.dumps([os.path.basename(theme)] + a.also)}\n'
                     f'themesDir = "{os.path.dirname(theme)}"\n'
                     'disableKinds = ["taxonomy", "term", "RSS", "sitemap", "robotsTXT"]\n')
         cases = []

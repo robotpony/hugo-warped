@@ -22,7 +22,8 @@ Spec work that other agents build:
 - [x] Fugu's formula hook adds the checks settled in de2df26 and a2926dc (6cad03b, 5d0d729): `stray-marker`, `missing-cell` (row skipped), `out-of-order` after `=` or the trailer, `duplicate-keyword`, and `over-limit` on icons and swaps (fugu-agent). `fences/fixtures/formula/` has a case for each.
 - [x] Fugu's stack hook adds the checks settled in cb7ef71 (405ace9): `missing-cell` (row skipped, no key as label), `too-many-cells`, `out-of-order` after the trailer, `duplicate-keyword` on a second caption, and `bad-repeat` for a count under 2 or not a number and for a backwards range (fugu-agent). `fences/fixtures/stack/` has a case for each.
 - [x] Fugu's port of `flow` (5f21797), first used on Cornmeal fried chicken.
-- [ ] Flow hooks in w42 and Fugu add the checks settled in ffc4258: `unknown-keyword` for a keyword line flow doesn't take (skipped, not drawn as a step), and `duplicate-keyword` for a second `caption:` (the first stands). w42's timeline hook gives `unknown-keyword`, not `bad-year`, for a keyword line (w42 theme agent, fugu-agent). `fences/fixtures/flow/` and `timeline/` have a case for each.
+- [x] Fugu's flow hook passes all 17 flow fixtures at ffc4258 (4d08907).
+- [ ] w42's flow hook adds the checks settled in ffc4258: `unknown-keyword` for a keyword line flow doesn't take (skipped, not drawn as a step), and `duplicate-keyword` for a second `caption:` (the first stands). w42's timeline hook gives `unknown-keyword`, not `bad-year`, for a keyword line (w42 theme agent). `fences/fixtures/flow/` and `timeline/` have a case for each.
 - [ ] Fugu ports of `timeline` and `tabs`, when a page needs one (fugu-agent).
 - [ ] w42 removes the `tabs` shortcode (w42 theme agent).
 

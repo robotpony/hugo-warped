@@ -56,6 +56,7 @@ These lines warn today:
 - A range: `1955-1960 Label` `bad-year`
 - A month or day: `1983-04 Label` `bad-year`
 - Anything before the year other than `~`: `- 1983 Atari BASIC`, `c. 1983 Atari BASIC` `bad-year`
+- A keyword line (`caption: …`): the type takes none `unknown-keyword`
 
 A warning means "not drawn yet", not "never valid".
 

@@ -86,6 +86,8 @@ These warn:
 - More than one `|`: `A | b | c` `too-many-cells`
 - No label: `| a note` `missing-cell`
 - A step or `row:` after the caption: the caption goes last `out-of-order`
+- A second `caption:`: skipped, and the first stands `duplicate-keyword`
+- A keyword line this type doesn't take (`note: x`): skipped. Write `Note: x` for a step that starts that way `unknown-keyword`
 - An arrow on the first drawn step (`→ Markdown`), or on a row's first drawn step: the arrow is dropped and the step is drawn, with a warning `stray-marker`. If the first line is skipped, the next valid step is the first, and its arrow warns.
 - More than five steps in a row: drawn, with a warning `over-limit`
 - A step before the first `row:`, in a block that uses rows: not drawn `out-of-order`

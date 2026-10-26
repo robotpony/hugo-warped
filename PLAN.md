@@ -6,7 +6,7 @@ Open work for hugo-warped. The fence spec's history before 2026-10-26 is in Not 
 
 - [x] Import the fence spec with its history into `fences/` (2026-10-26), and qualify its references to Not a Chef's files.
 - [x] Send the spec's path to the not-a-chef content agent, warped-agent and the Scorekeep content agent.
-- [ ] Create the GitHub remote (Bruce), then push.
+- [x] Create the GitHub remote (Bruce): https://github.com/robotpony/hugo-warped (2026-10-26).
 
 ## Fences
 
@@ -34,4 +34,4 @@ Moved in when a second project needs them: mounting a project's `docs/` as site 
 
 ## After the remote exists
 
-- [ ] Send the repo URL to fugu-agent, which then links `fences/formula.md` and `stack.md` from Fugu's `docs/recipe-format.md` and `docs/features.md`.
+- [x] Send the repo URL to fugu-agent, which then links `fences/formula.md` and `stack.md` from Fugu's `docs/recipe-format.md` and `docs/features.md`.

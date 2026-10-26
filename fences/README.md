@@ -1,6 +1,6 @@
 # Fences
 
-*Approved by Bruce, 2026-10-26. Shared by Not a Chef, warpedvisions.org (w42) and Scorekeep. It lives in the `fences/` folder of hugo-warped (`~/projects/sites/hugo-warped`), and it links only within the folder, so it can move in one piece. Panels in `tabs` start with `tab:` lines (approved over `=== Label`). Open items are marked **Open** and tracked in hugo-warped's `PLAN.md`.*
+*Approved by Bruce, 2026-10-26. Shared by Not a Chef, warpedvisions.org (w42) and Scorekeep. It lives in the `fences/` folder of hugo-warped (https://github.com/robotpony/hugo-warped, checked out at `~/projects/sites/hugo-warped`), and it links only within the folder, so it can move in one piece. Panels in `tabs` start with `tab:` lines (approved over `=== Label`). Open items are marked **Open** and tracked in hugo-warped's `PLAN.md`.*
 
 A fence is a code block with a type name, which a site or app draws as something richer: a diagram, a table, a box. Every project here embeds blocks this way, and only this way: no Hugo shortcodes, no `@` directive lines, no `> [!note]` callouts. The same block reads as plain text in Obsidian, on GitHub, and anywhere that can't draw it.
 

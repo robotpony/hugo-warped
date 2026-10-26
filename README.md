@@ -8,9 +8,10 @@ Bruce, tick to approve, or write a change after the item.
 
 - [ ] Three kinds of fence: **diagram** (illustrates the prose, carries nothing it doesn't say), **data** (is the content, complete as plain text), **placeholder** (drawn from elsewhere; the body is one plain description line, never empty). See "Kinds".
 - [ ] The shared line grammar: keyword lines are lowercase `key: value`; rows are `|` cells read by position, with no header row (`head:` when a type needs printed titles); markers before column 1; a row with too many cells is a bad line. See "Lines".
-- [ ] Attributes: `name` (this block's id, unique within its file), `draw` (which drawing a placeholder shows, kept apart from `name`), `class` (one site's styling hint). Unknown keys are ignored silently. See "Attributes".
+- [ ] Attributes: `name` (this block's id, unique within its file once conditionals are resolved, so two `@if` versions of one table can share it; `table.md`), `draw` (which drawing a placeholder shows, kept apart from `name`), `class` (one site's styling hint). Unknown keys are ignored silently. See "Attributes".
 - [ ] A block with no valid lines shows its source as preformatted text, never nothing. w42's hooks change to match, and so do the formula hook's extra-cell gap (`formula.md`). See "Lines that don't match".
 - [ ] Project extensions stay outside the spec: Scorekeep's `@if` may wrap whole fences but never sits inside a body, `{key}` substitution runs before parsing, and w42's (i) source toggle is optional. See "Project extensions".
+- [ ] Card and dice tokens in `table.md`: die faces written `d1`–`d6` (easy to type) rather than `⚀`–`⚅` (pictures in plain text, but hard to type and tiny), `Joker` as a token, and `stack:7♣` for the topped stack (a plainer spelling is welcome). See `table.md`, "Tokens".
 - [ ] Tabs: design it next, with a longer outer fence (```` ````tabs ````) so a tab can hold another fence. See "Open".
 
 A fence is a named code block that a site or app draws as something richer: a diagram, a table, a box. Every project here embeds blocks this way, and only this way: no Hugo shortcodes, no `@` directive lines, no `> [!note]` callouts. A fence reads as plain text in Obsidian, on GitHub, and anywhere without a hook, and it draws where there is one.
@@ -68,7 +69,7 @@ Attributes are for things a reader of the plain text doesn't need. The body must
 
 | Key | Means | Values |
 |---|---|---|
-| `name` | This block's id, so something else can ask for it (Scorekeep's cheat sheet asks a game's page for its `card-values` table). | Lowercase `a-z`, `0-9`, `-`. Unique within its file; lookups never cross files. |
+| `name` | This block's id, so something else can ask for it (Scorekeep's cheat sheet asks a game's page for its `card-values` table). | Lowercase `a-z`, `0-9`, `-`. Unique within its file once a project's conditionals are resolved (two `@if` branches may each hold a version of the same block); lookups never cross files. |
 | `draw` | Which drawing a placeholder shows, from the drawings its target knows (`draw="golf-revealed"`). Several words are an ordered list (`draw="table hand"`: the table, then the hand). | Lowercase words, space-separated. The fence page lists them. |
 | `class` | A presentation hint for one site. | Any. Other sites ignore it. |
 
@@ -110,7 +111,7 @@ A project can add things around fences that are its own, outside this spec:
 
 ## Drawing
 
-Each project draws in its own hook and CSS, with no shared files. What's shared is the input; each fence page records one project's rendering for reference when porting. Hooks write classes only (plus inline position variables where a layout needs them, like `timeline`), and colours come from each theme's CSS. Class prefixes don't collide across projects: w42 uses `.tline-*` and `.flow-*`; Not a Chef uses `.formula`, `.f-*`, `.timeline` and `.tl-*`.
+Each project draws in its own hook and CSS, with no shared files. What's shared is the input; each fence page records one project's rendering for reference when porting. Hooks write classes only (plus inline position variables where a layout needs them, like `timeline`), and colours come from each theme's CSS. Class prefixes don't collide across projects: w42 uses `.tline-*` and `.flow-*`; Not a Chef uses `.formula`, `.f-*`, `.timeline` and `.tl-*`; Scorekeep uses `.sk-*`.
 
 ## Extending a type
 
@@ -130,10 +131,10 @@ A new type starts in one project. It gets its own page here when a second projec
 | `stack` | diagram | `layer | label | role`, top first; `caption:`, `repeat:` | Not a Chef | `stack.md` |
 | `timeline` | diagram | `YEAR Label` text lines, `~` marker | w42; Not a Chef (port pending) | `timeline.md` |
 | `flow` | diagram | `Label | note`, optional `→` marker; `row:`, `caption:` | w42; Not a Chef (port pending) | `flow.md` |
-| `table` | data | `tokens | text`; `caption:`, `head:`; `name` | Scorekeep (draft) | to write here; draft in Scorekeep `PLAN.md` § 24 pick 6 |
-| `reminders` | data | one note per text line | Scorekeep | to write here; today in Scorekeep `docs/rules/README.md` |
-| `diagram`, `example` | placeholder | description line; `draw` | Scorekeep (planned) | to write |
-| `sheet`, `house-rules` | placeholder | description line | Scorekeep (planned) | to write |
+| `table` | data | `tokens | text`; `head:`, `caption:`; `name` | Scorekeep (planned) | `table.md` |
+| `reminders` | data | one note per text line | Scorekeep | `reminders.md` |
+| `diagram`, `example` | placeholder | description line; `draw` | Scorekeep (planned) | `placeholders.md` |
+| `sheet`, `house-rules` | placeholder | description line | Scorekeep (planned) | `placeholders.md` |
 | `tabs` | **Open** | text beside a picture or source, replacing w42's `{{< tabs >}}` | w42, Not a Chef (both waiting) | to design |
 
 Not fence types: highlighted source shown as an example, like w42's `qgraph` ASCII sketches (styled by one CSS rule, no hook) and the `formula` block shown as source in w42's manifesto. A language name that no hook draws is just a code block, and nothing in this spec applies to it.

@@ -104,7 +104,7 @@ The `←` text on each line is a note: it's for whoever reads the source, and th
 
 **Keyword line.** `key: value`. The key is lowercase `a-z` and `-`, starts the line, and is followed by a colon and a space. Each type lists the keywords it takes and where they go. Most go last, as a trailer (`caption:`, `bar:`, `repeat:`, `head:`). A few start a group (`flow`'s `row:`). Keywords are lowercase, so a row that starts with a capital is never read as one: `Note: salt early | brine` is a row.
 
-`caption:` means the same thing in every type that takes it: one line, drawn under the block, last in the block.
+`caption:` means the same thing in every type that takes it: one line, drawn under the block, in the trailer after every row. A type page says whether another trailer keyword may follow it.
 
 **Row.** Cells split on `|` and trimmed, read **by position**: column 1 holds the same kind of thing in every row of that type. There's no header row and no `|---|` line. A type that needs printed column titles takes a `head:` keyword instead:
 

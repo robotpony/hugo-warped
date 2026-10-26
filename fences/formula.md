@@ -18,13 +18,13 @@ caption: Per can of beans
 
 One slot per row, `icon | label | quantity | swaps`:
 
-1. **Operator.** A marker at the start of every row after the first: `+` (parts that go together), `:` (a ratio; the quantity is the ratio number), or `→` (the shape of a method; a quantity that isn't a number prints as an italic note). `->` is accepted for `→`. One operator per block. An optional last row starting `=` names the result.
+1. **Operator.** A marker at the start of every row after the first, followed by a space: `+` (parts that go together), `:` (a ratio; the quantity is the ratio number), or `→` (the shape of a method; a quantity that isn't a number prints as an italic note). `->` is accepted for `→`. One operator per block. A later row with no marker is joined by the block's operator. An optional last row starting `=` names the result.
 2. **Icon.** Tokens: one or two keys from Fugu's `assets/icons/formula/`. An unknown key draws a placeholder and warns.
-3. **Label.** Inline text, one short word.
+3. **Label.** Inline text, one short word. Required.
 4. **Quantity.** Inline text. Optional.
 5. **Swaps.** Optional, up to three, comma-separated.
 
-Keywords, as a trailer: `caption: <text>`, and `bar: yes` for a ratio's proportion bar.
+Keywords, as a trailer after every row, in either order and once each: `caption: <text>`, and `bar: yes` for a ratio's proportion bar.
 
 Keep it to five slots.
 
@@ -37,9 +37,14 @@ The diagram illustrates the sentence; it MUST NOT replace it. Only draw a ratio 
 These warn:
 
 - An unknown icon key: drawn as a placeholder. `unknown-token`
-- A second operator kind in one block (`+` then `:`). `mixed-markers`
-- More than five slots: drawn, since they won't fit the sidebar. `over-limit`
-- More than four cells in a row. `too-many-cells`
+- A second operator kind in one block (`+` then `:`): the row draws with its own marker. `mixed-markers`
+- A marker on the first row (`+ can | Beans`): the marker is dropped and the row draws. `stray-marker`
+- More than five slots, counting the `=` row: drawn, and warned on the sixth, since they won't fit the sidebar. `over-limit`
+- More than two icon keys, or more than three swaps: drawn. `over-limit`
+- More than four cells in a row: the first four draw. `too-many-cells`
+- A row with no label (`can`, `can |`): skipped. `missing-cell`
+- A row after the `=` row, or after a trailer keyword: skipped. `out-of-order`
+- A second `caption:` or `bar:`: skipped. `duplicate-keyword`
 - A keyword line this type doesn't take (`note: x`): skipped, with one warning. `unknown-keyword`
 
 ## Rendering in Not a Chef

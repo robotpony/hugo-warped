@@ -26,12 +26,12 @@ Spec work that other agents build:
 - [x] w42's flow hook adds the checks settled in ffc4258 (theme 0.7.4, 48a4edc; all 26 timeline and flow fixtures pass): `unknown-keyword` for a keyword line flow doesn't take (skipped, not drawn as a step), and `duplicate-keyword` for a second `caption:` (the first stands). w42's timeline hook gives `unknown-keyword`, not `bad-year`, for a keyword line (w42 theme agent). `fences/fixtures/flow/` and `timeline/` have a case for each.
 - [ ] Fugu ports of `timeline` and `tabs`, when a page needs one (fugu-agent).
 - [ ] w42 removes the `tabs` shortcode (w42 theme agent).
-- [ ] w42's tabs hook drops a `← note` on a `tab:` line (638b870), and passes `fences/fixtures/tabs/` (w42 theme agent).
+- [x] w42's tabs hook drops a `← note` on a `tab:` line (638b870), and passes `fences/fixtures/tabs/` (theme 0.7.5, 2adc2d7).
 
 ## Hugo module
 
 - [ ] One parse partial per fence type, returning data and warnings; themes draw their own HTML.
-- [ ] An example site that runs the fixtures through the partials, so they can't drift from the validator.
+- [ ] An example site that runs the fixtures through the partials, so they can't drift from the validator. `tools/run-hugo-fixtures.py` (from the w42 theme agent) already builds the fixtures through a theme's hooks and checks warnings, fallback and what's drawn; w42 0.7.5 passes all 40 timeline, flow and tabs cases.
 - [ ] Later, when a second site needs them: link, image, heading and table hooks.
 
 ## Plumbing and tools

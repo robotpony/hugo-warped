@@ -289,7 +289,7 @@ d1 d1 d1 | 1,000
 Each project draws in its own hooks and CSS. No files are shared: the input is shared, and each type page records one project's rendering for reference when porting.
 
 - Hooks write classes only, plus inline position variables where a layout needs them (`timeline`). Colours come from each theme's CSS.
-- Class prefixes don't collide across projects: w42 uses `.tline-*` and `.flow-*`; Not a Chef uses `.formula`, `.f-*`, `.timeline` and `.tl-*`; Scorekeep uses `.sk-*`.
+- Class prefixes don't collide across projects: w42 uses `.tline-*` and `.flow-*`; Not a Chef uses `.formula`, `.f-*`, `.timeline`, `.tl-*` and, for `flow`, w42's `.flow-*`; Scorekeep uses `.sk-*`.
 
 ## Extending a type
 
@@ -310,7 +310,7 @@ A new type starts in one project. It gets its own page here when a second projec
 | `formula` | diagram | `icon | label | quantity | swaps`, operator marker; `caption:`, `bar:` | Not a Chef | `formula.md` |
 | `stack` | diagram | `layer | label | role`, top first; `caption:`, `repeat:` | Not a Chef | `stack.md` |
 | `timeline` | diagram | `YEAR Label` text lines, `~` marker | w42; Not a Chef (port pending) | `timeline.md` |
-| `flow` | diagram | `Label | note`, optional `→` marker; `row:`, `caption:` | w42; Not a Chef (port pending) | `flow.md` |
+| `flow` | diagram | `Label | note`, optional `→` marker; `row:`, `caption:` | w42, Not a Chef | `flow.md` |
 | `table` | data | `tokens | text`; `head:`, `caption:`; `name` | Scorekeep (planned) | `table.md` |
 | `reminders` | data | one note per text line | Scorekeep | `reminders.md` |
 | `diagram`, `example` | placeholder | description line; `draw` | Scorekeep (planned) | `placeholders.md` |

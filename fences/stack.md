@@ -29,7 +29,7 @@ Keywords, as a trailer:
 
 ## Use
 
-On a build page the first `stack` block goes under `## Picks`, and its layers MUST follow the picks (`docs/FORMAT.md`, "Blueprints"). A build that isn't layered has no `stack` block.
+On a build page the first `stack` block goes under `## Picks`, and its layers MUST follow the picks (Not a Chef's `docs/FORMAT.md`, "Blueprints"). A build that isn't layered has no `stack` block.
 
 ## Lines that don't match
 
@@ -44,4 +44,4 @@ These warn:
 Not part of the spec; for reference when porting.
 
 - A small unlabelled copy goes on the build's card on its blueprint page.
-- Layer drawings come from `mockups/exploded-builds.html`, exported with `mockups/export-layers.mjs`.
+- Layer drawings come from Not a Chef's `mockups/exploded-builds.html`, exported with `mockups/export-layers.mjs`.

@@ -1,6 +1,6 @@
 # Fences
 
-*Approved by Bruce, 2026-10-26. Shared by Not a Chef, warpedvisions.org (w42) and Scorekeep. It lives in this folder until it has a home of its own, and it links only within the folder, so it can move in one piece. Panels in `tabs` start with `tab:` lines (approved over `=== Label`). Open items are marked **Open** and tracked in `docs/PLAN.md` "Standard diagram fences".*
+*Approved by Bruce, 2026-10-26. Shared by Not a Chef, warpedvisions.org (w42) and Scorekeep. It lives in the `fences/` folder of hugo-warped (`~/projects/sites/hugo-warped`), and it links only within the folder, so it can move in one piece. Panels in `tabs` start with `tab:` lines (approved over `=== Label`). Open items are marked **Open** and tracked in hugo-warped's `PLAN.md`.*
 
 A fence is a code block with a type name, which a site or app draws as something richer: a diagram, a table, a box. Every project here embeds blocks this way, and only this way: no Hugo shortcodes, no `@` directive lines, no `> [!note]` callouts. The same block reads as plain text in Obsidian, on GitHub, and anywhere that can't draw it.
 
@@ -285,5 +285,5 @@ Highlighted source isn't a fence type. w42's `qgraph` ASCII sketches (styled by 
 ## Open
 
 - **Charts.** Nobody needs a drawn chart yet. If one comes, the first shape on record is a labelled bar list (label, bar, note), from w42's `qgraph` sketch.
-- **Home.** Every type's page lives in this folder (Bruce, 2026-10-26). `timeline.md` and `flow.md` came from w42's `themes/w42/docs/`, and `formula.md` and `stack.md` from `FORMAT.md`. The folder stays in Not a Chef for now and may move to a repo of its own.
-- **Tools.** A validator any project can run on its Markdown, with the same checks the hooks warn on, plus a reference hook per type to port. In Not a Chef it would replace the build-time `warnf` checks and `/lint` item 5 as the source of truth.
+- **Home.** Every type's page lives in this folder (Bruce, 2026-10-26). `timeline.md` and `flow.md` came from w42's `themes/w42/docs/`, and `formula.md` and `stack.md` from Not a Chef's `docs/FORMAT.md`. The folder began in Not a Chef's `docs/fences/` and moved, with its history, to hugo-warped's `fences/` on 2026-10-26.
+- **Tools.** A validator any project can run on its Markdown, with the same checks the hooks warn on, plus a reference hook per type to port. In Not a Chef it would replace the build-time `warnf` checks and the `/lint` command's item 5 as the source of truth.

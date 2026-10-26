@@ -30,7 +30,7 @@ Leading and trailing whitespace on a line is ignored, and blank lines are skippe
 
 A label is inline Markdown, rendered with the page's own `RenderString` and `"display" "inline"`, so each site's render hooks apply (links, images, code). A label that's a link makes its entry a link; there's no other syntax for linked entries.
 
-Sites that rewrite their own syntax before Goldmark runs keep it. For example, the cookbook turns `[[Whopper]]` into `[Whopper](<Whopper>)` in `single.html`, so the hook sees and renders a normal link.
+Sites that rewrite their own syntax before Goldmark runs keep it. For example, the cookbook turns `[[Whopper]]` into `[Whopper](<Whopper>)` in Fugu's `layouts/_default/single.html`, so the hook sees and renders a normal link.
 
 ## Order
 

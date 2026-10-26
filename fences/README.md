@@ -207,7 +207,35 @@ Some problems still draw, with a warning:
 - Too many rows for the space still draw: `formula` over five slots, `flow` over five steps.
 - A stray marker is dropped and the row draws (`→` on `flow`'s first step).
 
-A block with no valid lines at all shows its source as preformatted text, plus a warning. It never draws nothing, so a reader still sees what was written. (w42's hooks draw nothing today; they change to match.)
+A block with no valid lines at all shows its source as preformatted text, plus a warning. It never draws nothing, so a reader still sees what was written.
+
+### Warning codes
+
+Every warning has a stable code, so two parsers can be checked against each other without matching their wording. Tests and the shared fixtures compare a warning's code and line number, never its message. A hook SHOULD put the code in its message, after the type:
+
+```
+WARN  flow [too-many-cells]: skipped "→ Oven | cook through | 30 min" (want "Label | note") in "…/steak.md:12:1"
+```
+
+Each type page lists its codes beside its "Lines that don't match" examples. These codes mean the same thing in every type that uses them:
+
+| Code | Means |
+|---|---|
+| `too-many-cells` | A row has more cells than its type takes. The extra cells are skipped (or the row, where the type says so). |
+| `missing-cell` | A row leaves out a cell its type requires, such as a label or a `table` row's tokens. |
+| `missing-label` | A text or keyword line that needs a label has none (`timeline`'s `1983`, `tabs`'s bare `tab:`). |
+| `unknown-keyword` | A keyword line this type doesn't take. |
+| `duplicate-keyword` | A keyword that may appear once appears again. |
+| `out-of-order` | A line where its type doesn't allow it: a row after the caption, text before the first `tab:`. |
+| `unknown-token` | A token cell holds a key outside the type's set. It draws as a placeholder. |
+| `mixed-token-cell` | A token cell mixes tokens with other words. |
+| `stray-marker` | A marker where the type doesn't allow one. The marker is dropped and the row draws. |
+| `mixed-markers` | Markers of more than one kind in a block that allows only one. |
+| `over-limit` | More rows, steps, slots or panels than fit. It still draws. |
+| `empty-group` | A group with nothing in it: a `flow` `row:` with no steps, a `tabs` panel with no body. |
+| `no-valid-lines` | Nothing in the block was valid, so its source shows instead. Reported on line 1, the opening fence. |
+
+Codes are lowercase words joined by `-`, like keywords. A code is never reused for a different problem; a new one is added to its type page (or to this table, if it's shared) first. `duplicate-block` (`reminders`) is reported on the opening fence of the second block, so only a page-level check, such as the validator, can raise it.
 
 A project can be stricter in its own checks. Scorekeep's `RulesDocumentTests` fail on any skipped line, because the app ships the same files. A hard stop like that belongs in a project's tests, or later in the shared validator, never in the site build.
 

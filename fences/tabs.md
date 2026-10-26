@@ -61,12 +61,12 @@ WARN  tabs: skipped "Some text" (want "tab: Label" first) in "…/index.md:56:1"
 
 These warn:
 
-- Text before the first `tab:` line: skipped.
-- A `tab:` line with no label: drawn with the label "Tab".
-- A panel with an empty body: drawn empty.
-- An unknown `layout`: drawn as switchable tabs.
-- More than six panels: drawn, with a warning.
-- No `tab:` lines at all: the source shows as preformatted text, as for every type.
+- Text before the first `tab:` line: skipped. `out-of-order`
+- A `tab:` line with no label: drawn with the label "Tab". `missing-label`
+- A panel with an empty body: drawn empty. `empty-group`
+- An unknown `layout`: drawn as switchable tabs. `unknown-layout`
+- More than six panels: drawn, with a warning. `over-limit`
+- No `tab:` lines at all: the source shows as preformatted text, as for every type. `no-valid-lines`
 
 ## Rendering in w42
 

@@ -83,15 +83,15 @@ WARN  flow: skipped "A | b | c" (want "Label | note") in "…/index.md:30:1"
 
 These warn:
 
-- More than one `|`: `A | b | c`
-- No label: `| a note`
-- A step or `row:` after the caption: the caption goes last
-- An arrow on the first line (`→ Markdown`), or on a row's first step: the arrow is dropped and the step is drawn, with a warning
-- More than five steps in a row: drawn, with a warning
-- A step before the first `row:`, in a block that uses rows: not drawn
-- A `row:` with no steps: not drawn
-- More than three rows: drawn, with a warning
-- No steps at all: the source shows as preformatted text, as for every type (`README.md`, "Lines that don't match").
+- More than one `|`: `A | b | c` `too-many-cells`
+- No label: `| a note` `missing-cell`
+- A step or `row:` after the caption: the caption goes last `out-of-order`
+- An arrow on the first line (`→ Markdown`), or on a row's first step: the arrow is dropped and the step is drawn, with a warning `stray-marker`
+- More than five steps in a row: drawn, with a warning `over-limit`
+- A step before the first `row:`, in a block that uses rows: not drawn `out-of-order`
+- A `row:` with no steps: not drawn `empty-group`
+- More than three rows: drawn, with a warning `over-limit`
+- No steps at all: the source shows as preformatted text, as for every type (`README.md`, "Lines that don't match"). `no-valid-lines`
 
 A warning means "not drawn this way yet", not "never valid". Any extension (parallel rows were one; branches or step links would be others) must be agreed between both sites and written here first, and must keep every line that's valid today drawing the same way.
 

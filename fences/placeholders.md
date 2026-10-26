@@ -65,11 +65,11 @@ WARN  example: skipped "and the total is entered" (want one description line) in
 
 These warn today:
 
-- A second body line (only the first is the description; the rest are skipped)
-- An empty body: drawn without a description, and warned, because an empty placeholder reads like a mistake
-- `example` with no `draw`, or more than one value
-- `draw` on `sheet` or `house-rules` (ignored)
-- A `draw` value the target doesn't know (`draw="table feet"`): the known values draw, the unknown one is skipped. In Scorekeep's app it's a test failure.
+- A second body line (only the first is the description; the rest are skipped) `extra-line`
+- An empty body: drawn without a description, and warned, because an empty placeholder reads like a mistake `empty-placeholder`
+- `example` with no `draw` `missing-draw`, or more than one value `too-many-draw`
+- `draw` on `sheet` or `house-rules` (ignored) `ignored-draw`
+- A `draw` value the target doesn't know (`draw="table feet"`): the known values draw, the unknown one is skipped. `unknown-draw` In Scorekeep's app it's a test failure.
 
 ## Rendering in Scorekeep
 

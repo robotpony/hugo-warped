@@ -35,9 +35,9 @@ On a build page the first `stack` block goes under `## Picks`, and its layers MU
 
 These warn:
 
-- An unknown layer key: drawn as a dashed placeholder.
-- A `repeat:` line that doesn't read (`want repeat: 3-5 x3`).
-- A `repeat:` range outside the block's layers.
+- An unknown layer key: drawn as a dashed placeholder. `unknown-token`
+- A `repeat:` line that doesn't read (`want repeat: 3-5 x3`). `bad-repeat`
+- A `repeat:` range outside the block's layers. `bad-repeat`
 
 ## Rendering in Not a Chef
 

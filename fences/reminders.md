@@ -25,11 +25,11 @@ WARN  reminders: skipped "caption: Before you deal" (want "a note") in "…/swip
 
 These lines warn today:
 
-- A keyword line: `caption: …`, `players: 4` (the type takes none, so a lowercase `key: ` start is read as a keyword, not a note; write `Players: …` or reword)
-- A Markdown list marker: `- Shuffle two decks.` (a note is the whole line; drop the `- `)
-- A second `reminders` block on the same page
+- A keyword line: `caption: …`, `players: 4` (the type takes none, so a lowercase `key: ` start is read as a keyword, not a note; write `Players: …` or reword) `unknown-keyword`
+- A Markdown list marker: `- Shuffle two decks.` (a note is the whole line; drop the `- `) `list-marker`
+- A second `reminders` block on the same page `duplicate-block`
 
-A block with no valid lines shows its source as preformatted text.
+A block with no valid lines shows its source as preformatted text. `no-valid-lines`
 
 ## Rendering in Scorekeep
 

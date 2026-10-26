@@ -50,12 +50,12 @@ WARN  timeline: skipped "1950s Decade entry" (want "YEAR Label") in "…/index.m
 
 These lines warn today:
 
-- No label: `1983`
-- Not four digits: `83 Atari BASIC`, `19830 Atari BASIC`
-- A decade: `1950s Label`
-- A range: `1955-1960 Label`
-- A month or day: `1983-04 Label`
-- Anything before the year other than `~`: `- 1983 Atari BASIC`, `c. 1983 Atari BASIC`
+- No label: `1983` `missing-label`
+- Not four digits: `83 Atari BASIC`, `19830 Atari BASIC` `bad-year`
+- A decade: `1950s Label` `bad-year`
+- A range: `1955-1960 Label` `bad-year`
+- A month or day: `1983-04 Label` `bad-year`
+- Anything before the year other than `~`: `- 1983 Atari BASIC`, `c. 1983 Atari BASIC` `bad-year`
 
 A warning means "not drawn yet", not "never valid".
 

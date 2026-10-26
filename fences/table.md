@@ -72,16 +72,16 @@ WARN  table: skipped "K | 0 | free" (want "tokens | text") in "…/golf-4.md:31:
 
 These lines warn today:
 
-- Too many cells: `K | 0 | free`
-- One cell: `K` (no text), `| 0` (no tokens)
-- A run that isn't ranks, or runs downward: `d1-d6`, `10-2`
-- A keyword before a row, or one this type doesn't take: `caption: …` then `K | 0`; `note: …`
-- A second `head:` or `caption:`
-- `head:` without exactly two cells
+- Too many cells: `K | 0 | free` `too-many-cells`
+- One cell: `K` (no text), `| 0` (no tokens) `missing-cell`
+- A run that isn't ranks, or runs downward: `d1-d6`, `10-2` `bad-run`
+- A keyword before a row `out-of-order`, or one this type doesn't take `unknown-keyword`: `caption: …` then `K | 0`; `note: …`
+- A second `head:` or `caption:` `duplicate-keyword`
+- `head:` without exactly two cells `bad-head`
 
-Recoverable, drawn and warned: a cell mixing tokens and other words (drawn as a word label).
+Recoverable, drawn and warned: a cell mixing tokens and other words (drawn as a word label). `mixed-token-cell`
 
-A block with no valid rows shows its source as preformatted text.
+A block with no valid rows shows its source as preformatted text. `no-valid-lines`
 
 Scorekeep's `RulesDocumentTests` fails on any warning and on a `name` the app asks for that the page doesn't define, so a bad table never ships.
 

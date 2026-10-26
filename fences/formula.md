@@ -36,11 +36,10 @@ The diagram illustrates the sentence; it MUST NOT replace it. Only draw a ratio 
 
 These warn:
 
-- An unknown icon key: drawn as a placeholder.
-- A second operator kind in one block (`+` then `:`).
-- More than five slots: drawn, since they won't fit the sidebar.
-
-Fugu's hook warns on a fifth cell and later ones, as the shared grammar asks (1d97f5f).
+- An unknown icon key: drawn as a placeholder. `unknown-token`
+- A second operator kind in one block (`+` then `:`). `mixed-markers`
+- More than five slots: drawn, since they won't fit the sidebar. `over-limit`
+- More than four cells in a row. `too-many-cells`
 
 ## Rendering in Not a Chef
 

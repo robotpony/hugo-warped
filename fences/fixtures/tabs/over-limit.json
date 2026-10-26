@@ -1,0 +1,18 @@
+{
+  "type": "tabs",
+  "kind": "layout",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "keyword": "tab", "value": "One", "body": "Panel one."},
+    {"line": 4, "keyword": "tab", "value": "Two", "body": "Panel two."},
+    {"line": 6, "keyword": "tab", "value": "Three", "body": "Panel three."},
+    {"line": 8, "keyword": "tab", "value": "Four", "body": "Panel four."},
+    {"line": 10, "keyword": "tab", "value": "Five", "body": "Panel five."},
+    {"line": 12, "keyword": "tab", "value": "Six", "body": "Panel six."},
+    {"line": 14, "keyword": "tab", "value": "Seven", "body": "Panel seven."}
+  ],
+  "warnings": [
+    {"line": 14, "code": "over-limit"}
+  ],
+  "fallback": false
+}

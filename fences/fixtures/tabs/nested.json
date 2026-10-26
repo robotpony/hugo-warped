@@ -1,0 +1,11 @@
+{
+  "type": "tabs",
+  "kind": "layout",
+  "attributes": {"layout": "stack"},
+  "lines": [
+    {"line": 2, "keyword": "tab", "value": "Text", "body": "````markdown\n## Mechanic\n\nA roux is equal parts fat and flour by weight.\n\n```formula\nbutter flour | Roux   | 1\n: water      | Liquid | 5\n```\n````"},
+    {"line": 14, "keyword": "tab", "value": "On the site", "body": "![The gravy recipe, with the 1:5 roux formula drawn in its sidebar](gravy-recipe.png)"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

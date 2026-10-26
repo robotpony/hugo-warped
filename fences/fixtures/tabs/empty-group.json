@@ -1,0 +1,15 @@
+{
+  "type": "tabs",
+  "kind": "layout",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "keyword": "tab", "value": "Pan", "body": ""},
+    {"line": 4, "keyword": "tab", "value": "Oven", "body": "Bake."},
+    {"line": 6, "keyword": "tab", "value": "Grill", "body": ""}
+  ],
+  "warnings": [
+    {"line": 2, "code": "empty-group"},
+    {"line": 6, "code": "empty-group"}
+  ],
+  "fallback": false
+}

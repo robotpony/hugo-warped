@@ -1,0 +1,10 @@
+{
+  "type": "tabs",
+  "kind": "layout",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "keyword": "tab", "value": "Rules", "body": "Tab: a capitalised line is body text.\ntab:no-space is body text too."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

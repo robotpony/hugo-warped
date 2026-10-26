@@ -1,0 +1,11 @@
+{
+  "type": "tabs",
+  "kind": "layout",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "keyword": "tab", "value": "Pan", "body": "Fry in 1 cm of oil at 175°C. ← stays: this is the body"},
+    {"line": 4, "keyword": "tab", "value": "Oven", "body": "Bake at 220°C for 25 minutes."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

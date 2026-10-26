@@ -1,0 +1,13 @@
+{
+  "type": "tabs",
+  "kind": "layout",
+  "attributes": {},
+  "lines": [
+    {"line": 5, "keyword": "tab", "value": "Pan", "body": "Fry."}
+  ],
+  "warnings": [
+    {"line": 2, "code": "out-of-order"},
+    {"line": 4, "code": "out-of-order"}
+  ],
+  "fallback": false
+}

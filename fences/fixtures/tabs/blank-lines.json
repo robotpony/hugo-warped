@@ -1,0 +1,11 @@
+{
+  "type": "tabs",
+  "kind": "layout",
+  "attributes": {},
+  "lines": [
+    {"line": 3, "keyword": "tab", "value": "Pan", "body": "First paragraph.\n\n    Indented code, kept as written."},
+    {"line": 10, "keyword": "tab", "value": "Oven", "body": "Bake."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

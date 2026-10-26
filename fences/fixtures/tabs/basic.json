@@ -1,0 +1,11 @@
+{
+  "type": "tabs",
+  "kind": "layout",
+  "attributes": {"layout": "side"},
+  "lines": [
+    {"line": 2, "keyword": "tab", "value": "Pan", "body": "Fry in 1 cm of oil at 175°C, 4 to 5 minutes a side."},
+    {"line": 5, "keyword": "tab", "value": "Oven", "body": "Bake on a rack at 220°C for 25 minutes, turning once."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

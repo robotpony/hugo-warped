@@ -1,0 +1,13 @@
+{
+  "type": "tabs",
+  "kind": "layout",
+  "attributes": {"layout": "grid"},
+  "lines": [
+    {"line": 2, "keyword": "tab", "value": "Pan", "body": "Fry."},
+    {"line": 4, "keyword": "tab", "value": "Oven", "body": "Bake."}
+  ],
+  "warnings": [
+    {"line": 1, "code": "unknown-layout"}
+  ],
+  "fallback": false
+}

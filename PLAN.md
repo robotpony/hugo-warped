@@ -10,7 +10,7 @@ Open work for hugo-warped. The fence spec's history before 2026-10-26 is in Not 
 
 ## Fences
 
-- [ ] Fixtures (every type but tabs done 2026-10-26; tabs next): good and bad sample blocks per type, each with its expected parse and warnings. They're the source of truth for every parser: the validator, the Hugo partials, and Scorekeep's Swift `RulesDocument`. Shape agreed with the Scorekeep content agent (2026-10-26): `fences/fixtures/<type>/<case>.md` (one whole fence) beside `<case>.json` (type, kind, attributes, lines numbered from the opening fence as 1, warnings, fallback); notes stripped in the expected output; typed tokens for cells; project extensions left out; `fences/fixtures/VERSION` holds the date and spec commit, since Scorekeep vendors a copy. Table, reminders and placeholders come first.
+- [x] Fixtures (every type done 2026-10-26): good and bad sample blocks per type, each with its expected parse and warnings. They're the source of truth for every parser: the validator, the Hugo partials, and Scorekeep's Swift `RulesDocument`. Shape agreed with the Scorekeep content agent (2026-10-26): `fences/fixtures/<type>/<case>.md` (one whole fence) beside `<case>.json` (type, kind, attributes, lines numbered from the opening fence as 1, warnings, fallback); notes stripped in the expected output; typed tokens for cells; project extensions left out; `fences/fixtures/VERSION` holds the date and spec commit, since Scorekeep vendors a copy. Table, reminders and placeholders come first.
 - [x] Warning codes (approved 2026-10-26): shared codes in `fences/README.md` "Warning codes", type codes beside each page's "Lines that don't match". Parsers compare codes and line numbers, never message text.
 - [ ] Validator: stdlib Python, run on any project's Markdown, with the same checks the hooks warn on. In Not a Chef it replaces the build-time `warnf` checks and the `/lint` command's item 5.
 - [ ] Charts: open in the spec, none needed yet. The first shape on record is a labelled bar list, from w42's `qgraph` sketch.
@@ -26,6 +26,7 @@ Spec work that other agents build:
 - [x] w42's flow hook adds the checks settled in ffc4258 (theme 0.7.4, 48a4edc; all 26 timeline and flow fixtures pass): `unknown-keyword` for a keyword line flow doesn't take (skipped, not drawn as a step), and `duplicate-keyword` for a second `caption:` (the first stands). w42's timeline hook gives `unknown-keyword`, not `bad-year`, for a keyword line (w42 theme agent). `fences/fixtures/flow/` and `timeline/` have a case for each.
 - [ ] Fugu ports of `timeline` and `tabs`, when a page needs one (fugu-agent).
 - [ ] w42 removes the `tabs` shortcode (w42 theme agent).
+- [ ] w42's tabs hook drops a `← note` on a `tab:` line (638b870), and passes `fences/fixtures/tabs/` (w42 theme agent).
 
 ## Hugo module
 

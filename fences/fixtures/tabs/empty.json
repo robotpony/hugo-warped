@@ -1,0 +1,10 @@
+{
+  "type": "tabs",
+  "kind": "layout",
+  "attributes": {},
+  "lines": [],
+  "warnings": [
+    {"line": 1, "code": "no-valid-lines"}
+  ],
+  "fallback": true
+}

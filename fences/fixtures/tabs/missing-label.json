@@ -1,0 +1,14 @@
+{
+  "type": "tabs",
+  "kind": "layout",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "keyword": "tab", "value": "Tab", "body": "Fry."},
+    {"line": 4, "keyword": "tab", "value": "Tab", "body": "Bake."}
+  ],
+  "warnings": [
+    {"line": 2, "code": "missing-label"},
+    {"line": 4, "code": "missing-label"}
+  ],
+  "fallback": false
+}

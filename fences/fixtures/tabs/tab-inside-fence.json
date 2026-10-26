@@ -1,0 +1,11 @@
+{
+  "type": "tabs",
+  "kind": "layout",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "keyword": "tab", "value": "Source", "body": "```markdown\ntab: Not a panel\n```\n~~~\ntab: Nor this\n~~~"},
+    {"line": 9, "keyword": "tab", "value": "Result", "body": "A drawn page."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

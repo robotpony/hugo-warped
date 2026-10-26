@@ -1,0 +1,12 @@
+{
+  "type": "tabs",
+  "kind": "layout",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "keyword": "tab", "value": "Text", "body": "Some *Markdown*."},
+    {"line": 4, "keyword": "tab", "value": "On the site", "body": "![A screenshot](shot.png)"},
+    {"line": 6, "keyword": "tab", "value": "[Notes](/notes/)", "body": "- One\n- Two"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

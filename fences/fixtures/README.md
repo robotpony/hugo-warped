@@ -9,7 +9,7 @@ Sample blocks with their expected parse, the source of truth for every parser of
 - `page/<case>.md` and `.json`: whole pages, for the checks that need more than one block (`duplicate-name`, `duplicate-block`, `unclosed-fence`) and for ordinary code blocks, which never warn.
 - `VERSION`: the date and the spec commit these fixtures match. A project that vendors a copy compares it to tell when the copy is stale.
 
-So far: every type but `tabs`, which comes next.
+Every type has fixtures.
 
 ## Expected output
 
@@ -58,6 +58,8 @@ So far: every type but `tabs`, which comes next.
 `timeline` entries are `marker` (`~` or `null`), `year` as a number, and `label` as written, in source order; drawing them in year order is the hook's job.
 
 `flow` steps are rows of one or two cells, with `marker` `→` (`->` read as `→`) or `null`, and `null` where a stray arrow was dropped. A `row:` line is a keyword line, `value` `""` when it has no label. A `row:` with no steps isn't drawn, so it's left out of `lines`.
+
+`tabs` panels are keyword lines, `tab`, whose `value` is the label with its note dropped, or `"Tab"` when it has none. Each adds `body`: the lines up to the next `tab:` outside a nested fence, joined with `\n` and with blank lines at either end dropped. The rest of a body is as written, indentation and `←` included.
 
 Placeholders add `draw` (the resolved list: `diagram` with none is `["table"]`, `sheet` and `house-rules` are `null`) and `description` (the text line, or `null` when the body is empty).
 

@@ -240,6 +240,8 @@ Each type page lists its codes beside its "Lines that don't match" examples. The
 | `duplicate-block` | A second block of a type that allows one per page (`reminders`, `sheet`, `house-rules`). |
 | `unclosed-fence` | An opening fence with no closing one. CommonMark runs it to the end of the file. |
 
+A line warns once, with its own code, whether or not the block as a whole draws. So a block whose lines are all bad reports each line's code first, then `no-valid-lines` on line 1: a `tabs` block with no `tab:` lines gives `out-of-order` for each non-blank line, then `no-valid-lines`.
+
 Codes are lowercase words joined by `-`, like keywords. A code is never reused for a different problem; a new one is added to its type page (or to this table, if it's shared) first. `duplicate-name` and `duplicate-block` are reported on the second block's opening fence, and `unclosed-fence` on the unclosed one. These three need the whole page, so only a page-level check (the validator, Scorekeep's `RulesDocument`) raises them, not a hook. A Hugo hook may not see a malformed `{…}` group either, so `bad-attributes` is likewise raised where the opening line is read raw.
 
 A project can be stricter in its own checks. Scorekeep's `RulesDocumentTests` fail on any skipped line, because the app ships the same files. A hard stop like that belongs in a project's tests, or later in the shared validator, never in the site build.

@@ -40,7 +40,7 @@ These warn:
 - A second operator kind in one block (`+` then `:`).
 - More than five slots: drawn, since they won't fit the sidebar.
 
-**Gap:** the hook ignores a fifth cell and later ones rather than warning, as the shared grammar asks. It changes to match when the validator lands.
+Fugu's hook warns on a fifth cell and later ones, as the shared grammar asks (1d97f5f).
 
 ## Rendering in Not a Chef
 

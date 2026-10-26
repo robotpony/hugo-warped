@@ -59,7 +59,7 @@ These lines warn today:
 
 A warning means "not drawn yet", not "never valid".
 
-A block with no valid lines shows its source as preformatted text, as for every type (`README.md`, "Lines that don't match"). **Gap:** w42's hook draws nothing today.
+A block with no valid lines shows its source as preformatted text, as for every type (`README.md`, "Lines that don't match").
 
 ## Room to grow
 

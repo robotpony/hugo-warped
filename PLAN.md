@@ -17,8 +17,8 @@ Open work for hugo-warped. The fence spec's history before 2026-10-26 is in Not 
 
 Spec work that other agents build:
 
-- [ ] `←` notes: Fugu's hooks drop them (fugu-agent) and so does Scorekeep. w42 is done (theme 0.6.0).
-- [ ] Fugu's formula hook warns on a row with more than four cells (fugu-agent).
+- [ ] `←` notes: Scorekeep's parser and hooks drop them. w42 (theme 0.6.0) and Fugu (1d97f5f) are done.
+- [x] Fugu's formula hook warns on a row with more than four cells (1d97f5f).
 - [ ] Fugu ports of `timeline`, `flow` and `tabs`, when a page needs one (fugu-agent).
 - [ ] w42 removes the `tabs` shortcode (w42 theme agent).
 
@@ -31,3 +31,7 @@ Spec work that other agents build:
 ## Plumbing and tools
 
 Moved in when a second project needs them: mounting a project's `docs/` as site pages, content adapters, JSON indexes (Not a Chef's `recipes/index.json`, Scorekeep's `rules.json`), Fugu's `compare-builds.py`, `frontmatter.py` and `drafts.py`, and `~/projects/sites/hugo-auto-drafts-and-future-posts`.
+
+## After the remote exists
+
+- [ ] Send the repo URL to fugu-agent, which then links `fences/formula.md` and `stack.md` from Fugu's `docs/recipe-format.md` and `docs/features.md`.

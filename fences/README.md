@@ -155,7 +155,7 @@ caption: Kings are free.
 - To show a literal arrow in a cell, write `\←` (or `\<-`). The hook drops the backslash.
 - A note is plain source text: it shows wherever the block isn't drawn (Obsidian, GitHub), and never in a drawing, its alt text or its `aria-label`.
 
-`<-` is accepted for `←` as `->` is for `→`. No fence body in Not a Chef, w42 or Scorekeep held either arrow when notes were added (2026-10-26), so no existing line changes meaning. **Gap:** no hook strips notes yet. Until each project's hooks do, keep notes out of published content.
+`<-` is accepted for `←` as `->` is for `→`. No fence body in Not a Chef, w42 or Scorekeep held either arrow when notes were added (2026-10-26), so no existing line changes meaning. w42's hooks (theme 0.6.0) and Fugu's (1d97f5f) drop notes. **Gap:** Scorekeep's parser and hooks don't yet, so keep notes out of Scorekeep's rules files until they do.
 
 ### Cells
 

@@ -91,7 +91,7 @@ These warn:
 - A step before the first `row:`, in a block that uses rows: not drawn
 - A `row:` with no steps: not drawn
 - More than three rows: drawn, with a warning
-- No steps at all: the source shows as preformatted text, as for every type (`README.md`, "Lines that don't match"). **Gap:** w42's hook draws nothing today.
+- No steps at all: the source shows as preformatted text, as for every type (`README.md`, "Lines that don't match").
 
 A warning means "not drawn this way yet", not "never valid". Any extension (parallel rows were one; branches or step links would be others) must be agreed between both sites and written here first, and must keep every line that's valid today drawing the same way.
 

@@ -11,9 +11,9 @@ This page is the grammar every fence shares. Each type has its own page for its 
 Bruce, tick to approve, or write a change after the item.
 
 - [x] Four kinds of fence: **diagram** (illustrates the prose, carries nothing it doesn't say), **data** (is the content, complete as plain text), **placeholder** (drawn from elsewhere; the body is one plain description line, never empty), **layout** (arranges ordinary Markdown, like `tabs`). See "Kinds".
-- [ ] The shared line grammar: keyword lines are lowercase `key: value`; rows are `|` cells read by position, with no header row (`head:` when a type needs printed titles); markers before column 1; a row with too many cells is a bad line. See "Lines".
-- [ ] Attributes: `name` (this block's id, unique within its file once conditionals are resolved, so two `@if` versions of one table can share it; `table.md`), `draw` (which drawing a placeholder shows, kept apart from `name`), `class` (one site's styling hint). Unknown keys are ignored silently. See "Attributes".
-- [ ] A block with no valid lines shows its source as preformatted text, never nothing. w42's hooks change to match, and so does the formula hook's extra-cell gap (`formula.md`). See "Bad lines".
+- [x] The shared line grammar: keyword lines are lowercase `key: value`; rows are `|` cells read by position, with no header row (`head:` when a type needs printed titles); markers before column 1; a row with too many cells is a bad line. See "Lines".
+- [x] Attributes: `name` (this block's id, unique within its file once conditionals are resolved, so two `@if` versions of one table can share it; `table.md`), `draw` (which drawing a placeholder shows, kept apart from `name`), `class` (one site's styling hint). Unknown keys are ignored silently. See "Attributes".
+- [x] A block with no valid lines shows its source as preformatted text, never nothing. w42's hooks change to match, and so does the formula hook's extra-cell gap (`formula.md`). See "Bad lines".
 - [ ] Project extensions stay outside the spec: Scorekeep's `@if` may wrap whole fences but never sits inside a body, `{key}` substitution runs before parsing, and w42's (i) source toggle is optional. See "Project extensions".
 - [ ] Card and dice tokens in `table.md`: die faces written `d1`–`d6` (easy to type) rather than `⚀`–`⚅` (pictures in plain text, but hard to type and tiny), `Joker` as a token, and `stack:7♣` for the topped stack (a plainer spelling is welcome). See `table.md`, "Tokens".
 - [ ] `←` notes: `← text` (or `<- text`) after whitespace, or at the start of a line, runs to the end of the line and is never drawn; works on rows, text lines and keyword lines, not inside `tabs` panels; `\←` for a literal arrow. See "Notes".
@@ -234,7 +234,7 @@ A target with no hook for a type shows the fence as preformatted text: Obsidian,
 
 A target that has the hook may still fall back within it. Scorekeep's web hooks show a light and dark screenshot pair for a placeholder when one exists, and a dashed box with the description line when it doesn't.
 
-A type no hook knows is a plain `<pre>` and a warning on a site. Scorekeep bundles its Markdown into the app, so there an unknown type fails the project's tests and never ships.
+An ordinary code block (```` ```bash ````, ```` ```json ````) isn't a fence, and a site never warns about one. A project may warn on an unknown type only where every block is expected to be a fence: Scorekeep's rules pages, where an unknown type is a plain `<pre>` and a warning on the site, and a test failure in the app, so it never ships.
 
 ## Project extensions
 

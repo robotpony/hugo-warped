@@ -40,6 +40,7 @@ These warn:
 - A second operator kind in one block (`+` then `:`). `mixed-markers`
 - More than five slots: drawn, since they won't fit the sidebar. `over-limit`
 - More than four cells in a row. `too-many-cells`
+- A keyword line this type doesn't take (`note: x`): skipped, with one warning. `unknown-keyword`
 
 ## Rendering in Not a Chef
 

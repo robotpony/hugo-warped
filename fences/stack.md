@@ -18,7 +18,7 @@ caption: Drive-in deluxe
 
 One layer per row, top first, `layer | label | role`:
 
-1. **Layer.** A token: a key from Fugu's `assets/icons/layers/` (the full list is in Fugu's `docs/recipe-format.md`, "Stack diagrams"). An unknown key draws a dashed placeholder and warns. Pick the layer that matches the label: `lettuce` is a single leaf, `lettuce-shredded` a heap of shreds. Patties are griddled unless the key says `-grilled`.
+1. **Layer.** A token: a key from Fugu's `assets/icons/layers/` (the full list is in Fugu's `docs/recipe-format.md`, "Stack diagrams"). An unknown key draws a dashed placeholder and warns. Pick the layer that matches the label: `lettuce` is a single leaf, `lettuce-shredded` a heap of shreds. Patties are griddled unless the key says `-grilled`. A spread on its bun is one layer, written as a pair, `bun-base + mayo` (the spaces are optional); it draws the pair's own drawing, not two layers. A pair the theme has no drawing for is an unknown key.
 2. **Label.** Inline text: what the layer is, with the pick's quantity when there is one.
 3. **Role.** Inline text: what it does for the whole. Optional.
 
@@ -35,9 +35,10 @@ On a build page the first `stack` block goes under `## Picks`, and its layers MU
 
 These warn:
 
-- An unknown layer key: drawn as a dashed placeholder. `unknown-token`
+- An unknown layer key or pair: drawn as a dashed placeholder. `unknown-token`
 - A `repeat:` line that doesn't read (`want repeat: 3-5 x3`). `bad-repeat`
-- A `repeat:` range outside the block's layers. `bad-repeat`
+- A `repeat:` range outside the block's layers, reported on the `repeat:` line. `bad-repeat`
+- A keyword line this type doesn't take (`note: x`): skipped, with one warning. `unknown-keyword`
 
 ## Rendering in Not a Chef
 

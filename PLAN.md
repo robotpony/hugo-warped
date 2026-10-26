@@ -31,8 +31,8 @@ Spec work that other agents build:
 
 ## Hugo module
 
-- [ ] One parse partial per fence type, returning data and warnings; themes draw their own HTML.
-- [ ] An example site that runs the fixtures through the partials, so they can't drift from the validator. `tools/run-hugo-fixtures.py` (from the w42 theme agent) already builds the fixtures through a theme's hooks and checks warnings, fallback and what's drawn; w42 0.7.5 passes all 40 timeline, flow and tabs cases.
+- [x] One parse partial per fence type, returning data and warnings; themes draw their own HTML. `partials/hugo-warped/parse.html` dispatches by type and `warn.html` prints the warnings; `go.mod` makes the repo importable.
+- [x] An example site that runs the fixtures through the partials, so they can't drift from the validator: `tools/test-hugo-partials.py` builds one and compares every block fixture's parse in full (106 cases; `table/bad-attributes` can't be seen in Hugo). `tools/run-hugo-fixtures.py` (from the w42 theme agent) already builds the fixtures through a theme's hooks and checks warnings, fallback and what's drawn; w42 0.7.5 passes all 40 timeline, flow and tabs cases.
 - [ ] Later, when a second site needs them: link, image, heading and table hooks.
 
 ## Plumbing and tools

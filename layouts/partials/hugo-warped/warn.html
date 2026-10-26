@@ -1,0 +1,21 @@
+{{- /*
+  Prints a parse's warnings as Hugo build warnings, each at its own line:
+
+    {{- $p := partial "hugo-warped/parse.html" . -}}
+    {{- partial "hugo-warped/warn.html" (dict "hook" . "parse" $p) -}}
+
+  WARN  table [too-many-cells]: "K | 0 | free" in "content/golf.md:12:1"
+
+  The form is fences/README.md's "Warning codes": the type, the code in
+  brackets, the line quoted when there is one, and the position. A
+  warning never fails the build.
+*/ -}}
+{{- $pos := .hook.Position -}}
+{{- range .parse.warnings -}}
+  {{- $at := printf "%s:%d:%d" $pos.Filename (add $pos.LineNumber .line -1) $pos.ColumnNumber -}}
+  {{- if .text -}}
+    {{- warnf "%s [%s]: %q in %q" $.parse.type .code .text $at -}}
+  {{- else -}}
+    {{- warnf "%s [%s]: in %q" $.parse.type .code $at -}}
+  {{- end -}}
+{{- end -}}

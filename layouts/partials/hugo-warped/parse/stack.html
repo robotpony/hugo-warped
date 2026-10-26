@@ -1,0 +1,62 @@
+{{- /*
+  stack (fences/stack.md): layer | label | role, top first, then caption:
+  and any number of repeat: lines. A layer pair's + loses its spaces.
+*/ -}}
+{{- $known := index .keys "stack" -}}
+{{- $lines := slice }}{{ $warns := slice }}{{ $caption := false }}{{ $trailer := false }}{{ $layers := 0 -}}
+{{- range partial "hugo-warped/read.html" .body -}}
+  {{- $n := .n }}{{ $line := .line -}}
+  {{- with partial "hugo-warped/keyword.html" $line -}}
+    {{- if eq .key "caption" -}}
+      {{- if $caption -}}
+        {{- $warns = $warns | append (dict "line" $n "code" "duplicate-keyword" "text" $line) -}}
+      {{- else -}}
+        {{- $caption = true }}{{ $trailer = true -}}
+        {{- $lines = $lines | append (dict "line" $n "keyword" "caption" "value" .value) -}}
+      {{- end -}}
+    {{- else if eq .key "repeat" -}}
+      {{- $trailer = true -}}
+      {{- $m := findRESubmatch `^(\d+)(?:\s*-\s*(\d+))?\s*[x×]\s*(\d+)$` .value 1 -}}
+      {{- $ok := false -}}
+      {{- if $m -}}
+        {{- $m = index $m 0 -}}
+        {{- $from := int (index $m 1) }}{{ $to := cond (ne (index $m 2) "") (index $m 2) (index $m 1) | int }}{{ $times := int (index $m 3) -}}
+        {{- if and (ge $times 2) (le $from $to) -}}
+          {{- $ok = true -}}
+          {{- $lines = $lines | append (dict "line" $n "keyword" "repeat" "value" .value "from" $from "to" $to "times" $times) -}}
+        {{- end -}}
+      {{- end -}}
+      {{- if not $ok }}{{ $warns = $warns | append (dict "line" $n "code" "bad-repeat" "text" $line) }}{{ end -}}
+    {{- else -}}
+      {{- $warns = $warns | append (dict "line" $n "code" "unknown-keyword" "text" $line) -}}
+    {{- end -}}
+    {{- continue -}}
+  {{- end -}}
+  {{- if $trailer -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "out-of-order" "text" $line) }}{{ continue -}}
+  {{- end -}}
+  {{- $c := partial "hugo-warped/cells.html" $line -}}
+  {{- if gt (len $c) 3 -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "too-many-cells" "text" $line) }}{{ $c = first 3 $c -}}
+  {{- end -}}
+  {{- if or (lt (len $c) 2) (eq (index $c 0) "") (eq (index $c 1) "") -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "missing-cell" "text" $line) }}{{ continue -}}
+  {{- end -}}
+  {{- $layer := replaceRE `\s*\+\s*` "+" (index $c 0) -}}
+  {{- if and $known (not (in $known $layer)) -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "unknown-token" "text" $line) -}}
+  {{- end -}}
+  {{- $lines = $lines | append (dict "line" $n "row" $c "marker" nil "layer" $layer) }}{{ $layers = add $layers 1 -}}
+{{- end -}}
+{{- /* A repeat that runs past the last layer is dropped, warned on its own line. */ -}}
+{{- $kept := slice -}}
+{{- range $lines -}}
+  {{- if and (eq .keyword "repeat") (or (lt .from 1) (gt .to $layers)) -}}
+    {{- $warns = $warns | append (dict "line" .line "code" "bad-repeat") -}}
+  {{- else -}}
+    {{- $kept = $kept | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- $fallback := false -}}
+{{- if not $layers }}{{ $warns = $warns | append (dict "line" 1 "code" "no-valid-lines") }}{{ $fallback = true }}{{ end -}}
+{{- return dict "lines" $kept "warnings" $warns "fallback" $fallback -}}

@@ -1,0 +1,39 @@
+{{- /*
+  Reads one fence, from a code-block render hook, and returns its parse
+  in the shape of fences/fixtures/<type>/<case>.json: type, kind,
+  attributes, lines, warnings and fallback (placeholders add draw and
+  description). Each warning is (dict "line" <the opening fence as 1>
+  "code" <its code> "text" <the line, when there is one>). A theme draws
+  from the parse and prints the warnings with hugo-warped/warn.html:
+
+    {{- $p := partial "hugo-warped/parse.html" . -}}
+    {{- partial "hugo-warped/warn.html" (dict "hook" . "parse" $p) -}}
+
+  To check formula or stack keys (unknown-token), pass them, each a
+  slice of the keys the theme draws:
+
+    {{- $p := partial "hugo-warped/parse.html" (dict "hook" . "keys" (dict "formula" $icons)) -}}
+
+  Returns false for a type that isn't a fence. Hugo parses the {…}
+  group before a hook sees it, so bad-attributes is never raised here;
+  the validator (tools/check-fences.py) reads the raw line.
+*/ -}}
+{{- $hook := . -}}
+{{- $keys := dict -}}
+{{- if reflect.IsMap . }}{{ $hook = .hook }}{{ $keys = .keys | default dict }}{{ end -}}
+{{- $kinds := dict
+  "formula" "diagram" "stack" "diagram" "timeline" "diagram" "flow" "diagram"
+  "table" "data" "reminders" "data"
+  "diagram" "placeholder" "example" "placeholder" "sheet" "placeholder" "house-rules" "placeholder"
+  "tabs" "layout" -}}
+{{- $r := false -}}
+{{- with index $kinds $hook.Type -}}
+  {{- $kind := . -}}
+  {{- $attributes := dict -}}
+  {{- range $k, $v := $hook.Attributes }}{{ $attributes = merge $attributes (dict $k (string $v)) }}{{ end -}}
+  {{- $body := split (strings.TrimRight "\n" $hook.Inner) "\n" -}}
+  {{- $name := cond (eq $kind "placeholder") "placeholder" $hook.Type -}}
+  {{- $parsed := partial (printf "hugo-warped/parse/%s.html" $name) (dict "type" $hook.Type "attributes" $attributes "body" $body "keys" $keys) -}}
+  {{- $r = merge (dict "type" $hook.Type "kind" $kind "attributes" $attributes "fallback" false) $parsed -}}
+{{- end -}}
+{{- return $r -}}

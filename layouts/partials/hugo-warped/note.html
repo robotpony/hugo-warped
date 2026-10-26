@@ -1,0 +1,11 @@
+{{- /*
+  One line of a line-read fence body, as a parser reads it: its note
+  dropped and the rest trimmed (fences/README.md, "Notes"). A note starts
+  at ← or <- with whitespace before it, or at the start of the line, and
+  runs to the end. \← and \<- are literal arrows. A note-only line comes
+  back empty, so callers skip it like a blank one.
+*/ -}}
+{{- $line := replace (replace . `\←` "\x00l") `\<-` "\x00a" -}}
+{{- $line = replaceRE `(?:^|\s+)(?:←|<-).*$` "" $line -}}
+{{- $line = replace (replace $line "\x00l" "←") "\x00a" "<-" -}}
+{{- return strings.TrimSpace $line -}}

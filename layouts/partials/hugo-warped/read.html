@@ -1,0 +1,12 @@
+{{- /*
+  A fence body's line-read lines: (dict "n" <line, the opening fence as 1>
+  "line" <with its note dropped>), blank and note-only lines left out.
+  Takes the body's raw lines.
+*/ -}}
+{{- $out := slice -}}
+{{- range $i, $raw := . -}}
+  {{- with partial "hugo-warped/note.html" $raw -}}
+    {{- $out = $out | append (dict "n" (add $i 2) "line" .) -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

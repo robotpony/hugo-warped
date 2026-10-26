@@ -1,0 +1,4 @@
+{{- /* A row's cells: split on | and trimmed. */ -}}
+{{- $out := slice -}}
+{{- range split . "|" }}{{ $out = $out | append (strings.TrimSpace .) }}{{ end -}}
+{{- return $out -}}

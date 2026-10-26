@@ -1,0 +1,47 @@
+{{- /*
+  tabs (fences/tabs.md): tab: Label lines, each starting a panel of block
+  Markdown that runs to the next one. A tab: line inside a nested fence
+  is part of that fence. A tab: line takes a note; a body is as written,
+  less blank lines at either end.
+*/ -}}
+{{- $warns := slice -}}
+{{- with .attributes.layout }}{{ if not (in (slice "side" "stack") .) }}{{ $warns = $warns | append (dict "line" 1 "code" "unknown-layout") }}{{ end }}{{ end -}}
+{{- $panels := slice }}{{ $panel := false }}{{ $body := slice }}{{ $fence := "" -}}
+{{- $open := print `^ {0,3}(` "`" `{3,}|~{3,})` -}}
+{{- range $i, $raw := .body -}}
+  {{- $n := add $i 2 -}}
+  {{- if $fence -}}
+    {{- with findRESubmatch (print $open `\s*$`) $raw 1 -}}
+      {{- $run := index (index . 0) 1 -}}
+      {{- if and (eq (substr $run 0 1) (substr $fence 0 1)) (ge (len $run) (len $fence)) }}{{ $fence = "" }}{{ end -}}
+    {{- end -}}
+  {{- else -}}
+    {{- $line := partial "hugo-warped/note.html" $raw -}}
+    {{- with findRESubmatch `^tab:(?:\s+(.*))?$` $line 1 -}}
+      {{- if $panel }}{{ $panels = $panels | append (merge $panel (dict "body" $body)) }}{{ end -}}
+      {{- $panel = dict "line" $n "keyword" "tab" "value" (strings.TrimSpace (index (index . 0) 1)) }}{{ $body = slice -}}
+      {{- continue -}}
+    {{- end -}}
+    {{- with findRESubmatch $open $raw 1 }}{{ $fence = index (index . 0) 1 }}{{ end -}}
+  {{- end -}}
+  {{- if $panel -}}
+    {{- $body = $body | append $raw -}}
+  {{- else if strings.TrimSpace $raw -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "out-of-order" "text" (strings.TrimSpace $raw)) -}}
+  {{- end -}}
+{{- end -}}
+{{- if $panel }}{{ $panels = $panels | append (merge $panel (dict "body" $body)) }}{{ end -}}
+{{- $lines := slice -}}
+{{- range $panels -}}
+  {{- $text := delimit .body "\n" -}}
+  {{- $text = replaceRE `^(?:[ \t]*\n)+` "" $text | replaceRE `(?:\n[ \t]*)+$` "" -}}
+  {{- if not (strings.TrimSpace $text) }}{{ $text = "" }}{{ end -}}
+  {{- $label := .value -}}
+  {{- if not $label }}{{ $warns = $warns | append (dict "line" .line "code" "missing-label") }}{{ $label = "Tab" }}{{ end -}}
+  {{- if not $text }}{{ $warns = $warns | append (dict "line" .line "code" "empty-group") }}{{ end -}}
+  {{- $lines = $lines | append (dict "line" .line "keyword" "tab" "value" $label "body" $text) -}}
+{{- end -}}
+{{- if gt (len $lines) 6 }}{{ $warns = $warns | append (dict "line" (index $lines 6).line "code" "over-limit") }}{{ end -}}
+{{- $fallback := false -}}
+{{- if not $lines }}{{ $warns = $warns | append (dict "line" 1 "code" "no-valid-lines") }}{{ $fallback = true }}{{ end -}}
+{{- return dict "lines" $lines "warnings" $warns "fallback" $fallback -}}

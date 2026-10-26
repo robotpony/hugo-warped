@@ -1,0 +1,52 @@
+{{- /* table (fences/table.md): tokens | text rows, then head: and caption:. */ -}}
+{{- $lines := slice }}{{ $warns := slice }}{{ $seen := slice }}{{ $trailer := "" }}{{ $rows := 0 -}}
+{{- range partial "hugo-warped/read.html" .body -}}
+  {{- $n := .n }}{{ $line := .line -}}
+  {{- with partial "hugo-warped/keyword.html" $line -}}
+    {{- $head := cond (eq .key "head") (partial "hugo-warped/cells.html" .value) slice -}}
+    {{- if not (in (slice "head" "caption") .key) -}}
+      {{- $warns = $warns | append (dict "line" $n "code" "unknown-keyword" "text" $line) -}}
+    {{- else if in $seen .key -}}
+      {{- $warns = $warns | append (dict "line" $n "code" "duplicate-keyword" "text" $line) -}}
+    {{- else if and (eq .key "head") (eq $trailer "caption") -}}
+      {{- $warns = $warns | append (dict "line" $n "code" "out-of-order" "text" $line) -}}
+    {{- else if and (eq .key "head") (or (ne (len $head) 2) (in $head "")) -}}
+      {{- $warns = $warns | append (dict "line" $n "code" "bad-head" "text" $line) -}}
+    {{- else -}}
+      {{- $seen = $seen | append .key }}{{ $trailer = .key -}}
+      {{- $e := dict "line" $n "keyword" .key "value" .value -}}
+      {{- if eq .key "head" }}{{ $e = merge $e (dict "cells" $head) }}{{ end -}}
+      {{- $lines = $lines | append $e -}}
+    {{- end -}}
+    {{- continue -}}
+  {{- end -}}
+  {{- if $trailer -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "out-of-order" "text" $line) }}{{ continue -}}
+  {{- end -}}
+  {{- $c := partial "hugo-warped/cells.html" $line -}}
+  {{- if gt (len $c) 2 -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "too-many-cells" "text" $line) }}{{ continue -}}
+  {{- end -}}
+  {{- if or (lt (len $c) 2) (in $c "") -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "missing-cell" "text" $line) }}{{ continue -}}
+  {{- end -}}
+  {{- $tokens := slice }}{{ $bad := false }}{{ $words := 0 -}}
+  {{- range split (replaceRE `\s+` " " (index $c 0)) " " -}}
+    {{- $t := partial "hugo-warped/parse/table-token.html" . -}}
+    {{- if eq $t "bad-run" }}{{ $bad = true }}{{ else if $t }}{{ $tokens = $tokens | append $t }}{{ else }}{{ $words = add $words 1 }}{{ end -}}
+  {{- end -}}
+  {{- if $bad -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "bad-run" "text" $line) }}{{ continue -}}
+  {{- end -}}
+  {{- $e := dict "line" $n "row" $c "marker" nil -}}
+  {{- if not $words -}}
+    {{- $e = merge $e (dict "tokens" $tokens) -}}
+  {{- else -}}
+    {{- $e = merge $e (dict "label" (index $c 0)) -}}
+    {{- if $tokens }}{{ $warns = $warns | append (dict "line" $n "code" "mixed-token-cell" "text" $line) }}{{ end -}}
+  {{- end -}}
+  {{- $lines = $lines | append $e }}{{ $rows = add $rows 1 -}}
+{{- end -}}
+{{- $fallback := false -}}
+{{- if not $rows }}{{ $warns = $warns | append (dict "line" 1 "code" "no-valid-lines") }}{{ $fallback = true }}{{ end -}}
+{{- return dict "lines" $lines "warnings" $warns "fallback" $fallback -}}

@@ -1,0 +1,62 @@
+{{- /*
+  formula (fences/formula.md): icon | label | quantity | swaps slots, one
+  operator per block, an optional closing = row, then caption: and bar:.
+*/ -}}
+{{- $known := index .keys "formula" -}}
+{{- $lines := slice }}{{ $warns := slice }}{{ $seen := slice -}}
+{{- $trailer := false }}{{ $result := false }}{{ $operator := "" }}{{ $slots := slice -}}
+{{- range partial "hugo-warped/read.html" .body -}}
+  {{- $n := .n }}{{ $line := .line -}}
+  {{- with partial "hugo-warped/keyword.html" $line -}}
+    {{- if not (in (slice "caption" "bar") .key) -}}
+      {{- $warns = $warns | append (dict "line" $n "code" "unknown-keyword" "text" $line) -}}
+    {{- else if in $seen .key -}}
+      {{- $warns = $warns | append (dict "line" $n "code" "duplicate-keyword" "text" $line) -}}
+    {{- else -}}
+      {{- $seen = $seen | append .key }}{{ $trailer = true -}}
+      {{- $lines = $lines | append (dict "line" $n "keyword" .key "value" .value) -}}
+    {{- end -}}
+    {{- continue -}}
+  {{- end -}}
+  {{- if or $trailer $result -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "out-of-order" "text" $line) }}{{ continue -}}
+  {{- end -}}
+  {{- $marker := "" }}{{ $rest := $line -}}
+  {{- with findRESubmatch `^(\+|:|→|->|=)\s+(.*)$` $line 1 -}}
+    {{- $marker = index (index . 0) 1 }}{{ $rest = index (index . 0) 2 -}}
+  {{- end -}}
+  {{- if eq $marker "->" }}{{ $marker = "→" }}{{ end -}}
+  {{- $c := partial "hugo-warped/cells.html" $rest -}}
+  {{- if gt (len $c) 4 -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "too-many-cells" "text" $line) }}{{ $c = first 4 $c -}}
+  {{- end -}}
+  {{- if or (lt (len $c) 2) (eq (index $c 0) "") (eq (index $c 1) "") -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "missing-cell" "text" $line) }}{{ continue -}}
+  {{- end -}}
+  {{- if and $marker (not $slots) -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "stray-marker" "text" $line) }}{{ $marker = "" -}}
+  {{- else if and $marker (ne $marker "=") -}}
+    {{- if and $operator (ne $marker $operator) -}}
+      {{- $warns = $warns | append (dict "line" $n "code" "mixed-markers" "text" $line) -}}
+    {{- else -}}
+      {{- $operator = $marker -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $result = eq $marker "=" -}}
+  {{- $icons := split (replaceRE `\s+` " " (index $c 0)) " " -}}
+  {{- $swaps := slice -}}
+  {{- if gt (len $c) 3 }}{{ range split (index $c 3) "," }}{{ with strings.TrimSpace . }}{{ $swaps = $swaps | append . }}{{ end }}{{ end }}{{ end -}}
+  {{- if or (gt (len $icons) 2) (gt (len $swaps) 3) -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "over-limit" "text" $line) -}}
+  {{- end -}}
+  {{- if $known -}}
+    {{- $unknown := false }}{{ range $icons }}{{ if not (in $known .) }}{{ $unknown = true }}{{ end }}{{ end -}}
+    {{- if $unknown }}{{ $warns = $warns | append (dict "line" $n "code" "unknown-token" "text" $line) }}{{ end -}}
+  {{- end -}}
+  {{- $e := dict "line" $n "row" $c "marker" (cond (ne $marker "") $marker nil) "icons" $icons "swaps" $swaps -}}
+  {{- $lines = $lines | append $e }}{{ $slots = $slots | append $e -}}
+{{- end -}}
+{{- if gt (len $slots) 5 }}{{ $warns = $warns | append (dict "line" (index $slots 5).line "code" "over-limit") }}{{ end -}}
+{{- $fallback := false -}}
+{{- if not $slots }}{{ $warns = $warns | append (dict "line" 1 "code" "no-valid-lines") }}{{ $fallback = true }}{{ end -}}
+{{- return dict "lines" $lines "warnings" $warns "fallback" $fallback -}}

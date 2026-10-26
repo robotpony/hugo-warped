@@ -1,0 +1,27 @@
+{{- /*
+  diagram, example, sheet and house-rules (fences/placeholders.md): one
+  description line, and draw resolved for the type.
+*/ -}}
+{{- $lines := slice }}{{ $warns := slice -}}
+{{- range partial "hugo-warped/read.html" .body -}}
+  {{- if $lines -}}
+    {{- $warns = $warns | append (dict "line" .n "code" "extra-line" "text" .line) -}}
+  {{- else -}}
+    {{- $lines = $lines | append (dict "line" .n "text" .line) -}}
+  {{- end -}}
+{{- end -}}
+{{- if not $lines }}{{ $warns = $warns | append (dict "line" 1 "code" "empty-placeholder") }}{{ end -}}
+{{- $words := slice -}}
+{{- with .attributes.draw }}{{ range split (replaceRE `\s+` " " (strings.TrimSpace .)) " " }}{{ $words = $words | append . }}{{ end }}{{ end -}}
+{{- $draw := slice }}{{ $resolved := true -}}
+{{- if eq .type "diagram" -}}
+  {{- $draw = $words | default (slice "table") -}}
+{{- else if eq .type "example" -}}
+  {{- $draw = first 1 $words -}}
+  {{- if not $words }}{{ $warns = $warns | append (dict "line" 1 "code" "missing-draw") }}{{ else if gt (len $words) 1 }}{{ $warns = $warns | append (dict "line" 1 "code" "too-many-draw") }}{{ end -}}
+{{- else -}}
+  {{- $resolved = false -}}
+  {{- if isset .attributes "draw" }}{{ $warns = $warns | append (dict "line" 1 "code" "ignored-draw") }}{{ end -}}
+{{- end -}}
+{{- $description := cond (gt (len $lines) 0) (index ($lines | default (slice (dict))) 0).text nil -}}
+{{- return dict "lines" $lines "warnings" $warns "draw" (cond $resolved $draw nil) "description" $description -}}

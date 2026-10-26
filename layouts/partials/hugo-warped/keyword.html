@@ -1,0 +1,11 @@
+{{- /*
+  A keyword line's key and value, (dict "key" "caption" "value" "…"), or
+  false. Keys are lowercase a-z and -, then a colon and a space or the
+  end of the line (fences/README.md, "Lines").
+*/ -}}
+{{- $r := false -}}
+{{- with findRESubmatch `^([a-z][a-z-]*):(?:\s+(.*))?$` . 1 -}}
+  {{- $m := index . 0 -}}
+  {{- $r = dict "key" (index $m 1) "value" (strings.TrimSpace (index $m 2)) -}}
+{{- end -}}
+{{- return $r -}}

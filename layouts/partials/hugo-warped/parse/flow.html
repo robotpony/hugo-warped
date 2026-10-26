@@ -1,0 +1,66 @@
+{{- /*
+  flow (fences/flow.md): Label | note steps, an optional → on each, in one
+  row or in row: groups, then one caption:. A row: with no steps isn't
+  drawn, so it's left out of lines.
+*/ -}}
+{{- $read := partial "hugo-warped/read.html" .body -}}
+{{- $rowMode := false -}}
+{{- range $read }}{{ with partial "hugo-warped/keyword.html" .line }}{{ if eq .key "row" }}{{ $rowMode = true }}{{ end }}{{ end }}{{ end -}}
+{{- $warns := slice }}{{ $rows := slice }}{{ $caption := false -}}
+{{- $head := false }}{{ $steps := slice }}{{ $open := not $rowMode -}}
+{{- range $read -}}
+  {{- $n := .n }}{{ $line := .line -}}
+  {{- $kw := partial "hugo-warped/keyword.html" $line -}}
+  {{- if and $kw (eq $kw.key "caption") -}}
+    {{- if $caption -}}
+      {{- $warns = $warns | append (dict "line" $n "code" "duplicate-keyword" "text" $line) -}}
+    {{- else -}}
+      {{- $caption = dict "line" $n "keyword" "caption" "value" $kw.value -}}
+    {{- end -}}
+    {{- continue -}}
+  {{- end -}}
+  {{- if $caption -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "out-of-order" "text" $line) }}{{ continue -}}
+  {{- end -}}
+  {{- if and $kw (eq $kw.key "row") -}}
+    {{- if $open }}{{ $rows = $rows | append (dict "head" $head "steps" $steps) }}{{ end -}}
+    {{- $head = dict "line" $n "keyword" "row" "value" $kw.value }}{{ $steps = slice }}{{ $open = true -}}
+    {{- continue -}}
+  {{- end -}}
+  {{- if $kw -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "unknown-keyword" "text" $line) }}{{ continue -}}
+  {{- end -}}
+  {{- if not $open -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "out-of-order" "text" $line) }}{{ continue -}}
+  {{- end -}}
+  {{- $marker := "" }}{{ $rest := $line -}}
+  {{- with findRESubmatch `^(?:→|->)\s+(.*)$` $line 1 }}{{ $marker = "→" }}{{ $rest = index (index . 0) 1 }}{{ end -}}
+  {{- $c := partial "hugo-warped/cells.html" $rest -}}
+  {{- if gt (len $c) 2 -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "too-many-cells" "text" $line) }}{{ continue -}}
+  {{- end -}}
+  {{- if eq (index $c 0) "" -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "missing-cell" "text" $line) }}{{ continue -}}
+  {{- end -}}
+  {{- if and $marker (not $steps) -}}
+    {{- $warns = $warns | append (dict "line" $n "code" "stray-marker" "text" $line) }}{{ $marker = "" -}}
+  {{- end -}}
+  {{- $steps = $steps | append (dict "line" $n "row" $c "marker" (cond (ne $marker "") $marker nil)) -}}
+{{- end -}}
+{{- if $open }}{{ $rows = $rows | append (dict "head" $head "steps" $steps) }}{{ end -}}
+{{- $lines := slice }}{{ $drawn := slice -}}
+{{- range $rows -}}
+  {{- if .steps -}}
+    {{- $drawn = $drawn | append . -}}
+    {{- with .head }}{{ $lines = $lines | append . }}{{ end -}}
+    {{- $lines = $lines | append .steps -}}
+    {{- if gt (len .steps) 5 }}{{ $warns = $warns | append (dict "line" (index .steps 5).line "code" "over-limit") }}{{ end -}}
+  {{- else if .head -}}
+    {{- $warns = $warns | append (dict "line" .head.line "code" "empty-group") -}}
+  {{- end -}}
+{{- end -}}
+{{- if and $rowMode (gt (len $drawn) 3) }}{{ $warns = $warns | append (dict "line" (index $drawn 3).head.line "code" "over-limit") }}{{ end -}}
+{{- with $caption }}{{ $lines = $lines | append . }}{{ end -}}
+{{- $fallback := false -}}
+{{- if not $drawn }}{{ $warns = $warns | append (dict "line" 1 "code" "no-valid-lines") }}{{ $fallback = true }}{{ end -}}
+{{- return dict "lines" $lines "warnings" $warns "fallback" $fallback -}}

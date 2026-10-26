@@ -1,0 +1,17 @@
+{{- /* timeline (fences/timeline.md): "YEAR Label" text lines, ~ for a faint entry, in source order. */ -}}
+{{- $lines := slice }}{{ $warns := slice -}}
+{{- range partial "hugo-warped/read.html" .body -}}
+  {{- if partial "hugo-warped/keyword.html" .line -}}
+    {{- $warns = $warns | append (dict "line" .n "code" "unknown-keyword" "text" .line) -}}
+  {{- else if findRE `^~?\d{4}\s+\S` .line 1 -}}
+    {{- $m := index (findRESubmatch `^(~?)(\d{4})\s+(.+)$` .line 1) 0 -}}
+    {{- $lines = $lines | append (dict "line" .n "marker" (cond (eq (index $m 1) "~") "~" nil) "year" (int (strings.TrimLeft "0" (index $m 2) | default "0")) "label" (index $m 3)) -}}
+  {{- else if findRE `^~?\d{4}$` .line 1 -}}
+    {{- $warns = $warns | append (dict "line" .n "code" "missing-label" "text" .line) -}}
+  {{- else -}}
+    {{- $warns = $warns | append (dict "line" .n "code" "bad-year" "text" .line) -}}
+  {{- end -}}
+{{- end -}}
+{{- $fallback := false -}}
+{{- if not $lines }}{{ $warns = $warns | append (dict "line" 1 "code" "no-valid-lines") }}{{ $fallback = true }}{{ end -}}
+{{- return dict "lines" $lines "warnings" $warns "fallback" $fallback -}}

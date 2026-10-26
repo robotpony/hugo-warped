@@ -15,10 +15,10 @@ The sites share structure and parsing here. Each keeps its own look, so nothing 
 | Fence spec (`fences/`) | **Approved** and in use. Nine fence types, a shared grammar, and a stable code for every warning. |
 | Fixtures (`fences/fixtures/`) | **Done** for every type. Fugu passes formula, stack and flow; w42 passes timeline, flow and tabs. |
 | Validator (`tools/check-fences.py`) | **Done.** Stdlib Python, run on any project's Markdown. It passes every fixture (`tools/test-check-fences.py`), and Not a Chef, w42 and Scorekeep check clean. |
-| Hugo module | Planned. Parse partials only. |
+| Hugo module (`layouts/partials/hugo-warped/`) | **Done**, and optional. One parse partial per type, returning the same parse as the validator. It passes every block fixture in Hugo (`tools/test-hugo-partials.py`). No theme uses it yet. |
 | Plumbing and tools | `tools/run-hugo-fixtures.py` runs the fixtures through a theme's hooks. The rest comes as a second site needs each piece. |
 
-The spec and its fixtures are the product so far, and each site's theme implements them in its own hooks. `PLAN.md` has the open work.
+The spec and its fixtures are the product so far. Each site's theme implements them in its own hooks, and a new theme can start from the module's partials instead. `PLAN.md` has the open work.
 
 ## Fences
 
@@ -48,20 +48,38 @@ Start at `fences/README.md` for the shared grammar: lines, cells, notes, attribu
 
 | Site | Repo | Theme or parser | Status |
 |---|---|---|---|
-| bruce-loves-to-cook.ca | `~/writing/not-a-chef` | Fugu (`robotpony/hugo-theme-fugu`) | Implements `formula` and `stack`, with notes and warning codes (Fugu 9fc6950) |
-| warpedvisions.org | `~/projects/sites/w42` | w42 theme 0.7.3 | Implements `timeline`, `flow` and `tabs`, with warning codes; the tabs shortcode is on its way out |
+| bruce-loves-to-cook.ca | `~/writing/not-a-chef` | Fugu (`robotpony/hugo-theme-fugu`) | Implements `formula`, `stack` and `flow`, passing their fixtures (Fugu 2380c23) |
+| warpedvisions.org | `~/projects/sites/w42` | w42 theme 0.7.5 | Implements `timeline`, `flow` and `tabs`, passing their fixtures; the tabs shortcode is on its way out |
 | Scorekeep | `~/projects/utilities/scorekeep` | Swift `RulesDocument` and the `site/` hooks | Moving from `@` placeholders to fences, with its parser rewritten to the spec |
 
 My other sites (space-command.ca, brucealderson.ca, robotpony.ca, w31, w32, warped-next) only hold ordinary code blocks, which the spec never touches.
+
+## The Hugo module
+
+A theme can read fences with the module's partials and draw them its own way. Import it (Hugo 0.168 is what I test with):
+
+```toml
+[[module.imports]]
+path = "github.com/robotpony/hugo-warped"
+```
+
+Then, in a hook such as `layouts/_default/_markup/render-codeblock-flow.html`:
+
+```go-html-template
+{{- $p := partial "hugo-warped/parse.html" . -}}
+{{- partial "hugo-warped/warn.html" (dict "hook" . "parse" $p) -}}
+{{- if $p.fallback }}<pre><code>{{ .Inner }}</code></pre>{{ else }}…draw $p.lines…{{ end -}}
+```
+
+The parse has the shape of `fences/fixtures/<type>/<case>.json`. To check `formula` or `stack` keys, pass them: `(dict "hook" . "keys" (dict "formula" $iconKeys))`. The partials live under `partials/hugo-warped/`, so they never collide with a theme's own `partials/fences/`.
 
 ## What's next
 
 In rough priority order. A piece moves in here once a second project needs it.
 
-1. **Fixtures and validator.** Good and bad sample blocks for each type (`fences/fixtures/<type>/<case>.md`, with the expected `.json` beside it). They're the source of truth for every parser. Then a stdlib Python validator that any project can run on its Markdown.
-2. **Hugo module.** Optional, with one parse partial per fence type that returns data and warnings. Each theme still draws its own HTML. An example site runs the fixtures through Hugo. Later: link, image, heading and table hooks.
-3. **Plumbing.** Mounting a project's `docs/` as site pages, content adapters, JSON indexes.
-4. **Tools.** Shared build and content tools, like `compare-builds.py`, `frontmatter.py` and `drafts.py` from Fugu.
+1. **Shared hooks.** Link, image, heading and table hooks, when a second site needs them.
+2. **Plumbing.** Mounting a project's `docs/` as site pages, content adapters, JSON indexes.
+3. **Tools.** Shared build and content tools, like `compare-builds.py`, `frontmatter.py` and `drafts.py` from Fugu.
 
 ## Changing the spec
 

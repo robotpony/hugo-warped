@@ -1,0 +1,14 @@
+{{- /* reminders (fences/reminders.md): one note per text line, no keywords or list markers. */ -}}
+{{- $lines := slice }}{{ $warns := slice -}}
+{{- range partial "hugo-warped/read.html" .body -}}
+  {{- if partial "hugo-warped/keyword.html" .line -}}
+    {{- $warns = $warns | append (dict "line" .n "code" "unknown-keyword" "text" .line) -}}
+  {{- else if findRE `^(?:[-*+]|\d+[.)])\s` .line 1 -}}
+    {{- $warns = $warns | append (dict "line" .n "code" "list-marker" "text" .line) -}}
+  {{- else -}}
+    {{- $lines = $lines | append (dict "line" .n "text" .line) -}}
+  {{- end -}}
+{{- end -}}
+{{- $fallback := false -}}
+{{- if not $lines }}{{ $warns = $warns | append (dict "line" 1 "code" "no-valid-lines") }}{{ $fallback = true }}{{ end -}}
+{{- return dict "lines" $lines "warnings" $warns "fallback" $fallback -}}

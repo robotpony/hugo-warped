@@ -10,12 +10,13 @@ This page is the grammar every fence shares. Each type has its own page for its 
 
 Bruce, tick to approve, or write a change after the item.
 
-- [ ] Four kinds of fence: **diagram** (illustrates the prose, carries nothing it doesn't say), **data** (is the content, complete as plain text), **placeholder** (drawn from elsewhere; the body is one plain description line, never empty), **layout** (arranges ordinary Markdown, like `tabs`). See "Kinds".
+- [x] Four kinds of fence: **diagram** (illustrates the prose, carries nothing it doesn't say), **data** (is the content, complete as plain text), **placeholder** (drawn from elsewhere; the body is one plain description line, never empty), **layout** (arranges ordinary Markdown, like `tabs`). See "Kinds".
 - [ ] The shared line grammar: keyword lines are lowercase `key: value`; rows are `|` cells read by position, with no header row (`head:` when a type needs printed titles); markers before column 1; a row with too many cells is a bad line. See "Lines".
 - [ ] Attributes: `name` (this block's id, unique within its file once conditionals are resolved, so two `@if` versions of one table can share it; `table.md`), `draw` (which drawing a placeholder shows, kept apart from `name`), `class` (one site's styling hint). Unknown keys are ignored silently. See "Attributes".
 - [ ] A block with no valid lines shows its source as preformatted text, never nothing. w42's hooks change to match, and so does the formula hook's extra-cell gap (`formula.md`). See "Bad lines".
 - [ ] Project extensions stay outside the spec: Scorekeep's `@if` may wrap whole fences but never sits inside a body, `{key}` substitution runs before parsing, and w42's (i) source toggle is optional. See "Project extensions".
 - [ ] Card and dice tokens in `table.md`: die faces written `d1`–`d6` (easy to type) rather than `⚀`–`⚅` (pictures in plain text, but hard to type and tiny), `Joker` as a token, and `stack:7♣` for the topped stack (a plainer spelling is welcome). See `table.md`, "Tokens".
+- [ ] `←` notes: `← text` (or `<- text`) after whitespace, or at the start of a line, runs to the end of the line and is never drawn; works on rows, text lines and keyword lines, not inside `tabs` panels; `\←` for a literal arrow. See "Notes".
 - [ ] Tabs as a fence (`tabs.md`): `tab: Label` lines start panels, each panel is ordinary Markdown, `{layout="side"}` or `{layout="stack"}` as today, and an outer fence with more backticks than any fence inside it. In Obsidian it reads as clear source text, which is enough (Bruce, 2026-10-26). warped-agent prefers `=== Label` to `tab: Label` as the panel line, since it can't be mistaken for prose; `tab:` matches `flow`'s `row:`. Pick one.
 
 ## Words used here
@@ -112,7 +113,7 @@ caption: Same steps, swapped     ← keyword line (trailer)
 ```
 ````
 
-The `←` notes are labels for this page, not part of the block.
+The `←` text on each line is a note: it's for whoever reads the source, and the hook drops it (see "Notes").
 
 **Keyword line.** `key: value`. The key is lowercase `a-z` and `-`, starts the line, and is followed by a colon and a space. Each type lists the keywords it takes and where they go. Most go last, as a trailer (`caption:`, `bar:`, `repeat:`, `head:`). A few start a group (`flow`'s `row:`). Keywords are lowercase, so a row that starts with a capital is never read as one: `Note: salt early | brine` is a row.
 
@@ -147,6 +148,27 @@ A row may stop early when its last cells are optional (`= patty | Patties | 6` l
 2022 Hugo
 ```
 ````
+
+### Notes
+
+A note explains a line to whoever reads the source: why a value is what it is, where it came from, what to check. It's never drawn.
+
+````markdown
+```table {name="card-values"}
+K    | 0           ← kings are free in our house
+J Q  | 10 each
+5 5  | Cancels to 0 ← pairs only; three of a kind still counts
+caption: Kings are free.
+```
+````
+
+- A note starts at `←` (or `<-`) with whitespace before it, or at the start of a line, and runs to the end of the line. The hook drops it and the whitespace before it, then reads what's left.
+- A line that's only a note is skipped, like a blank line.
+- Notes work on every line-read line: rows, text lines and keyword lines. A layout body (`tabs`) is ordinary Markdown, so notes don't apply there or inside a nested fence; Markdown has its own comments.
+- To show a literal arrow in a cell, write `\←` (or `\<-`). The hook drops the backslash.
+- A note is plain source text: it shows wherever the block isn't drawn (Obsidian, GitHub), and never in a drawing, its alt text or its `aria-label`.
+
+`<-` is accepted for `←` as `->` is for `→`. No fence body in Not a Chef, w42 or Scorekeep held either arrow when notes were added (2026-10-26), so no existing line changes meaning. **Gap:** no hook strips notes yet. Until each project's hooks do, keep notes out of published content.
 
 ### Cells
 

@@ -22,7 +22,7 @@ One entry per line:
 1. **Year.** Four digits at the start of the line (`1983`).
 2. **Faint marker.** An optional `~` right before the year (`~2008`) marks the entry as faint: a detour, a tentative start, or a draft. It doesn't mean "circa".
 3. **Separator.** One or more spaces or tabs after the year.
-4. **Label.** The rest of the line, as written: brackets, pipes, backticks and all. Nothing in it is parsed by the hook.
+4. **Label.** The rest of the line, as written: brackets, pipes, backticks and all. Nothing in it is parsed by the hook, except a `←` note at the end, which is dropped (`README.md`, "Notes").
 
 Leading and trailing whitespace on a line is ignored, and blank lines are skipped. As a pattern: `^(~?)(\d{4})\s+(.+)$`.
 

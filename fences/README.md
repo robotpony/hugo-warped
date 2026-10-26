@@ -234,8 +234,13 @@ Each type page lists its codes beside its "Lines that don't match" examples. The
 | `over-limit` | More rows, steps, slots or panels than fit. It still draws. |
 | `empty-group` | A group with nothing in it: a `flow` `row:` with no steps, a `tabs` panel with no body. |
 | `no-valid-lines` | Nothing in the block was valid, so its source shows instead. Reported on line 1, the opening fence. |
+| `bad-attributes` | The opening line's `{…}` group doesn't parse: `{draw=table hand}` with no quotes, a missing `}`. The whole group is dropped and the block is read without attributes. |
+| `unknown-type` | A fence type the project doesn't know, where every block is expected to be a fence (see "Where it can't be drawn"). Never raised for an ordinary code language. |
+| `duplicate-name` | Two blocks in one file share a `name`, once a project's conditionals are resolved. |
+| `duplicate-block` | A second block of a type that allows one per page (`reminders`, `sheet`, `house-rules`). |
+| `unclosed-fence` | An opening fence with no closing one. CommonMark runs it to the end of the file. |
 
-Codes are lowercase words joined by `-`, like keywords. A code is never reused for a different problem; a new one is added to its type page (or to this table, if it's shared) first. `duplicate-block` (`reminders`) is reported on the opening fence of the second block, so only a page-level check, such as the validator, can raise it.
+Codes are lowercase words joined by `-`, like keywords. A code is never reused for a different problem; a new one is added to its type page (or to this table, if it's shared) first. `duplicate-name` and `duplicate-block` are reported on the second block's opening fence, and `unclosed-fence` on the unclosed one. These three need the whole page, so only a page-level check (the validator, Scorekeep's `RulesDocument`) raises them, not a hook. A Hugo hook may not see a malformed `{…}` group either, so `bad-attributes` is likewise raised where the opening line is read raw.
 
 A project can be stricter in its own checks. Scorekeep's `RulesDocumentTests` fail on any skipped line, because the app ships the same files. A hard stop like that belongs in a project's tests, or later in the shared validator, never in the site build.
 

@@ -70,6 +70,7 @@ These warn today:
 - `example` with no `draw` `missing-draw`, or more than one value `too-many-draw`
 - `draw` on `sheet` or `house-rules` (ignored) `ignored-draw`
 - A `draw` value the target doesn't know (`draw="table feet"`): the known values draw, the unknown one is skipped. `unknown-draw` In Scorekeep's app it's a test failure.
+- A second `sheet`, or a second `house-rules`, on the same page `duplicate-block`
 
 ## Rendering in Scorekeep
 

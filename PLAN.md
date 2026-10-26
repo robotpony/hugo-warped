@@ -19,8 +19,8 @@ Spec work that other agents build:
 
 - [ ] `←` notes: Scorekeep's parser and hooks drop them. w42 (theme 0.6.0) and Fugu (1d97f5f) are done.
 - [x] Fugu's formula hook warns on a row with more than four cells (1d97f5f).
-- [ ] Fugu's formula hook adds the checks settled in de2df26: `stray-marker`, `missing-cell` (row skipped), `out-of-order` after `=` or the trailer, `duplicate-keyword`, and `over-limit` on icons and swaps (fugu-agent). `fences/fixtures/formula/` has a case for each.
-- [ ] Fugu's stack hook adds the checks settled in cb7ef71: `missing-cell` (row skipped, no key as label), `too-many-cells`, `out-of-order` after the trailer, `duplicate-keyword` on a second caption, and `bad-repeat` for a count under 2 or not a number and for a backwards range (fugu-agent). `fences/fixtures/stack/` has a case for each.
+- [x] Fugu's formula hook adds the checks settled in de2df26 and a2926dc (6cad03b, 5d0d729): `stray-marker`, `missing-cell` (row skipped), `out-of-order` after `=` or the trailer, `duplicate-keyword`, and `over-limit` on icons and swaps (fugu-agent). `fences/fixtures/formula/` has a case for each.
+- [x] Fugu's stack hook adds the checks settled in cb7ef71 (405ace9): `missing-cell` (row skipped, no key as label), `too-many-cells`, `out-of-order` after the trailer, `duplicate-keyword` on a second caption, and `bad-repeat` for a count under 2 or not a number and for a backwards range (fugu-agent). `fences/fixtures/stack/` has a case for each.
 - [x] Fugu's port of `flow` (5f21797), first used on Cornmeal fried chicken.
 - [ ] Fugu ports of `timeline` and `tabs`, when a page needs one (fugu-agent).
 - [ ] w42 removes the `tabs` shortcode (w42 theme agent).

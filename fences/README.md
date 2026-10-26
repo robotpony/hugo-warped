@@ -151,7 +151,7 @@ caption: Kings are free.
 
 - A note starts at `←` (or `<-`) with whitespace before it, or at the start of a line, and runs to the end of the line. The hook drops it and the whitespace before it, then reads what's left.
 - A line that's only a note is skipped, like a blank line.
-- Notes work on every line-read line: rows, text lines and keyword lines. A layout body (`tabs`) is ordinary Markdown, so notes don't apply there or inside a nested fence; Markdown has its own comments.
+- Notes work on every line-read line: rows, text lines and keyword lines. A layout body (`tabs`) is ordinary Markdown, so notes don't apply there or inside a nested fence; Markdown has its own comments. A layout's own keyword lines (`tab:`) take notes like any other.
 - To show a literal arrow in a cell, write `\←` (or `\<-`). The hook drops the backslash.
 - A note is plain source text: it shows wherever the block isn't drawn (Obsidian, GitHub), and never in a drawing, its alt text or its `aria-label`.
 

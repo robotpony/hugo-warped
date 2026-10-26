@@ -18,7 +18,7 @@ Bake on a rack at 220°C for 25 minutes, turning once.
 ````
 `````
 
-1. **Panel.** A `tab: <label>` keyword line starts a panel, and everything up to the next `tab:` (or the end) is its body. The label is inline Markdown. The block MUST start with a `tab:` line.
+1. **Panel.** A `tab: <label>` keyword line starts a panel, and everything up to the next `tab:` (or the end) is its body. The label is inline Markdown. A `← note` on a `tab:` line is dropped, as on any keyword line (`README.md`, "Notes"); in a body it's ordinary text. The block MUST start with a `tab:` line.
 2. **Body.** Block Markdown, rendered with the page's own `RenderString` and `"display" "block"`, so each site's hooks apply: images and page resources, links, wiki links, lists, headings, other fences. Blank lines inside a body are kept; this is the one type whose body isn't read line by line.
 3. **Layout.** The `layout` attribute: `side` shows every panel at once as equal columns on wide screens, falling back to tabs where columns would be too narrow; `stack` shows every panel at once, full width, one under another, each under its label. Without `layout`, the panels are switchable tabs, the first one open.
 

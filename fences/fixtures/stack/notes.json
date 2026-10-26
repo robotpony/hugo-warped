@@ -1,0 +1,12 @@
+{
+  "type": "stack",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 3, "row": ["bun-top", "Toasted bun"], "marker": null, "layer": "bun-top"},
+    {"line": 4, "row": ["patty-thin", "Thin patty ← 140 g"], "marker": null, "layer": "patty-thin"},
+    {"line": 5, "keyword": "caption", "value": "House burger"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

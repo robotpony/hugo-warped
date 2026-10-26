@@ -1,0 +1,16 @@
+{
+  "type": "stack",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["bun-brioche", "Brioche bun"], "marker": null, "layer": "bun-brioche"},
+    {"line": 3, "row": ["Bun top", "Capitalised, so not a key"], "marker": null, "layer": "Bun top"},
+    {"line": 4, "row": ["bun-base + ketchup", "No drawing for this pair"], "marker": null, "layer": "bun-base+ketchup"}
+  ],
+  "warnings": [
+    {"line": 2, "code": "unknown-token"},
+    {"line": 3, "code": "unknown-token"},
+    {"line": 4, "code": "unknown-token"}
+  ],
+  "fallback": false
+}

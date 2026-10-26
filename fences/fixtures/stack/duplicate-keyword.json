@@ -1,0 +1,17 @@
+{
+  "type": "stack",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["bun-top", "Toasted bun"], "marker": null, "layer": "bun-top"},
+    {"line": 3, "row": ["patty-thin", "Thin patty"], "marker": null, "layer": "patty-thin"},
+    {"line": 4, "row": ["bun-base", "Toasted bun"], "marker": null, "layer": "bun-base"},
+    {"line": 5, "keyword": "caption", "value": "Plain burger"},
+    {"line": 7, "keyword": "repeat", "value": "2 x2", "from": 2, "to": 2, "times": 2},
+    {"line": 8, "keyword": "repeat", "value": "2 x3", "from": 2, "to": 2, "times": 3}
+  ],
+  "warnings": [
+    {"line": 6, "code": "duplicate-keyword"}
+  ],
+  "fallback": false
+}

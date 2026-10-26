@@ -1,0 +1,20 @@
+{
+  "type": "stack",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["bun-top", "Toasted bun"], "marker": null, "layer": "bun-top"},
+    {"line": 3, "row": ["patty-thin", "Thin patty"], "marker": null, "layer": "patty-thin"},
+    {"line": 4, "row": ["cheese", "Cheese"], "marker": null, "layer": "cheese"},
+    {"line": 5, "row": ["bun-base", "Toasted bun"], "marker": null, "layer": "bun-base"},
+    {"line": 11, "keyword": "repeat", "value": "2-3 x2", "from": 2, "to": 3, "times": 2}
+  ],
+  "warnings": [
+    {"line": 6, "code": "bad-repeat"},
+    {"line": 7, "code": "bad-repeat"},
+    {"line": 8, "code": "bad-repeat"},
+    {"line": 9, "code": "bad-repeat"},
+    {"line": 10, "code": "bad-repeat"}
+  ],
+  "fallback": false
+}

@@ -1,0 +1,12 @@
+{
+  "type": "stack",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["bun-top + sauce-burger", "Bun and sauce"], "marker": null, "layer": "bun-top+sauce-burger"},
+    {"line": 3, "row": ["patty-smash", "Smash patty"], "marker": null, "layer": "patty-smash"},
+    {"line": 4, "row": ["bun-base+mayo", "Bun and mayo", "barrier"], "marker": null, "layer": "bun-base+mayo"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

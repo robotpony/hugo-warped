@@ -1,0 +1,13 @@
+{
+  "type": "stack",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["bun-top", "Toasted bun"], "marker": null, "layer": "bun-top"},
+    {"line": 3, "row": ["bun-base", "Toasted bun"], "marker": null, "layer": "bun-base"}
+  ],
+  "warnings": [
+    {"line": 4, "code": "unknown-keyword"}
+  ],
+  "fallback": false
+}

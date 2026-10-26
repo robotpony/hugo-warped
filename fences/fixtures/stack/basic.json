@@ -1,0 +1,14 @@
+{
+  "type": "stack",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["bun-top", "Toasted bun", "soft, toasted"], "marker": null, "layer": "bun-top"},
+    {"line": 3, "row": ["lettuce-shredded", "Shredded lettuce", "cold crunch"], "marker": null, "layer": "lettuce-shredded"},
+    {"line": 4, "row": ["patty-thin", "Thin patty, 140 g", "salt, fat, savoury"], "marker": null, "layer": "patty-thin"},
+    {"line": 5, "row": ["bun-base", "Toasted bun", "barrier"], "marker": null, "layer": "bun-base"},
+    {"line": 6, "keyword": "caption", "value": "Drive-in deluxe"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

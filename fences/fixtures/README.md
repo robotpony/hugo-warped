@@ -9,7 +9,7 @@ Sample blocks with their expected parse, the source of truth for every parser of
 - `page/<case>.md` and `.json`: whole pages, for the checks that need more than one block (`duplicate-name`, `duplicate-block`, `unclosed-fence`) and for ordinary code blocks, which never warn.
 - `VERSION`: the date and the spec commit these fixtures match. A project that vendors a copy compares it to tell when the copy is stale.
 
-So far: `table`, `reminders`, `formula` and the placeholders (`diagram`, `example`, `sheet`, `house-rules`). `stack`, `timeline`, `flow` and `tabs` come next.
+So far: `table`, `reminders`, `formula`, `stack` and the placeholders (`diagram`, `example`, `sheet`, `house-rules`). `timeline`, `flow` and `tabs` come next.
 
 ## Expected output
 
@@ -53,10 +53,12 @@ So far: `table`, `reminders`, `formula` and the placeholders (`diagram`, `exampl
 
 `formula` rows add `icons` (column 1's keys, in order, unknown ones included) and `swaps` (column 4 split on commas and trimmed, `[]` when there's none). Their `marker` is `+`, `:`, `→` or `=`, with `->` read as `→`, and `null` on the first row and on a later row written without one.
 
+`stack` rows add `layer`: column 1 with the spaces around a pair's `+` removed (`bun-base + mayo` is `"bun-base+mayo"`), unknown keys included. Its `marker` is always `null`. A `repeat:` line adds `from`, `to` and `times` as numbers; `repeat: 4 ×2` is `4`, `4`, `2`.
+
 Placeholders add `draw` (the resolved list: `diagram` with none is `["table"]`, `sheet` and `house-rules` are `null`) and `description` (the text line, or `null` when the body is empty).
 
 ## Left out
 
 - **Project extensions.** `@if` and `{key}` filling are Scorekeep's, tested in its own suite. One case each (`table/value-passthrough`, `house-rules/value-passthrough`) checks that an unfilled `{key}` passes through untouched.
-- **Icon keys.** `formula`'s set is Fugu's `assets/icons/formula/`. The fixtures use keys from it, and `wok` for an unknown one.
+- **Icon and layer keys.** `formula`'s set is Fugu's `assets/icons/formula/` and `stack`'s is `assets/icons/layers/`. The fixtures use keys from them, plus `wok`, `bun-brioche` and the pair `bun-base+ketchup` as unknown ones.
 - **Target-judged checks.** `unknown-draw` depends on what a target draws for a page's game, and `unknown-type` on a project's own list of types, so neither has a shared fixture.

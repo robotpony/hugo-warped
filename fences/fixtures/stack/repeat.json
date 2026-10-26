@@ -1,0 +1,18 @@
+{
+  "type": "stack",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["pasta", "Noodles"], "marker": null, "layer": "pasta"},
+    {"line": 3, "row": ["ragu", "Ragù"], "marker": null, "layer": "ragu"},
+    {"line": 4, "row": ["bechamel", "Béchamel"], "marker": null, "layer": "bechamel"},
+    {"line": 5, "row": ["cheese", "Mozzarella"], "marker": null, "layer": "cheese"},
+    {"line": 6, "row": ["pasta", "Noodles"], "marker": null, "layer": "pasta"},
+    {"line": 7, "keyword": "repeat", "value": "1-3 x3", "from": 1, "to": 3, "times": 3},
+    {"line": 8, "keyword": "repeat", "value": "4 ×2", "from": 4, "to": 4, "times": 2},
+    {"line": 9, "keyword": "caption", "value": "Lasagne"},
+    {"line": 10, "keyword": "repeat", "value": "2-4 x2", "from": 2, "to": 4, "times": 2}
+  ],
+  "warnings": [],
+  "fallback": false
+}

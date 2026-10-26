@@ -66,5 +66,5 @@ Placeholders add `draw` (the resolved list: `diagram` with none is `["table"]`, 
 ## Left out
 
 - **Project extensions.** `@if` and `{key}` filling are Scorekeep's, tested in its own suite. One case each (`table/value-passthrough`, `house-rules/value-passthrough`) checks that an unfilled `{key}` passes through untouched.
-- **Icon and layer keys.** `formula`'s set is Fugu's `assets/icons/formula/` and `stack`'s is `assets/icons/layers/`. The fixtures use keys from them, plus `wok`, `bun-brioche` and the pair `bun-base+ketchup` as unknown ones.
+- **Icon and layer keys.** `formula`'s set is Fugu's `assets/icons/formula/` and `stack`'s is `assets/icons/layers/`. The fixtures use keys from them, plus `wok`, `bun-brioche` and the pair `bun-base+ketchup` as unknown ones. `keys.json` is a snapshot of both sets, so a parser can check `unknown-token` without a Fugu checkout.
 - **Target-judged checks.** `unknown-draw` depends on what a target draws for a page's game, and `unknown-type` on a project's own list of types, so neither has a shared fixture.

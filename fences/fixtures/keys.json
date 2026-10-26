@@ -1,0 +1,5 @@
+{
+  "source": "Fugu 2380c23, assets/icons/formula/ and assets/icons/layers/",
+  "formula": ["bowl", "butter", "buttermilk", "can", "carrot", "cheese", "chicken", "clock", "cornmeal", "crumbs", "cup", "egg", "flame", "flour", "fruit", "herb", "honey", "jar", "lemon", "lentils", "mustard", "oats", "oil", "onion", "oven", "pan", "patty", "pepper", "pickle", "pot", "potato", "salt", "soy", "strainer", "sugar", "vinegar", "water"],
+  "stack": ["bacon", "bechamel", "bread", "bun-base", "bun-base+mayo", "bun-base+sauce-burger", "bun-top", "bun-top+mayo", "bun-top+sauce-burger", "cheese", "cheese-american", "cheese-top", "ketchup", "lettuce", "lettuce-chunks", "lettuce-shredded", "mayo", "mustard", "onion-fried", "onion-minced", "onion-raw", "pasta", "patty-smash", "patty-thick", "patty-thick-grilled", "patty-thin", "patty-thin-grilled", "pickle", "ragu", "sauce-burger", "sauce-ketchup-mustard", "tomato"]
+}

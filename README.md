@@ -14,7 +14,7 @@ The sites share structure and parsing here. Each keeps its own look, so nothing 
 |---|---|
 | Fence spec (`fences/`) | **Approved** and in use. Nine fence types, a shared grammar, and a stable code for every warning. |
 | Fixtures (`fences/fixtures/`) | **Done** for every type. Fugu passes formula, stack and flow; w42 passes timeline, flow and tabs. |
-| Validator | Next. |
+| Validator (`tools/check-fences.py`) | **Done.** Stdlib Python, run on any project's Markdown. It passes every fixture (`tools/test-check-fences.py`), and Not a Chef, w42 and Scorekeep check clean. |
 | Hugo module | Planned. Parse partials only. |
 | Plumbing and tools | `tools/run-hugo-fixtures.py` runs the fixtures through a theme's hooks. The rest comes as a second site needs each piece. |
 

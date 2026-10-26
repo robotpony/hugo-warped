@@ -1,0 +1,13 @@
+{
+  "type": "flow",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["Sear", "crust first"], "marker": null},
+    {"line": 3, "row": ["Oven"], "marker": "→"}
+  ],
+  "warnings": [
+    {"line": 2, "code": "stray-marker"}
+  ],
+  "fallback": false
+}

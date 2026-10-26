@@ -1,0 +1,17 @@
+{
+  "type": "flow",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "keyword": "row", "value": "Conventional"},
+    {"line": 3, "row": ["Sear"], "marker": null},
+    {"line": 4, "row": ["Oven"], "marker": "→"},
+    {"line": 6, "keyword": "row", "value": "Sous vide"},
+    {"line": 7, "row": ["Bath"], "marker": null},
+    {"line": 8, "row": ["Sear"], "marker": "→"}
+  ],
+  "warnings": [
+    {"line": 5, "code": "empty-group"}
+  ],
+  "fallback": false
+}

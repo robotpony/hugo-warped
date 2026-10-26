@@ -1,0 +1,22 @@
+{
+  "type": "flow",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "keyword": "row", "value": "1983"},
+    {"line": 3, "row": ["Tape", "eats the game"], "marker": null},
+    {"line": 4, "row": ["Notebook", "the design"], "marker": null},
+    {"line": 5, "row": ["Rebuild"], "marker": null},
+    {"line": 6, "keyword": "row", "value": "2026"},
+    {"line": 7, "row": ["Session", "ends, forgets"], "marker": null},
+    {"line": 8, "row": ["CLAUDE.md", "the design"], "marker": null},
+    {"line": 9, "row": ["Rebuild"], "marker": null},
+    {"line": 10, "keyword": "row", "value": ""},
+    {"line": 11, "row": ["Paper", "lasts"], "marker": null},
+    {"line": 12, "keyword": "caption", "value": "Same lesson, about 40 years apart"}
+  ],
+  "warnings": [
+    {"line": 11, "code": "stray-marker"}
+  ],
+  "fallback": false
+}

@@ -9,7 +9,7 @@ Sample blocks with their expected parse, the source of truth for every parser of
 - `page/<case>.md` and `.json`: whole pages, for the checks that need more than one block (`duplicate-name`, `duplicate-block`, `unclosed-fence`) and for ordinary code blocks, which never warn.
 - `VERSION`: the date and the spec commit these fixtures match. A project that vendors a copy compares it to tell when the copy is stale.
 
-So far: `table`, `reminders`, `formula`, `stack` and the placeholders (`diagram`, `example`, `sheet`, `house-rules`). `timeline`, `flow` and `tabs` come next.
+So far: every type but `tabs`, which comes next.
 
 ## Expected output
 
@@ -54,6 +54,10 @@ So far: `table`, `reminders`, `formula`, `stack` and the placeholders (`diagram`
 `formula` rows add `icons` (column 1's keys, in order, unknown ones included) and `swaps` (column 4 split on commas and trimmed, `[]` when there's none). Their `marker` is `+`, `:`, `→` or `=`, with `->` read as `→`, and `null` on the first row and on a later row written without one.
 
 `stack` rows add `layer`: column 1 with the spaces around a pair's `+` removed (`bun-base + mayo` is `"bun-base+mayo"`), unknown keys included. Its `marker` is always `null`. A `repeat:` line adds `from`, `to` and `times` as numbers; `repeat: 4 ×2` is `4`, `4`, `2`.
+
+`timeline` entries are `marker` (`~` or `null`), `year` as a number, and `label` as written, in source order; drawing them in year order is the hook's job.
+
+`flow` steps are rows of one or two cells, with `marker` `→` (`->` read as `→`) or `null`, and `null` where a stray arrow was dropped. A `row:` line is a keyword line, `value` `""` when it has no label. A `row:` with no steps isn't drawn, so it's left out of `lines`.
 
 Placeholders add `draw` (the resolved list: `diagram` with none is `["table"]`, `sheet` and `house-rules` are `null`) and `description` (the text line, or `null` when the body is empty).
 

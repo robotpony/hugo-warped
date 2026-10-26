@@ -1,0 +1,15 @@
+{
+  "type": "flow",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["Markdown", "in git"], "marker": null},
+    {"line": 3, "row": ["Hugo"], "marker": null},
+    {"line": 4, "row": ["public/"], "marker": null},
+    {"line": 5, "row": ["rsync"], "marker": null},
+    {"line": 6, "row": ["Dreamhost"], "marker": null},
+    {"line": 7, "keyword": "caption", "value": "How a post gets to the server"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

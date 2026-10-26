@@ -1,0 +1,17 @@
+{
+  "type": "flow",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["Plan"], "marker": null},
+    {"line": 3, "row": ["Draft"], "marker": null},
+    {"line": 4, "row": ["Edit"], "marker": null},
+    {"line": 5, "row": ["Proof"], "marker": null},
+    {"line": 6, "row": ["Publish"], "marker": null},
+    {"line": 7, "row": ["Share"], "marker": null}
+  ],
+  "warnings": [
+    {"line": 7, "code": "over-limit"}
+  ],
+  "fallback": false
+}

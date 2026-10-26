@@ -1,0 +1,13 @@
+{
+  "type": "flow",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["Sear", "crust first"], "marker": null},
+    {"line": 4, "row": ["Rest"], "marker": null}
+  ],
+  "warnings": [
+    {"line": 3, "code": "too-many-cells"}
+  ],
+  "fallback": false
+}

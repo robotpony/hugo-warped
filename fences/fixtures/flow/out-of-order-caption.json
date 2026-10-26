@@ -1,0 +1,14 @@
+{
+  "type": "flow",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["Sear"], "marker": null},
+    {"line": 3, "row": ["Oven"], "marker": "→"},
+    {"line": 4, "keyword": "caption", "value": "Conventional"}
+  ],
+  "warnings": [
+    {"line": 5, "code": "out-of-order"}
+  ],
+  "fallback": false
+}

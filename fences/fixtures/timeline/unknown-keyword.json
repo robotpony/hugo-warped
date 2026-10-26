@@ -1,0 +1,12 @@
+{
+  "type": "timeline",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "marker": null, "year": 1983, "label": "Atari BASIC"}
+  ],
+  "warnings": [
+    {"line": 3, "code": "unknown-keyword"}
+  ],
+  "fallback": false
+}

@@ -1,0 +1,13 @@
+{
+  "type": "flow",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["Roast", "deep brown"], "marker": null},
+    {"line": 3, "row": ["Extract", "bones set the time"], "marker": "→"},
+    {"line": 4, "row": ["Reduce", "by half"], "marker": "→"},
+    {"line": 5, "row": ["Strain"], "marker": null}
+  ],
+  "warnings": [],
+  "fallback": false
+}

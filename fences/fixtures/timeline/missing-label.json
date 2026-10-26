@@ -1,0 +1,13 @@
+{
+  "type": "timeline",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 4, "marker": null, "year": 2022, "label": "Hugo"}
+  ],
+  "warnings": [
+    {"line": 2, "code": "missing-label"},
+    {"line": 3, "code": "missing-label"}
+  ],
+  "fallback": false
+}

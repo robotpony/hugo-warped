@@ -1,0 +1,17 @@
+{
+  "type": "flow",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 3, "keyword": "row", "value": "Conventional"},
+    {"line": 4, "row": ["Sear"], "marker": null},
+    {"line": 5, "row": ["Oven"], "marker": "→"},
+    {"line": 6, "keyword": "caption", "value": "Two ways"}
+  ],
+  "warnings": [
+    {"line": 2, "code": "out-of-order"},
+    {"line": 7, "code": "out-of-order"},
+    {"line": 8, "code": "out-of-order"}
+  ],
+  "fallback": false
+}

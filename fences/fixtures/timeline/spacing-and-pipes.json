@@ -1,0 +1,11 @@
+{
+  "type": "timeline",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 3, "marker": null, "year": 1983, "label": "Atari BASIC"},
+    {"line": 4, "marker": null, "year": 2002, "label": "Blosxom | Perl, one file"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

@@ -1,0 +1,15 @@
+{
+  "type": "timeline",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "marker": null, "year": 1983, "label": "Atari BASIC"},
+    {"line": 3, "marker": null, "year": 1994, "label": "*The UNIX Philosophy*"},
+    {"line": 4, "marker": null, "year": 1996, "label": "Carmack's `.plan` files"},
+    {"line": 5, "marker": null, "year": 2002, "label": "[Blosxom](https://blosxom.sourceforge.net/)"},
+    {"line": 6, "marker": "~", "year": 2008, "label": "WordPress, a detour"},
+    {"line": 7, "marker": null, "year": 2022, "label": "Hugo"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

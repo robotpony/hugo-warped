@@ -1,0 +1,12 @@
+{
+  "type": "timeline",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "marker": null, "year": 2022, "label": "Hugo"},
+    {"line": 3, "marker": null, "year": 1983, "label": "Atari BASIC"},
+    {"line": 4, "marker": null, "year": 2022, "label": "Fences"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

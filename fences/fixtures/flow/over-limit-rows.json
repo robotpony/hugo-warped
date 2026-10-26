@@ -1,0 +1,19 @@
+{
+  "type": "flow",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "keyword": "row", "value": "A"},
+    {"line": 3, "row": ["One"], "marker": null},
+    {"line": 4, "keyword": "row", "value": "B"},
+    {"line": 5, "row": ["One"], "marker": null},
+    {"line": 6, "keyword": "row", "value": "C"},
+    {"line": 7, "row": ["One"], "marker": null},
+    {"line": 8, "keyword": "row", "value": "D"},
+    {"line": 9, "row": ["One"], "marker": null}
+  ],
+  "warnings": [
+    {"line": 8, "code": "over-limit"}
+  ],
+  "fallback": false
+}

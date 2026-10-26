@@ -1,0 +1,12 @@
+{
+  "type": "flow",
+  "kind": "diagram",
+  "attributes": {},
+  "lines": [
+    {"line": 3, "row": ["Markdown", "in git"], "marker": null},
+    {"line": 4, "row": ["Hugo ← 0.168"], "marker": null},
+    {"line": 5, "keyword": "caption", "value": "Deploy"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

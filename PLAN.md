@@ -13,7 +13,7 @@ Open work for hugo-warped. The fence spec's history before 2026-10-26 is in Not 
 - [x] Fixtures (every type done 2026-10-26): good and bad sample blocks per type, each with its expected parse and warnings. They're the source of truth for every parser: the validator, the Hugo partials, and Scorekeep's Swift `RulesDocument`. Shape agreed with the Scorekeep content agent (2026-10-26): `fences/fixtures/<type>/<case>.md` (one whole fence) beside `<case>.json` (type, kind, attributes, lines numbered from the opening fence as 1, warnings, fallback); notes stripped in the expected output; typed tokens for cells; project extensions left out; `fences/fixtures/VERSION` holds the date and spec commit, since Scorekeep vendors a copy. Table, reminders and placeholders come first.
 - [x] Warning codes (approved 2026-10-26): shared codes in `fences/README.md` "Warning codes", type codes beside each page's "Lines that don't match". Parsers compare codes and line numbers, never message text.
 - [x] Validator: `tools/check-fences.py`, stdlib Python, run on any project's Markdown, with the same checks the hooks warn on plus the page checks. `tools/test-check-fences.py` compares its parse of all 111 fixtures in full.
-- [ ] Not a Chef's `/lint` item 5 and build-time `warnf` checks hand over to the validator (not-a-chef content agent).
+- [x] Not a Chef's `/lint` item 5 runs the validator (1807a72). Fugu's hooks keep their own build warnings, as the spec expects of a hook.
 - [ ] Charts: open in the spec, none needed yet. The first shape on record is a labelled bar list, from w42's `qgraph` sketch.
 
 Spec work that other agents build:

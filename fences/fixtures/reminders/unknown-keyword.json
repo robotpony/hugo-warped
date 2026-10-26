@@ -1,0 +1,13 @@
+{
+  "type": "reminders",
+  "kind": "data",
+  "attributes": {},
+  "lines": [
+    {"line": 4, "text": "Players: four or more."}
+  ],
+  "warnings": [
+    {"line": 2, "code": "unknown-keyword"},
+    {"line": 3, "code": "unknown-keyword"}
+  ],
+  "fallback": false
+}

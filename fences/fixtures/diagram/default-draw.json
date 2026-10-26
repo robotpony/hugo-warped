@@ -1,0 +1,12 @@
+{
+  "type": "diagram",
+  "kind": "placeholder",
+  "attributes": {},
+  "draw": ["table"],
+  "description": "The whole table from above.",
+  "lines": [
+    {"line": 2, "text": "The whole table from above."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

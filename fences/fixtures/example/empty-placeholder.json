@@ -1,0 +1,12 @@
+{
+  "type": "example",
+  "kind": "placeholder",
+  "attributes": {"draw": "gin-melds"},
+  "draw": ["gin-melds"],
+  "description": null,
+  "lines": [],
+  "warnings": [
+    {"line": 1, "code": "empty-placeholder"}
+  ],
+  "fallback": false
+}

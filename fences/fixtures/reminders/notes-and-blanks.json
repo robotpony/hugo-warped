@@ -1,0 +1,11 @@
+{
+  "type": "reminders",
+  "kind": "data",
+  "attributes": {"class": "tight"},
+  "lines": [
+    {"line": 3, "text": "Shuffle two decks."},
+    {"line": 5, "text": "Deal from the left. <- not the right"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

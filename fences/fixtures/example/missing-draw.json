@@ -1,0 +1,14 @@
+{
+  "type": "example",
+  "kind": "placeholder",
+  "attributes": {},
+  "draw": [],
+  "description": "A hole's hands, face-up.",
+  "lines": [
+    {"line": 2, "text": "A hole's hands, face-up."}
+  ],
+  "warnings": [
+    {"line": 1, "code": "missing-draw"}
+  ],
+  "fallback": false
+}

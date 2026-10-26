@@ -1,0 +1,12 @@
+{
+  "type": "table",
+  "kind": "data",
+  "attributes": {"name": "hands"},
+  "lines": [
+    {"line": 2, "row": ["Full house", "25"], "marker": null, "label": "Full house"},
+    {"line": 3, "row": ["Ones–Sixes", "Sum of that face"], "marker": null, "label": "Ones–Sixes"},
+    {"line": 4, "row": ["joker", "Lowercase, so a word"], "marker": null, "label": "joker"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

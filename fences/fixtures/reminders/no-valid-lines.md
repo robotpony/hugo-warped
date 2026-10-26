@@ -1,0 +1,3 @@
+```reminders
+- Shuffle two decks.
+```

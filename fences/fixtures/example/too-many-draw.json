@@ -1,0 +1,14 @@
+{
+  "type": "example",
+  "kind": "placeholder",
+  "attributes": {"draw": "golf-hole golf-revealed"},
+  "draw": ["golf-hole"],
+  "description": "Two examples in one block.",
+  "lines": [
+    {"line": 2, "text": "Two examples in one block."}
+  ],
+  "warnings": [
+    {"line": 1, "code": "too-many-draw"}
+  ],
+  "fallback": false
+}

@@ -1,0 +1,14 @@
+{
+  "type": "table",
+  "kind": "data",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["K", "0"], "marker": null, "tokens": [{"rank": "K"}]},
+    {"line": 3, "keyword": "caption", "value": "Kings are free."}
+  ],
+  "warnings": [
+    {"line": 4, "code": "out-of-order"},
+    {"line": 5, "code": "out-of-order"}
+  ],
+  "fallback": false
+}

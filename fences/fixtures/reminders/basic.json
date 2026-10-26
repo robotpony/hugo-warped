@@ -1,0 +1,11 @@
+{
+  "type": "reminders",
+  "kind": "data",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "text": "Shuffle {decks} with {jokers} jokers."},
+    {"line": 3, "text": "Last game's Village Idiot deals."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

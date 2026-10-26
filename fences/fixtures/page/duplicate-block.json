@@ -1,0 +1,6 @@
+{
+  "warnings": [
+    {"line": 11, "code": "duplicate-block"},
+    {"line": 15, "code": "duplicate-block"}
+  ]
+}

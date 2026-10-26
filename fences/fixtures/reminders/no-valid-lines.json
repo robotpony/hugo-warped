@@ -1,0 +1,11 @@
+{
+  "type": "reminders",
+  "kind": "data",
+  "attributes": {},
+  "lines": [],
+  "warnings": [
+    {"line": 2, "code": "list-marker"},
+    {"line": 1, "code": "no-valid-lines"}
+  ],
+  "fallback": true
+}

@@ -1,0 +1,14 @@
+{
+  "type": "diagram",
+  "kind": "placeholder",
+  "attributes": {"draw": "hand"},
+  "draw": ["hand"],
+  "description": "Your hand up close.",
+  "lines": [
+    {"line": 2, "text": "Your hand up close."}
+  ],
+  "warnings": [
+    {"line": 3, "code": "extra-line"}
+  ],
+  "fallback": false
+}

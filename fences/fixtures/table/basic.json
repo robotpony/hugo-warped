@@ -1,0 +1,15 @@
+{
+  "type": "table",
+  "kind": "data",
+  "attributes": {"name": "card-values"},
+  "lines": [
+    {"line": 2, "row": ["K", "0"], "marker": null, "tokens": [{"rank": "K"}]},
+    {"line": 3, "row": ["A", "1"], "marker": null, "tokens": [{"rank": "A"}]},
+    {"line": 4, "row": ["2-10", "Face value"], "marker": null, "tokens": [{"run": ["2", "10"]}]},
+    {"line": 5, "row": ["J Q", "10 each"], "marker": null, "tokens": [{"rank": "J"}, {"rank": "Q"}]},
+    {"line": 6, "row": ["Joker", "−2"], "marker": null, "tokens": [{"joker": true}]},
+    {"line": 7, "keyword": "caption", "value": "Kings are free."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

@@ -1,0 +1,12 @@
+{
+  "type": "example",
+  "kind": "placeholder",
+  "attributes": {"draw": "golf-revealed"},
+  "draw": ["golf-revealed"],
+  "description": "A hole's four hands turned face-up and totalled, the low one circled.",
+  "lines": [
+    {"line": 2, "text": "A hole's four hands turned face-up and totalled, the low one circled."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

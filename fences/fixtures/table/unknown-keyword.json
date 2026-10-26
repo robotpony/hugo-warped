@@ -1,0 +1,14 @@
+{
+  "type": "table",
+  "kind": "data",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["K", "0"], "marker": null, "tokens": [{"rank": "K"}]},
+    {"line": 4, "row": ["Note: K", "Capitalised, so a row and a word label"], "marker": null, "label": "Note: K"}
+  ],
+  "warnings": [
+    {"line": 3, "code": "unknown-keyword"},
+    {"line": 4, "code": "mixed-token-cell"}
+  ],
+  "fallback": false
+}

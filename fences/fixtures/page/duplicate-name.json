@@ -1,0 +1,5 @@
+{
+  "warnings": [
+    {"line": 9, "code": "duplicate-name"}
+  ]
+}

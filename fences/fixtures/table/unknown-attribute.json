@@ -1,0 +1,10 @@
+{
+  "type": "table",
+  "kind": "data",
+  "attributes": {"name": "card-values", "colour": "red"},
+  "lines": [
+    {"line": 2, "row": ["K", "0"], "marker": null, "tokens": [{"rank": "K"}]}
+  ],
+  "warnings": [],
+  "fallback": false
+}

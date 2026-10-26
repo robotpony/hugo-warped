@@ -1,0 +1,12 @@
+{
+  "type": "house-rules",
+  "kind": "placeholder",
+  "attributes": {},
+  "draw": null,
+  "description": "Play to {target} points.",
+  "lines": [
+    {"line": 2, "text": "Play to {target} points."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

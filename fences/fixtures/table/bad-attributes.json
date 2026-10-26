@@ -1,0 +1,12 @@
+{
+  "type": "table",
+  "kind": "data",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["K", "0"], "marker": null, "tokens": [{"rank": "K"}]}
+  ],
+  "warnings": [
+    {"line": 1, "code": "bad-attributes"}
+  ],
+  "fallback": false
+}

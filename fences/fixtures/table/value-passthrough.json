@@ -1,0 +1,10 @@
+{
+  "type": "table",
+  "kind": "data",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["d5", "{dice-target} points"], "marker": null, "tokens": [{"die": 5}]}
+  ],
+  "warnings": [],
+  "fallback": false
+}

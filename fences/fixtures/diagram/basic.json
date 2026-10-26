@@ -1,0 +1,12 @@
+{
+  "type": "diagram",
+  "kind": "placeholder",
+  "attributes": {"draw": "table hand"},
+  "draw": ["table", "hand"],
+  "description": "The table from above, then your 2×2 hand up close.",
+  "lines": [
+    {"line": 2, "text": "The table from above, then your 2×2 hand up close."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

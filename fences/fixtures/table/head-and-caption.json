@@ -1,0 +1,13 @@
+{
+  "type": "table",
+  "kind": "data",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["K", "0"], "marker": null, "tokens": [{"rank": "K"}]},
+    {"line": 3, "row": ["A", "1"], "marker": null, "tokens": [{"rank": "A"}]},
+    {"line": 4, "keyword": "head", "value": "Card | Worth", "cells": ["Card", "Worth"]},
+    {"line": 5, "keyword": "caption", "value": "Low is good."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

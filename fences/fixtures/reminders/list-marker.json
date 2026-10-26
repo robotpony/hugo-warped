@@ -1,0 +1,16 @@
+{
+  "type": "reminders",
+  "kind": "data",
+  "attributes": {},
+  "lines": [
+    {"line": 7, "text": "2 decks, shuffled together."}
+  ],
+  "warnings": [
+    {"line": 2, "code": "list-marker"},
+    {"line": 3, "code": "list-marker"},
+    {"line": 4, "code": "list-marker"},
+    {"line": 5, "code": "list-marker"},
+    {"line": 6, "code": "list-marker"}
+  ],
+  "fallback": false
+}

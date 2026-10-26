@@ -1,0 +1,12 @@
+{
+  "type": "house-rules",
+  "kind": "placeholder",
+  "attributes": {},
+  "draw": null,
+  "description": "This game's house rules, at the values in play.",
+  "lines": [
+    {"line": 2, "text": "This game's house rules, at the values in play."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

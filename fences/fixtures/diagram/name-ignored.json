@@ -1,0 +1,12 @@
+{
+  "type": "diagram",
+  "kind": "placeholder",
+  "attributes": {"name": "opening", "draw": "table"},
+  "draw": ["table"],
+  "description": "The table from above.",
+  "lines": [
+    {"line": 2, "text": "The table from above."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

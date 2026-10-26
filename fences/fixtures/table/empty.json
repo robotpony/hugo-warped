@@ -1,0 +1,10 @@
+{
+  "type": "table",
+  "kind": "data",
+  "attributes": {},
+  "lines": [],
+  "warnings": [
+    {"line": 1, "code": "no-valid-lines"}
+  ],
+  "fallback": true
+}

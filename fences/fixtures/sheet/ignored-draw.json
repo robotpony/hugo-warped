@@ -1,0 +1,14 @@
+{
+  "type": "sheet",
+  "kind": "placeholder",
+  "attributes": {"draw": "table"},
+  "draw": null,
+  "description": "The score sheet.",
+  "lines": [
+    {"line": 2, "text": "The score sheet."}
+  ],
+  "warnings": [
+    {"line": 1, "code": "ignored-draw"}
+  ],
+  "fallback": false
+}

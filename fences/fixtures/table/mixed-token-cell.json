@@ -1,0 +1,14 @@
+{
+  "type": "table",
+  "kind": "data",
+  "attributes": {},
+  "lines": [
+    {"line": 2, "row": ["Q K X", "Drawn as a word label"], "marker": null, "label": "Q K X"},
+    {"line": 3, "row": ["d1 d7", "So is this"], "marker": null, "label": "d1 d7"}
+  ],
+  "warnings": [
+    {"line": 2, "code": "mixed-token-cell"},
+    {"line": 3, "code": "mixed-token-cell"}
+  ],
+  "fallback": false
+}

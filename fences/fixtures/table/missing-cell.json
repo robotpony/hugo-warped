@@ -1,0 +1,14 @@
+{
+  "type": "table",
+  "kind": "data",
+  "attributes": {},
+  "lines": [
+    {"line": 5, "row": ["A", "1"], "marker": null, "tokens": [{"rank": "A"}]}
+  ],
+  "warnings": [
+    {"line": 2, "code": "missing-cell"},
+    {"line": 3, "code": "missing-cell"},
+    {"line": 4, "code": "missing-cell"}
+  ],
+  "fallback": false
+}

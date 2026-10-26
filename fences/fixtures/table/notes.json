@@ -1,0 +1,13 @@
+{
+  "type": "table",
+  "kind": "data",
+  "attributes": {"name": "card-values"},
+  "lines": [
+    {"line": 3, "row": ["K", "0"], "marker": null, "tokens": [{"rank": "K"}]},
+    {"line": 4, "row": ["5 5", "Cancels to 0"], "marker": null, "tokens": [{"rank": "5"}, {"rank": "5"}]},
+    {"line": 5, "row": ["J", "Worth ← ten"], "marker": null, "tokens": [{"rank": "J"}]},
+    {"line": 6, "keyword": "caption", "value": "Kings are free."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

@@ -1,0 +1,13 @@
+{
+  "type": "table",
+  "kind": "data",
+  "attributes": {},
+  "lines": [
+    {"line": 4, "row": ["2-10", "Face value"], "marker": null, "tokens": [{"run": ["2", "10"]}]}
+  ],
+  "warnings": [
+    {"line": 2, "code": "bad-run"},
+    {"line": 3, "code": "bad-run"}
+  ],
+  "fallback": false
+}

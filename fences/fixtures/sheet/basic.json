@@ -1,0 +1,12 @@
+{
+  "type": "sheet",
+  "kind": "placeholder",
+  "attributes": {},
+  "draw": null,
+  "description": "The score sheet: names down the side, holes across, a small X box in each cell.",
+  "lines": [
+    {"line": 2, "text": "The score sheet: names down the side, holes across, a small X box in each cell."}
+  ],
+  "warnings": [],
+  "fallback": false
+}

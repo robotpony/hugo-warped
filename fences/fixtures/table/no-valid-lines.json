@@ -1,0 +1,13 @@
+{
+  "type": "table",
+  "kind": "data",
+  "attributes": {},
+  "lines": [
+    {"line": 3, "keyword": "caption", "value": "Nothing to show."}
+  ],
+  "warnings": [
+    {"line": 2, "code": "too-many-cells"},
+    {"line": 1, "code": "no-valid-lines"}
+  ],
+  "fallback": true
+}

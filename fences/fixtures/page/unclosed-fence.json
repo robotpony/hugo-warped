@@ -1,0 +1,6 @@
+{
+  "warnings": [
+    {"line": 3, "code": "unclosed-fence"},
+    {"line": 6, "code": "missing-cell"}
+  ]
+}

@@ -58,7 +58,7 @@ A cell that **mixes** tokens and other words (`Q K X`, `d1 d7`) is drawn as a wo
 
 Scorekeep's `@if … @end` may wrap a whole `table` fence to pick between two versions (`README.md`, "Project extensions"); Dice 10,000's score table changes one row with the extra-die rule. Both versions carry the same `name`, since only one survives.
 
-**Depends on review:** this needs README's `name` rule to read "unique within its file once a project's conditionals are resolved". As written ("unique within its file") two branches sharing a name would break it.
+README's `name` rule allows this: a name is unique within its file once a project's conditionals are resolved. **Depends on review.**
 
 `{key}` values fill before the block is read, so a cell can hold one (`{dice-target}`), as long as the filled line still follows this grammar.
 

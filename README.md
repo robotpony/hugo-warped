@@ -49,7 +49,7 @@ Start at `fences/README.md` for the shared grammar: lines, cells, notes, attribu
 | Site | Repo | Theme or parser | Status |
 |---|---|---|---|
 | bruce-loves-to-cook.ca | `~/writing/not-a-chef` | Fugu (`robotpony/hugo-theme-fugu`) | Implements `formula` and `stack`, notes included |
-| warpedvisions.org | `~/projects/sites/w42` | w42 theme 0.7.2 | Implements `timeline`, `flow` and `tabs`, with warning codes; the tabs shortcode is on its way out |
+| warpedvisions.org | `~/projects/sites/w42` | w42 theme 0.7.3 | Implements `timeline`, `flow` and `tabs`, with warning codes; the tabs shortcode is on its way out |
 | Scorekeep | `~/projects/utilities/scorekeep` | Swift `RulesDocument` and the `site/` hooks | Moving from `@` placeholders to fences, with its parser rewritten to the spec |
 
 My other sites (space-command.ca, brucealderson.ca, robotpony.ca, w31, w32, warped-next) only hold ordinary code blocks, which the spec never touches.

@@ -1,6 +1,17 @@
 # Fences
 
-*Draft, 2026-10-26. Owned by Not a Chef; shared with warpedvisions.org (w42) and Scorekeep. Open items are marked **Open** and tracked in `docs/PLAN.md` "Standard diagram fences".*
+*Draft, 2026-10-26. Shared by Not a Chef, warpedvisions.org (w42) and Scorekeep, and kept in this folder until it has a home of its own; it links only within the folder, so it can move as a whole. Open items are marked **Open** and tracked in `docs/PLAN.md` "Standard diagram fences".*
+
+## Review #todo
+
+Bruce, tick to approve, or write a change after the item.
+
+- [ ] Three kinds of fence: **diagram** (illustrates the prose, carries nothing it doesn't say), **data** (is the content, complete as plain text), **placeholder** (drawn from elsewhere; the body is one plain description line, never empty). See "Kinds".
+- [ ] The shared line grammar: keyword lines are lowercase `key: value`; rows are `|` cells read by position, with no header row (`head:` when a type needs printed titles); markers before column 1; a row with too many cells is a bad line. See "Lines".
+- [ ] Attributes: `name` (this block's id, unique within its file), `draw` (which drawing a placeholder shows, kept apart from `name`), `class` (one site's styling hint). Unknown keys are ignored silently. See "Attributes".
+- [ ] A block with no valid lines shows its source as preformatted text, never nothing. w42's hooks change to match, and so do the formula hook's extra-cell gap (`formula.md`). See "Lines that don't match".
+- [ ] Project extensions stay outside the spec: Scorekeep's `@if` may wrap whole fences but never sits inside a body, `{key}` substitution runs before parsing, and w42's (i) source toggle is optional. See "Project extensions".
+- [ ] Tabs: design it next, with a longer outer fence (```` ````tabs ````) so a tab can hold another fence. See "Open".
 
 A fence is a named code block that a site or app draws as something richer: a diagram, a table, a box. Every project here embeds blocks this way, and only this way: no Hugo shortcodes, no `@` directive lines, no `> [!note]` callouts. A fence reads as plain text in Obsidian, on GitHub, and anywhere without a hook, and it draws where there is one.
 
@@ -115,12 +126,12 @@ A new type starts in one project. It gets its own page here when a second projec
 
 | Type | Kind | Shape | Used by | Spec |
 |---|---|---|---|---|
-| `formula` | diagram | `icon | label | quantity | swaps`, operator marker; `caption:`, `bar:` | Not a Chef | `docs/FORMAT.md` §Formula diagrams |
-| `stack` | diagram | `layer | label | role`, top first; `caption:`, `repeat:` | Not a Chef | `docs/FORMAT.md` §Stack diagrams |
-| `timeline` | diagram | `YEAR Label` text lines, `~` marker | w42; Not a Chef (port pending) | w42 `themes/w42/docs/timeline.md` |
-| `flow` | diagram | `Label | note`, optional `→` marker; `row:`, `caption:` | w42; Not a Chef (port pending) | w42 `themes/w42/docs/flow.md` |
-| `table` | data | `tokens | text`; `caption:`, `head:`; `name` | Scorekeep (draft) | Scorekeep `PLAN.md` § 24 pick 6 |
-| `reminders` | data | one note per text line | Scorekeep | Scorekeep `docs/rules/README.md` |
+| `formula` | diagram | `icon | label | quantity | swaps`, operator marker; `caption:`, `bar:` | Not a Chef | `formula.md` |
+| `stack` | diagram | `layer | label | role`, top first; `caption:`, `repeat:` | Not a Chef | `stack.md` |
+| `timeline` | diagram | `YEAR Label` text lines, `~` marker | w42; Not a Chef (port pending) | `timeline.md` |
+| `flow` | diagram | `Label | note`, optional `→` marker; `row:`, `caption:` | w42; Not a Chef (port pending) | `flow.md` |
+| `table` | data | `tokens | text`; `caption:`, `head:`; `name` | Scorekeep (draft) | to write here; draft in Scorekeep `PLAN.md` § 24 pick 6 |
+| `reminders` | data | one note per text line | Scorekeep | to write here; today in Scorekeep `docs/rules/README.md` |
 | `diagram`, `example` | placeholder | description line; `draw` | Scorekeep (planned) | to write |
 | `sheet`, `house-rules` | placeholder | description line | Scorekeep (planned) | to write |
 | `tabs` | **Open** | text beside a picture or source, replacing w42's `{{< tabs >}}` | w42, Not a Chef (both waiting) | to design |
@@ -131,5 +142,5 @@ Not fence types: highlighted source shown as an example, like w42's `qgraph` ASC
 
 - **Tabs.** No syntax yet. The hard case is that a tab holds another fence (the manifesto's tabs hold ```` ```markdown ```` and ```` ```formula ````), so the outer fence needs longer backticks (```` ````tabs ````) or another way to embed source.
 - **Charts.** Nobody needs a drawn chart yet. If one comes, the first shape on record is a labelled bar list (label, bar, note), from w42's `qgraph` sketch.
-- **Where pages live.** Whether `timeline` and `flow` move here from w42, and `formula` and `stack` out of `FORMAT.md`, so every shared type's page sits in this folder. Projects link here either way.
+- **Home.** Every type's page lives in this folder (Bruce, 2026-10-26); `timeline.md` and `flow.md` came from w42's `themes/w42/docs/`, and `formula.md` and `stack.md` from `FORMAT.md`. The folder stays in Not a Chef for now and may move to a repo of its own.
 - **Tools.** A validator any project can run on its Markdown, with the same checks the hooks warn on, plus a reference hook per type to port. Here it would replace the build-time `warnf` checks and `/lint` item 5 as the source of truth.

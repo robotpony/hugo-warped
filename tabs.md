@@ -1,6 +1,6 @@
 # The tabs block
 
-*Draft, 2026-10-26. Designed with warped-agent (w42 content); replaces w42's `{{< tabs >}}` and `{{< tab >}}` shortcodes.*
+*Approved 2026-10-26. Designed with warped-agent (w42 content); replaces w42's `{{< tabs >}}` and `{{< tab >}}` shortcodes.*
 
 A fenced code block with the info string `tabs` shows the same thing two or more ways: source beside the page it makes, or a method beside its variation. It's a **layout** fence (`README.md`, "Kinds"): each panel is ordinary Markdown, and the block reads as that Markdown in order where it isn't drawn. Used by w42 (two blocks in the manifesto, both shortcodes today), and wanted by Not a Chef.
 

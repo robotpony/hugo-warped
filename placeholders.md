@@ -1,6 +1,6 @@
 # The placeholder blocks: diagram, example, sheet, house-rules
 
-Four fenced code block types mark where a drawing goes whose content comes from somewhere else: an app's own code, a screenshot, a data file. They're **placeholder** fences (`README.md`, "Kinds"): attributes say what to draw, and the body is one plain line describing it. Used by Scorekeep, in its `docs/rules/<game>.md` How to play pages; they replace the `@diagram`, `@example`, `@sheet` and `@house-rules` lines. **Depends on review:** the placeholder kind and the `draw` attribute are both in README's review list.
+Four fenced code block types mark where a drawing goes whose content comes from somewhere else: an app's own code, a screenshot, a data file. They're **placeholder** fences (`README.md`, "Kinds"): attributes say what to draw, and the body is one plain line describing it. Used by Scorekeep, in its `docs/rules/<game>.md` How to play pages; they replace the `@diagram`, `@example`, `@sheet` and `@house-rules` lines.
 
 ## Syntax
 

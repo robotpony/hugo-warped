@@ -29,7 +29,7 @@ These lines warn today:
 - A Markdown list marker: `- Shuffle two decks.` (a note is the whole line; drop the `- `)
 - A second `reminders` block on the same page
 
-A block with no valid lines shows its source as preformatted text. **Depends on review** (README's "no valid lines" rule).
+A block with no valid lines shows its source as preformatted text.
 
 ## Rendering in Scorekeep
 

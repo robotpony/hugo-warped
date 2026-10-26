@@ -58,7 +58,7 @@ A cell that **mixes** tokens and other words (`Q K X`, `d1 d7`) is drawn as a wo
 
 Scorekeep's `@if … @end` may wrap a whole `table` fence to pick between two versions (`README.md`, "Project extensions"); Dice 10,000's score table changes one row with the extra-die rule. Both versions carry the same `name`, since only one survives.
 
-README's `name` rule allows this: a name is unique within its file once a project's conditionals are resolved. **Depends on review.**
+README's `name` rule allows this: a name is unique within its file once a project's conditionals are resolved.
 
 `{key}` values fill before the block is read, so a cell can hold one (`{dice-target}`), as long as the filled line still follows this grammar.
 
@@ -81,7 +81,7 @@ These lines warn today:
 
 Recoverable, drawn and warned: a cell mixing tokens and other words (drawn as a word label).
 
-A block with no valid rows shows its source as preformatted text. **Depends on review** (README's "no valid lines" rule).
+A block with no valid rows shows its source as preformatted text.
 
 Scorekeep's `RulesDocumentTests` fails on any warning and on a `name` the app asks for that the page doesn't define, so a bad table never ships.
 

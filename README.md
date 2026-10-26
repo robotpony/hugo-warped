@@ -1,23 +1,10 @@
 # Fences
 
-*Draft, 2026-10-26. Shared by Not a Chef, warpedvisions.org (w42) and Scorekeep. It lives in this folder until it has a home of its own, and it links only within the folder, so it can move in one piece. Open items are marked **Open** and tracked in `docs/PLAN.md` "Standard diagram fences".*
+*Approved by Bruce, 2026-10-26. Shared by Not a Chef, warpedvisions.org (w42) and Scorekeep. It lives in this folder until it has a home of its own, and it links only within the folder, so it can move in one piece. Panels in `tabs` start with `tab:` lines (approved over `=== Label`). Open items are marked **Open** and tracked in `docs/PLAN.md` "Standard diagram fences".*
 
 A fence is a code block with a type name, which a site or app draws as something richer: a diagram, a table, a box. Every project here embeds blocks this way, and only this way: no Hugo shortcodes, no `@` directive lines, no `> [!note]` callouts. The same block reads as plain text in Obsidian, on GitHub, and anywhere that can't draw it.
 
 This page is the grammar every fence shares. Each type has its own page for its columns, rules and drawing (see "Fence types" at the end). A type page can narrow these rules, but it can't break them.
-
-## Review #todo
-
-Bruce, tick to approve, or write a change after the item.
-
-- [x] Four kinds of fence: **diagram** (illustrates the prose, carries nothing it doesn't say), **data** (is the content, complete as plain text), **placeholder** (drawn from elsewhere; the body is one plain description line, never empty), **layout** (arranges ordinary Markdown, like `tabs`). See "Kinds".
-- [x] The shared line grammar: keyword lines are lowercase `key: value`; rows are `|` cells read by position, with no header row (`head:` when a type needs printed titles); markers before column 1; a row with too many cells is a bad line. See "Lines".
-- [x] Attributes: `name` (this block's id, unique within its file once conditionals are resolved, so two `@if` versions of one table can share it; `table.md`), `draw` (which drawing a placeholder shows, kept apart from `name`), `class` (one site's styling hint). Unknown keys are ignored silently. See "Attributes".
-- [x] A block with no valid lines shows its source as preformatted text, never nothing. w42's hooks change to match, and so does the formula hook's extra-cell gap (`formula.md`). See "Bad lines".
-- [ ] Project extensions stay outside the spec: Scorekeep's `@if` may wrap whole fences but never sits inside a body, `{key}` substitution runs before parsing, and w42's (i) source toggle is optional. See "Project extensions".
-- [ ] Card and dice tokens in `table.md`: die faces written `d1`–`d6` (easy to type) rather than `⚀`–`⚅` (pictures in plain text, but hard to type and tiny), `Joker` as a token, and `stack:7♣` for the topped stack (a plainer spelling is welcome). See `table.md`, "Tokens".
-- [ ] `←` notes: `← text` (or `<- text`) after whitespace, or at the start of a line, runs to the end of the line and is never drawn; works on rows, text lines and keyword lines, not inside `tabs` panels; `\←` for a literal arrow. See "Notes".
-- [ ] Tabs as a fence (`tabs.md`): `tab: Label` lines start panels, each panel is ordinary Markdown, `{layout="side"}` or `{layout="stack"}` as today, and an outer fence with more backticks than any fence inside it. In Obsidian it reads as clear source text, which is enough (Bruce, 2026-10-26). warped-agent prefers `=== Label` to `tab: Label` as the panel line, since it can't be mistaken for prose; `tab:` matches `flow`'s `row:`. Pick one.
 
 ## Words used here
 

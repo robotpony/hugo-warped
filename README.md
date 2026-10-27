@@ -78,12 +78,14 @@ The theme whose hooks call the partials owns the dependency, not the site. A sit
 
    Hugo finds it in the site's `themes/` folder. The site's theme list keeps naming only its own themes (`["fugu", "blowfish"]`), without hugo-warped.
 
-**As a Hugo Module**, for a project that already uses them (it needs Go). In the theme's config:
+**As a Hugo Module**, for a site that already uses them (it needs Go). The site imports it in its own config:
 
 ```toml
 [[module.imports]]
 path = "github.com/robotpony/hugo-warped"
 ```
+
+Never put that import in a theme's config. A site that takes the theme by submodule then looks for `themes/github.com/robotpony/hugo-warped` and fails to load. A theme names hugo-warped only as `theme = ["hugo-warped"]`.
 
 Either way:
 

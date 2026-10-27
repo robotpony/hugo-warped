@@ -10,7 +10,7 @@ As of 2026-10-26: the spec in `fences/`, with warning codes and every reading th
 
 Here:
 
-- [ ] Try the Hugo module on the cookbook (Not a Chef, Fugu) first: move one Fugu hook's parsing onto `hugo-warped/parse.html` and check it with `run-hugo-fixtures.py` and `compare-builds.py`. Other sites wait until that's settled.
+- [ ] Try the Hugo module on the cookbook first, on `hugo-warped-module` branches: Not a Chef takes hugo-warped as a theme (0808187, done), and Fugu moves its formula, stack and flow hooks and card strips onto `hugo-warped/parse.html` (fugu-agent, in progress). Checked with `run-hugo-fixtures.py` and `compare-builds.py`, then Bruce tests the local preview. Other sites wait until that's settled.
 - [ ] Charts: open in the spec, none needed yet. The first shape on record is a labelled bar list, from w42's `qgraph` sketch.
 - [ ] Later, when a second site needs them: link, image, heading and table hooks.
 

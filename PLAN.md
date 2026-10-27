@@ -10,7 +10,7 @@ As of 2026-10-26: the spec in `fences/`, with warning codes and every reading th
 
 Here:
 
-- [ ] w42 moves its timeline, flow and tabs hooks onto the module, following the cookbook (w42 theme agent), when Bruce wants it.
+- [ ] w42 moves its timeline, flow and tabs hooks onto the module, following the cookbook, on `hugo-warped-module` branches (started 2026-10-27): the theme imports hugo-warped pinned at 4045b3f (w42 theme agent), and the site adds the submodule and module replacement (warped-agent). Checked with `run-hugo-fixtures.py` (40/40) and a build diff against main, then Bruce previews the manifesto, which holds all four of w42's fence blocks.
 - [ ] Charts: open in the spec, none needed yet. The first shape on record is a labelled bar list, from w42's `qgraph` sketch.
 - [ ] Later, when a second site needs them: link, image, heading and table hooks.
 

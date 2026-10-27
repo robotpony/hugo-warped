@@ -4,7 +4,7 @@ Open work for hugo-warped. The fence spec's history before 2026-10-26 is in Not 
 
 ## Done
 
-As of 2026-10-26: the spec in `fences/`, with warning codes and every reading the fixtures needed settled; fixtures for all eleven types and the page checks (`fences/fixtures/`, 111 cases); the validator (`tools/check-fences.py`), which Not a Chef's `/lint` runs; the Hugo module's parse partials (`layouts/partials/hugo-warped/`), tested in Hugo against every block fixture; and `tools/run-hugo-fixtures.py`, which w42 (0.7.5) and Fugu pass.
+As of 2026-10-26: the spec in `fences/`, with warning codes and every reading the fixtures needed settled; fixtures for all eleven types and the page checks (`fences/fixtures/`, 111 cases); the validator (`tools/check-fences.py`), which Not a Chef's `/lint` runs; the Hugo module's parse partials (`layouts/partials/hugo-warped/`), tested in Hugo against every block fixture; and `tools/run-hugo-fixtures.py`, which w42 (0.7.5) and Fugu (2380c23, pushed) pass.
 
 ## Open
 
@@ -16,7 +16,6 @@ Here:
 
 Other agents:
 
-- [ ] Fugu pushes its fence commits (6cad03b, 405ace9, 5d0d729, 4d08907, 2380c23) (fugu-agent).
 - [ ] Fugu ports `timeline` and `tabs`, when a page needs one (fugu-agent).
 - [ ] w42 removes the `tabs` shortcode (w42 theme agent).
 - [ ] Scorekeep's parser and hooks drop `←` notes, and `RulesDocument` is rewritten to the spec against its vendored fixtures (Scorekeep content agent).

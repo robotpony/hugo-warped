@@ -56,14 +56,45 @@ My other sites (space-command.ca, brucealderson.ca, robotpony.ca, w31, w32, warp
 
 ## The Hugo module
 
-A theme can read fences with the module's partials and draw them its own way. Import it (Hugo 0.168 is what I test with):
+A theme can read fences with the module's partials and draw them its own way. Hugo 0.168 is what I test with.
+
+### Adding it to a project
+
+The theme whose hooks call the partials owns the dependency, not the site. A site that uses the theme only has to provide the checkout. Otherwise a second site on the same theme ends up with missing partials and no clue why.
+
+**As a git submodule.** I use this for my sites, because they already get their themes this way:
+
+1. In the site, add hugo-warped beside the theme, pinned to a commit:
+
+   ```sh
+   git submodule add https://github.com/robotpony/hugo-warped themes/hugo-warped
+   ```
+
+2. In the theme's own `hugo.toml` (Fugu's, say), list it as a component:
+
+   ```toml
+   theme = ["hugo-warped"]
+   ```
+
+   Hugo finds it in the site's `themes/` folder. The site's theme list keeps naming only its own themes (`["fugu", "blowfish"]`), without hugo-warped.
+
+**As a Hugo Module**, for a project that already uses them (it needs Go). In the theme's config:
 
 ```toml
 [[module.imports]]
 path = "github.com/robotpony/hugo-warped"
 ```
 
-Then, in a hook such as `layouts/_default/_markup/render-codeblock-flow.html`:
+Either way:
+
+- Pin to a commit, never a moving `main`. When you bump it, run `tools/run-hugo-fixtures.py` against the theme first, so a spec change can't reach a site unchecked.
+- Don't copy the partials into a theme. Copies drift from the fixtures, which is what this repo is here to stop.
+
+Scorekeep doesn't use the partials: its Swift parser vendors `fences/fixtures/` and compares its copy against `fences/fixtures/VERSION`.
+
+### Using it in a hook
+
+In a hook such as `layouts/_default/_markup/render-codeblock-flow.html`:
 
 ```go-html-template
 {{- $p := partial "hugo-warped/parse.html" . -}}

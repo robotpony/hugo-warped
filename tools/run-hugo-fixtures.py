@@ -83,6 +83,10 @@ def main():
             f.write(f'baseURL = "https://example.org/"\ntheme = {json.dumps([os.path.basename(theme)] + a.also)}\n'
                     f'themesDir = "{os.path.dirname(theme)}"\n'
                     'disableKinds = ["taxonomy", "term", "RSS", "sitemap", "robotsTXT"]\n')
+            # A theme that imports hugo-warped as a module finds it beside it,
+            # as a submodule site does (README, "Adding it to a project").
+            if os.path.isdir(os.path.join(os.path.dirname(theme), "hugo-warped")):
+                f.write('[module]\nreplacements = "github.com/robotpony/hugo-warped -> hugo-warped"\n')
         cases = []
         for t in a.types.split(","):
             folder = os.path.join(FIXTURES, t)

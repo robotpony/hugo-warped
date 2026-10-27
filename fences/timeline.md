@@ -40,6 +40,20 @@ Entries are drawn in year order, whatever order the lines are in. Lines with the
 
 The track runs from the first year's decade (1983 → 1980) to the last year rounded up to a decade (2022 → 2030). When every year sits on one decade boundary, the track runs one decade past it. How the track, ticks and labels are drawn is up to each site; w42's choices are under "Rendering in w42".
 
+## Clusters
+
+*Approved 2026-10-27, at Bruce's request, for the timeline fence and for any drawing of dated dots on a track, such as Not a Chef's lineage. It changes no syntax: the block's text reads as before, and only a crowded track draws differently.*
+
+Years close together crowd their dots into one blob: 1988, 1989 and 1991 on a decade track. A site SHOULD zoom the track slightly where that happens, so each dot can be read and sits by its own label.
+
+1. **Gap.** Each site sets a minimum gap between two dots: enough that they don't touch, and that each label sits by its own dot without a fanned leader. It records the value under its "Rendering" section.
+2. **Cluster.** Take the distinct years in order. Two neighbours closer on the scale than the gap belong to one cluster, and a run of such neighbours is one cluster. Entries sharing a year share a dot, so they never make a cluster on their own.
+3. **Zoom.** A cluster's span gets just the length it needs to put each pair of its neighbours one gap apart. The rest of the track keeps its own scale, shrunk only as much as the column needs to make room. Nothing else is re-scaled. A track with no cluster draws exactly as before.
+4. **Mark it.** A zoomed span is drawn so a reader can see the scale changed: small break marks at each end, or a slightly different track. Inside it, each year gets a short tick (`'88`, `'89`, `'91`) in place of the decade ticks it covers.
+5. **Narrow screens.** Where the track turns into a list (w42 under 640px), there's nothing to zoom.
+
+The zoom is the site's: the parse (`year`, in source order) doesn't change, and no fixture covers a drawing.
+
 ## Lines that don't match
 
 A line that doesn't match the syntax isn't drawn. The hook prints a build warning that quotes the line and gives its file and line number:

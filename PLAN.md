@@ -1,10 +1,10 @@
 # Plan
 
-Open work for hugo-warped. The fence spec's history before 2026-10-26 is in Not a Chef's `docs/PLAN.md` ("Standard diagram fences"); everything since is in this repo's git log.
+Open work for hugo-warped. Finished work is in this repo's git log; the spec's history before 2026-10-26 is in Not a Chef's git log (`docs/PLAN.md`, `docs/fences/`).
 
 ## Done
 
-As of 2026-10-26: the spec in `fences/`, with warning codes and every reading the fixtures needed settled; fixtures for all eleven types and the page checks (`fences/fixtures/`, 111 cases); the validator (`tools/check-fences.py`), which Not a Chef's `/lint` runs; the Hugo module's parse partials (`layouts/partials/hugo-warped/`), tested in Hugo against every block fixture; and `tools/run-hugo-fixtures.py`, which w42 (0.7.5) and Fugu pass. As of 2026-10-27 the cookbook reads every fence through the module: Fugu main 82ce85f imports it pinned at 4045b3f, and Not a Chef main cd43dc4 takes it by submodule with the module replacement, checked on Hugo 0.166 and 0.168. w42 followed the same day: theme master 707cf36 (0.8.0) imports it pinned at 4045b3f, and site main de4b7dd takes it by submodule with the replacement (not yet deployed).
+As of 2026-10-27: the spec in `fences/` with fixtures for all eleven types (111 cases), the validator (`tools/check-fences.py`, run by Not a Chef's `/lint`), the Hugo module's parse partials, and `tools/run-hugo-fixtures.py`. Fugu (82ce85f) and w42 (theme 0.8.0, 707cf36) read every fence through the module, pinned at 4045b3f; both sites take it by submodule with the module replacement. w42 removed its `tabs` shortcode (theme 236b8bd).
 
 ## Open
 
@@ -16,7 +16,7 @@ Here:
 Other agents:
 
 - [ ] Fugu ports `timeline` and `tabs`, when a page needs one (fugu-agent).
-- [ ] w42 removes the `tabs` shortcode (w42 theme agent).
+- [ ] w42 deploys the module move (site main de4b7dd; warped-agent).
 - [ ] Scorekeep's parser and hooks drop `←` notes, and `RulesDocument` is rewritten to the spec against its vendored fixtures (Scorekeep content agent).
 
 ## Plumbing and tools

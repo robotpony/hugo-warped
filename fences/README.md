@@ -309,18 +309,20 @@ A new type starts in one project. It gets its own page here when a second projec
 |---|---|---|---|---|
 | `formula` | diagram | `icon | label | quantity | swaps`, operator marker; `caption:`, `bar:` | Not a Chef | `formula.md` |
 | `stack` | diagram | `layer | label | role`, top first; `caption:`, `repeat:` | Not a Chef | `stack.md` |
-| `timeline` | diagram | `YEAR Label` text lines, `~` marker | w42; Not a Chef (port pending) | `timeline.md` |
+| `timeline` | diagram | `YEAR Label` text lines, `~` marker | w42; Not a Chef (when a page needs one) | `timeline.md` |
 | `flow` | diagram | `Label | note`, optional `→` marker; `row:`, `caption:` | w42, Not a Chef | `flow.md` |
 | `table` | data | `tokens | text`; `head:`, `caption:`; `name` | Scorekeep (planned) | `table.md` |
 | `reminders` | data | one note per text line | Scorekeep | `reminders.md` |
 | `diagram`, `example` | placeholder | description line; `draw` | Scorekeep (planned) | `placeholders.md` |
 | `sheet`, `house-rules` | placeholder | description line | Scorekeep (planned) | `placeholders.md` |
-| `tabs` | layout | `tab: Label` then Markdown, per panel; `layout` | w42 (planned, replacing `{{< tabs >}}`), Not a Chef (wanted) | `tabs.md` |
+| `tabs` | layout | `tab: Label` then Markdown, per panel; `layout` | w42; Not a Chef (when a page needs one) | `tabs.md` |
 
 Highlighted source isn't a fence type. w42's `qgraph` ASCII sketches (styled by one CSS rule, with no hook) and the `formula` block shown as source in w42's manifesto are ordinary code blocks. Nothing in this spec applies to a code block that no hook draws.
 
 ## Open
 
 - **Charts.** Nobody needs a drawn chart yet. If one comes, the first shape on record is a labelled bar list (label, bar, note), from w42's `qgraph` sketch.
-- **Home.** Every type's page lives in this folder (decided 2026-10-26). `timeline.md` and `flow.md` came from w42's `themes/w42/docs/`, and `formula.md` and `stack.md` from Not a Chef's `docs/FORMAT.md`. The folder began in Not a Chef's `docs/fences/` and moved, with its history, to hugo-warped's `fences/` on 2026-10-26.
-- **Tools.** A validator any project can run on its Markdown, with the same checks the hooks warn on, plus a reference hook per type to port. In Not a Chef it would replace the build-time `warnf` checks and the `/lint` command's item 5 as the source of truth.
+
+## History
+
+Every type's page lives in this folder (decided 2026-10-26). `timeline.md` and `flow.md` came from w42's `themes/w42/docs/`, and `formula.md` and `stack.md` from Not a Chef's `docs/FORMAT.md`. The folder began in Not a Chef's `docs/fences/` and moved, with its history, to hugo-warped's `fences/` on 2026-10-26.

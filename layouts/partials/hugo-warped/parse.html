@@ -14,26 +14,36 @@
 
     {{- $p := partial "hugo-warped/parse.html" (dict "hook" . "keys" (dict "formula" $icons)) -}}
 
+  Outside a hook (a card that finds the block in .RawContent, say), pass
+  the parts instead; attributes and keys are optional:
+
+    {{- $p := partial "hugo-warped/parse.html" (dict "type" "formula" "inner" $body "attributes" (dict)) -}}
+
   Returns false for a type that isn't a fence. Hugo parses the {…}
   group before a hook sees it, so bad-attributes is never raised here;
   the validator (tools/check-fences.py) reads the raw line.
 */ -}}
-{{- $hook := . -}}
-{{- $keys := dict -}}
-{{- if reflect.IsMap . }}{{ $hook = .hook }}{{ $keys = .keys | default dict }}{{ end -}}
+{{- $type := "" }}{{ $inner := "" }}{{ $raw := dict }}{{ $keys := dict -}}
+{{- if not (reflect.IsMap .) -}}
+  {{- $type = .Type }}{{ $inner = .Inner }}{{ $raw = .Attributes -}}
+{{- else if .hook -}}
+  {{- $type = .hook.Type }}{{ $inner = .hook.Inner }}{{ $raw = .hook.Attributes }}{{ $keys = .keys | default dict -}}
+{{- else -}}
+  {{- $type = .type }}{{ $inner = .inner | default "" }}{{ $raw = .attributes | default dict }}{{ $keys = .keys | default dict -}}
+{{- end -}}
 {{- $kinds := dict
   "formula" "diagram" "stack" "diagram" "timeline" "diagram" "flow" "diagram"
   "table" "data" "reminders" "data"
   "diagram" "placeholder" "example" "placeholder" "sheet" "placeholder" "house-rules" "placeholder"
   "tabs" "layout" -}}
 {{- $r := false -}}
-{{- with index $kinds $hook.Type -}}
+{{- with index $kinds $type -}}
   {{- $kind := . -}}
   {{- $attributes := dict -}}
-  {{- range $k, $v := $hook.Attributes }}{{ $attributes = merge $attributes (dict $k (string $v)) }}{{ end -}}
-  {{- $body := split (strings.TrimRight "\n" $hook.Inner) "\n" -}}
-  {{- $name := cond (eq $kind "placeholder") "placeholder" $hook.Type -}}
-  {{- $parsed := partial (printf "hugo-warped/parse/%s.html" $name) (dict "type" $hook.Type "attributes" $attributes "body" $body "keys" $keys) -}}
-  {{- $r = merge (dict "type" $hook.Type "kind" $kind "attributes" $attributes "fallback" false) $parsed -}}
+  {{- range $k, $v := $raw }}{{ $attributes = merge $attributes (dict $k (string $v)) }}{{ end -}}
+  {{- $body := split (strings.TrimRight "\n" $inner) "\n" -}}
+  {{- $name := cond (eq $kind "placeholder") "placeholder" $type -}}
+  {{- $parsed := partial (printf "hugo-warped/parse/%s.html" $name) (dict "type" $type "attributes" $attributes "body" $body "keys" $keys) -}}
+  {{- $r = merge (dict "type" $type "kind" $kind "attributes" $attributes "fallback" false) $parsed -}}
 {{- end -}}
 {{- return $r -}}

@@ -60,32 +60,37 @@ A theme can read fences with the module's partials and draw them its own way. Hu
 
 ### Adding it to a project
 
-The theme whose hooks call the partials owns the dependency, not the site. A site that uses the theme only has to provide the checkout. Otherwise a second site on the same theme ends up with missing partials and no clue why.
+The theme whose hooks call the partials owns the dependency, not the site: it imports hugo-warped as a Hugo Module. One theme config then serves both ways a site can take the theme.
 
-**As a git submodule.** I use this for my sites, because they already get their themes this way:
-
-1. In the site, add hugo-warped beside the theme, pinned to a commit:
-
-   ```sh
-   git submodule add https://github.com/robotpony/hugo-warped themes/hugo-warped
-   ```
-
-2. In the theme's own `hugo.toml` (Fugu's, say), list it as a component:
-
-   ```toml
-   theme = ["hugo-warped"]
-   ```
-
-   Hugo finds it in the site's `themes/` folder. The site's theme list keeps naming only its own themes (`["fugu", "blowfish"]`), without hugo-warped.
-
-**As a Hugo Module**, for a site that already uses them (it needs Go). The site imports it in its own config:
+**In the theme** (Fugu, say), import it in `hugo.toml`, and pin it in the theme's `go.mod` as you would Blowfish:
 
 ```toml
 [[module.imports]]
 path = "github.com/robotpony/hugo-warped"
 ```
 
-Never put that import in a theme's config. A site that takes the theme by submodule then looks for `themes/github.com/robotpony/hugo-warped` and fails to load. A theme names hugo-warped only as `theme = ["hugo-warped"]`.
+```text
+require github.com/robotpony/hugo-warped v0.0.0-<date>-<commit>
+```
+
+Don't use `theme = ["hugo-warped"]` in the theme. In module mode a bare name only resolves from the site's `themes/` folder, so module sites fail to build.
+
+**A site that takes the theme as a Hugo Module** needs nothing more: Hugo fetches hugo-warped at the theme's pin.
+
+**A site that takes the theme as a git submodule** (my sites do) adds hugo-warped beside it, pinned to a commit, and maps the module path to that folder:
+
+```sh
+git submodule add https://github.com/robotpony/hugo-warped themes/hugo-warped
+```
+
+```toml
+theme = ["fugu", "blowfish"]
+
+[module]
+replacements = "github.com/robotpony/hugo-warped -> hugo-warped"
+```
+
+Without the replacement, Hugo looks for `themes/github.com/robotpony/hugo-warped` and the config fails to load. I tested both kinds of site on Hugo 0.168.
 
 Either way:
 

@@ -16,7 +16,6 @@ Here:
 Other agents:
 
 - [ ] Fugu ports `timeline` and `tabs`, when a page needs one (fugu-agent).
-- [ ] Fugu's lineage zooms on clustered years, per `fences/timeline.md` "Clusters": built in Fugu ffa1a1d (sidebar gap 22px, body 6%), waiting on Bruce's preview of /methods/chicken-sandwiches/ and a push (fugu-agent). #focus
 - [ ] w42 checks whether its timelines cluster, and if so adds the same zoom and records its dot gap (w42 theme agent; not running when the rule landed, so not yet told).
 - [ ] w42 deploys the module move (site main de4b7dd; warped-agent).
 - [ ] Scorekeep's parser and hooks drop `←` notes, and `RulesDocument` is rewritten to the spec against its vendored fixtures (Scorekeep content agent).

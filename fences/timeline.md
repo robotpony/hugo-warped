@@ -44,9 +44,9 @@ The track runs from the first year's decade (1983 → 1980) to the last year rou
 
 *Approved 2026-10-27, at Bruce's request, for the timeline fence and for any drawing of dated dots on a track, such as Not a Chef's lineage. It changes no syntax: the block's text reads as before, and only a crowded track draws differently.*
 
-Years close together crowd their dots into one blob: 1988, 1989 and 1991 on a decade track. A site SHOULD zoom the track slightly where that happens, so each dot can be read and sits by its own label.
+Years close together crowd their dots into one blob: 1988, 1989 and 1991 on a decade track. A site SHOULD zoom the track slightly where that happens, so each dot can be read on its own.
 
-1. **Gap.** Each site sets a minimum gap between two dots: enough that they don't touch, and that each label sits by its own dot without a fanned leader. It records the value under its "Rendering" section.
+1. **Gap.** Each site sets a minimum gap between two dots, enough that they don't touch, and records it under its "Rendering" section. The zoom spaces dots, not labels: labels keep the site's own placement (rows, leaders). A gap of one label row also clears the labels; a smaller one may leave long labels crowding inside the zoom.
 2. **Cluster.** Take the distinct years in order. Two neighbours closer on the scale than the gap belong to one cluster, and a run of such neighbours is one cluster. Entries sharing a year share a dot, so they never make a cluster on their own.
 3. **Zoom.** A cluster's span gets just the length it needs to put each pair of its neighbours one gap apart. The rest of the track keeps its own scale, shrunk only as much as the column needs to make room. Nothing else is re-scaled. A track with no cluster draws exactly as before.
 4. **Mark it.** A zoomed span is drawn so a reader can see the scale changed: small break marks at each end, or a slightly different track. Inside it, each year gets a short tick (`'88`, `'89`, `'91`) in place of the decade ticks it covers.

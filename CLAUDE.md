@@ -20,6 +20,10 @@ Change another project's files only by agreement with its agent; otherwise send 
 - Spec changes follow `fences/README.md` "Extending a type": every user agrees first, the change is written in the type page before any code, and nothing valid today changes how it draws.
 - Share structure and parsing, never CSS or colours.
 
+## Site copies
+
+- Bruce's edits in a site's submodule copy of this repo (e.g. `~/writing/not-a-chef/themes/hugo-warped`) are answers, not stray work. Carry each one to `main` here, commit and push it, then ask the site's agent to bump its submodule. Never offer to discard them.
+
 ## Commits
 
 - Work and commit directly on `main`; commit and push when a task is done. Stage only the files you touched.

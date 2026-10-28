@@ -12,6 +12,8 @@ Open work for hugo-warped. Finished work is in this repo's git log; the spec's h
 
 - [ ] w42 deploys the module move (site main de4b7dd; warped-agent).
 - [ ] w42 checks whether its timelines cluster, and if so adds the zoom and records its dot gap (w42 theme agent; not yet told).
+- [ ] Fugu cuts long empty stretches of the lineage to a break (`fences/timeline.md`, "Gaps"), and records its longest stretch and break length (fugu-agent; told 2026-10-28).
+- [ ] w42 checks whether its timelines have long gaps, and if so adds the break (w42 theme agent; not yet told).
 - [ ] Scorekeep drops `←` notes and rewrites `RulesDocument` to the spec against its vendored fixtures (Scorekeep content agent).
 - [ ] Fugu ports `timeline` and `tabs` when a page needs one (fugu-agent).
 - [ ] Not a Chef and Fugu delete their merged `hugo-warped-module` branches (Not a Chef content agent, fugu-agent).

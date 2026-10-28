@@ -54,6 +54,21 @@ Years close together crowd their dots into one blob: 1988, 1989 and 1991 on a de
 
 The zoom is the site's: the parse (`year`, in source order) doesn't change, and no fixture covers a drawing.
 
+## Gaps
+
+*Approved 2026-10-28, at Bruce's request, for the same tracks as "Clusters". It changes no syntax, and only a track with a long empty stretch draws differently.*
+
+The opposite of a cluster: years far apart leave most of the track empty. Not a Chef's poke has 1778, 1970 and 2012, so its lineage draws almost two centuries of empty decades between the first two dots. A site SHOULD cut a long empty stretch down to a short break, so the track is mostly dots.
+
+1. **Bounds.** Each dot keeps the decade ticks on either side of it: the one at or before its year, and the next one after. A year on a decade (1970) is its own tick before. The track's ends are bounds too.
+2. **Gap.** Between two neighbouring distinct years, the empty stretch runs from the earlier dot's tick after to the later dot's tick before (1780 to 1970 for poke). Each site sets a longest stretch it draws in full, and records it under its "Rendering" section. A stretch at least that long is a gap. Fifty years is a good start: poke's 1780–1970 is cut, and its 1980–2010 is drawn.
+3. **Cut.** A gap is drawn as a break of fixed length, set by the site, in place of the years it covers. The break is at least the cluster gap (so a cut never makes a cluster), and short: about one label row. Everything else keeps its scale, and on a track as wide as its column the rest grows into the room the cut frees. A track with no gap draws exactly as before.
+4. **Mark it.** A break is drawn so a reader can see time was left out: a gap in the track with two slanted strokes across it, or an ellipsis (`⋮` down a vertical track, `…` along a horizontal one). It has no ticks. The ticks at its two ends keep their year labels, even where a site would otherwise skip some (w42 names every other decade over 80 years), so the dates either side still read.
+5. **Order.** Find gaps on the years first, then clusters on what's left. A break is never inside a cluster.
+6. **Narrow screens.** Where the track turns into a list, there's nothing to cut.
+
+The cut is the site's, like the zoom: the parse doesn't change, and no fixture covers a drawing.
+
 ## Lines that don't match
 
 A line that doesn't match the syntax isn't drawn. The hook prints a build warning that quotes the line and gives its file and line number:

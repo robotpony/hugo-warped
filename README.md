@@ -8,11 +8,11 @@ The sites share structure and parsing here. Each keeps its own look, so nothing 
 
 ## Where it stands
 
-*As of 2026-10-27.*
+*As of 2026-10-29.*
 
 | Part | State |
 |---|---|
-| Fence spec (`fences/`) | **Approved** and in use. Nine fence types, a shared grammar, and a stable code for every warning. |
+| Fence spec (`fences/`) | **Approved** and in use. Eleven fence types, a shared grammar, and a stable code for every warning. |
 | Fixtures (`fences/fixtures/`) | **Done** for every type. Fugu passes formula, stack and flow; w42 passes timeline, flow and tabs. |
 | Validator (`tools/check-fences.py`) | **Done.** Stdlib Python, run on any project's Markdown. It passes every fixture (`tools/test-check-fences.py`), and Not a Chef, w42 and Scorekeep check clean. |
 | Hugo module (`layouts/partials/hugo-warped/`) | **Done**, and optional. One parse partial per type, returning the same parse as the validator. It passes every block fixture in Hugo (`tools/test-hugo-partials.py`). Fugu and w42 read every fence through it, pinned at 4045b3f. |
@@ -48,7 +48,7 @@ Start at `fences/README.md` for the shared grammar: lines, cells, notes, attribu
 
 | Site | Repo | Theme or parser | Status |
 |---|---|---|---|
-| bruce-loves-to-cook.ca | `~/writing/not-a-chef` | Fugu (`robotpony/hugo-theme-fugu`) | Draws `formula`, `stack` and `flow` through the module (Fugu 82ce85f) |
+| bruce-loves-to-cook.ca | `~/writing/not-a-chef` | Fugu (`robotpony/hugo-theme-fugu`) | Draws `formula`, `stack` and `flow` through the module, and cuts long gaps in its lineage timelines |
 | warpedvisions.org | `~/projects/sites/w42` | w42 theme 0.8.0 | Draws `timeline`, `flow` and `tabs` through the module; the tabs shortcode is gone |
 | Scorekeep | `~/projects/utilities/scorekeep` | Swift `RulesDocument` and the `site/` hooks | Moving from `@` placeholders to fences, with its parser rewritten to the spec |
 
@@ -126,3 +126,7 @@ Every project that uses a type agrees to a change first, and it's written in the
 ## Not in scope
 
 Themes, CSS and the look of each site, and browser JS (warped.js).
+
+## Licence
+
+MIT, like Fugu, so anyone can use it. See `LICENSE`.

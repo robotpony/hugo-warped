@@ -10,7 +10,7 @@ Open work for hugo-warped. Finished work is in this repo's git log; the spec's h
 
 ## Other agents
 
-- [ ] w42 deploys the module move (site main de4b7dd; warped-agent).
+- [ ] w42 deploys the module move (site main de4b7dd, pushed; live is still deploy-2026-10-25-2 as of 2026-10-29; waits on Bruce, then warped-agent).
 - [ ] w42 checks whether its timelines cluster, and if so adds the zoom and records its dot gap (w42 theme agent; told 2026-10-29, gaps too).
 - [ ] Scorekeep drops `←` notes and rewrites `RulesDocument` to the spec against its vendored fixtures (Scorekeep content agent).
 - [ ] Fugu ports `timeline` and `tabs` when a page needs one (fugu-agent).

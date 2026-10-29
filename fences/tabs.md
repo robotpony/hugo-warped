@@ -92,5 +92,6 @@ Not part of the spec; for reference when porting.
 
 - No JS. Switchable tabs are a radio per panel, the first checked, and `common/tabs.css` shows the panel matching the checked one. Arrow keys move between tabs, as in any radio group.
 - `layout="stack"` draws no radios: each label is a plain caption over its panel.
-- Classes: `.tabs`, `.tabs.side`, `.tabs.stack`, `.tabs-input`, `.tabs-label`, `.tabs-panel`, with `--tabs` set to the panel count.
+- `layout="aside"` (theme 0.11.0) draws as `stack` in a 260px column floated right with a 24px left gutter, from 700px up; the next h2–h4 clears it. Under 700px it's full-width `stack`.
+- Classes: `.tabs`, `.tabs.side`, `.tabs.stack`, `.tabs.stack.aside`, `.tabs-input`, `.tabs-label`, `.tabs-panel`, with `--tabs` set to the panel count.
 - The shortcode stays until both manifesto blocks are migrated and checked against the live page; it's removed in a later theme bump.

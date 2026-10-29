@@ -20,7 +20,25 @@ Bake on a rack at 220°C for 25 minutes, turning once.
 
 1. **Panel.** A `tab: <label>` keyword line starts a panel, and everything up to the next `tab:` (or the end) is its body. The label is inline Markdown. A `← note` on a `tab:` line is dropped, as on any keyword line (`README.md`, "Notes"); in a body it's ordinary text. The block MUST start with a `tab:` line.
 2. **Body.** Block Markdown, rendered with the page's own `RenderString` and `"display" "block"`, so each site's hooks apply: images and page resources, links, wiki links, lists, headings, other fences. Blank lines inside a body are kept; this is the one type whose body isn't read line by line.
-3. **Layout.** The `layout` attribute: `side` shows every panel at once as equal columns on wide screens, falling back to tabs where columns would be too narrow; `stack` shows every panel at once, full width, one under another, each under its label. Without `layout`, the panels are switchable tabs, the first one open.
+3. **Layout.** The `layout` attribute: `side` shows every panel at once as equal columns on wide screens, falling back to tabs where columns would be too narrow; `stack` shows every panel at once, full width, one under another, each under its label; `aside` stacks the panels the same way in a narrow column on the right, with the text that follows wrapping beside it on wide screens, and full width like `stack` where the column would be too narrow. Without `layout`, the panels are switchable tabs, the first one open. The width and gutter of an `aside` are the site's.
+
+## Aside
+
+*Approved 2026-10-29, at Bruce's request via warped-agent, for the Bruce burger block in w42's cookbook post. w42 is the only site drawing `tabs` today; Not a Chef and Fugu take it up when a page needs one.*
+
+`aside` is for a block that sits beside the prose rather than between it: a recipe's source next to a tall screenshot of the page it makes. It changes placement only, so a reader without the hook loses nothing. The block goes before the paragraphs meant to wrap beside it. Before this, `aside` warned `unknown-layout` and drew as switchable tabs, so no valid block draws differently.
+
+`````markdown
+````tabs {layout="aside"}
+tab: Text
+```stack
+…
+```
+
+tab: On the site
+![The Bruce burger's build, drawn on the site](bruce-burger-build.png)
+````
+`````
 
 ## Nesting
 

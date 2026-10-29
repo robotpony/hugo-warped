@@ -5,7 +5,7 @@
   less blank lines at either end.
 */ -}}
 {{- $warns := slice -}}
-{{- with .attributes.layout }}{{ if not (in (slice "side" "stack") .) }}{{ $warns = $warns | append (dict "line" 1 "code" "unknown-layout") }}{{ end }}{{ end -}}
+{{- with .attributes.layout }}{{ if not (in (slice "side" "stack" "aside") .) }}{{ $warns = $warns | append (dict "line" 1 "code" "unknown-layout") }}{{ end }}{{ end -}}
 {{- $panels := slice }}{{ $panel := false }}{{ $body := slice }}{{ $fence := "" -}}
 {{- $open := print `^ {0,3}(` "`" `{3,}|~{3,})` -}}
 {{- range $i, $raw := .body -}}

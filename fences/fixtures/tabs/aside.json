@@ -1,0 +1,11 @@
+{
+  "type": "tabs",
+  "kind": "layout",
+  "attributes": {"layout": "aside"},
+  "lines": [
+    {"line": 2, "keyword": "tab", "value": "Text", "body": "Top bun, patty, cheese, bottom bun."},
+    {"line": 5, "keyword": "tab", "value": "On the site", "body": "![The burger's build, drawn on the site](burger-build.png)"}
+  ],
+  "warnings": [],
+  "fallback": false
+}

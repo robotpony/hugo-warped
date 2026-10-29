@@ -419,7 +419,7 @@ def parse_placeholder(b, body, keys):
 
 def parse_tabs(b, body, keys):
     layout = b.attributes.get("layout")
-    if layout is not None and layout not in ("side", "stack"):
+    if layout is not None and layout not in ("side", "stack", "aside"):
         b.warn(1, "unknown-layout")
     panels, panel, inner = [], None, None
     for n, raw in enumerate(body, start=2):

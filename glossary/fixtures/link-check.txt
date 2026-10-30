@@ -1,8 +1,9 @@
 essays/camp-cooking.md:12  Deglaze  "deglaze"
-recipes/dal.md:18  Deglaze  "Deglaze"
+recipes/dal.md:22  Deglaze  "Deglaze"
 recipes/pan-sauce.md:21  Deglaze  "Deglaze"
-recipes/dal.md:22  Kewpie mayonnaise  "Kewpie"
-recipes/pan-sauce.md:19  Kewpie mayonnaise  "kewpie"
+recipes/stock.md:12  Fond  "fond"  (move from line 8)
+recipes/dal.md:26  Kewpie mayonnaise  "Kewpie"
+recipes/pan-sauce.md:11  Kewpie mayonnaise  "kewpie"
 recipes/pan-sauce.md:19  Maillard reaction  "Maillard reaction"
 essays/gravy.md:15  Roux  "roux"
-recipes/dal.md:14  Roux  "roux"
+recipes/dal.md:18  Roux  "roux"

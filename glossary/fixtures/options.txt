@@ -1,1 +1,1 @@
---recipes recipes --not-ingredients method,directions,steps,notes,serve
+--recipes recipes --not-ingredients method,directions,steps,notes,serve --sidebar-headings "Mechanic,To serve,Notes:"

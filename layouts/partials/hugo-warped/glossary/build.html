@@ -31,11 +31,11 @@
     {{- else -}}
       {{- warnf "glossary [empty-definition]: a stub, left out until it's written, in %q" $path -}}
     {{- end -}}
-    {{- $add = $add | append (dict "term" .Title "also" $also "def" $def "url" "" "page" . "path" $path "stub" (not $body)) -}}
+    {{- $add = $add | append (dict "term" .Title "also" $also "kind" (.Params.kind | default "") "def" $def "url" "" "page" . "path" $path "stub" (not $body)) -}}
   {{- end -}}
 {{- end -}}
 {{- range .extra -}}
-  {{- $add = $add | append (dict "term" .term "also" (.also | default slice) "def" .def "url" .url "page" nil "path" .url) -}}
+  {{- $add = $add | append (dict "term" .term "also" (.also | default slice) "kind" (.kind | default "") "def" .def "url" .url "page" nil "path" .url) -}}
 {{- end -}}
 {{- range $add -}}
   {{- $e := . -}}
@@ -57,6 +57,6 @@
   {{- with findRE `^\p{L}` $key 1 }}{{ $letter = upper (index . 0) }}{{ end -}}
   {{- $url := .url -}}
   {{- with .page }}{{ $url = printf "%s#%s" $g.RelPermalink $anchor }}{{ end -}}
-  {{- $out = $out | append (dict "term" .term "also" .also "key" $key "keys" $keys "anchor" $anchor "letter" $letter "def" .def "url" $url "page" .page) -}}
+  {{- $out = $out | append (dict "term" .term "also" .also "kind" .kind "key" $key "keys" $keys "anchor" $anchor "letter" $letter "def" .def "url" $url "page" .page) -}}
 {{- end -}}
 {{- return sort $out "key" -}}

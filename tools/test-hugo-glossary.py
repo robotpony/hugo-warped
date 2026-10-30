@@ -27,7 +27,7 @@ FIXTURES = os.path.join(ROOT, "glossary", "fixtures")
 HOME = """{{- $a := dict "glossary" "/reference/glossary" "extra" hugo.Data.extra -}}
 {{- $entries := slice -}}
 {{- range partial "hugo-warped/glossary/entries.html" (dict "glossary" "/reference/glossary") -}}
-  {{- $entries = $entries | append (dict "term" .term "also" .also "key" .key "keys" .keys "anchor" .anchor "letter" .letter "def" .def "url" .url) -}}
+  {{- $entries = $entries | append (dict "term" .term "also" .also "kind" .kind "key" .key "keys" .keys "anchor" .anchor "letter" .letter "def" .def "url" .url) -}}
 {{- end -}}
 {{- $list := slice -}}
 {{- range partial "hugo-warped/glossary/list.html" $a -}}

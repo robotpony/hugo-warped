@@ -139,16 +139,20 @@ def blank(line, pattern, keep=None):
     return pattern.sub(sub, line)
 
 
-def marks(body, first):
-    """[(line, target, text)] for every mark in prose."""
+def mark_spans(body, first):
+    """[(line, start, end, target, text)] for every mark in prose."""
     out = []
     for n, line, kind in read_lines(body, first):
         if kind == "code":
             continue
-        for m in WIKI.finditer(blank(line, CODE_SPAN)):
-            target = m.group(1).strip()
-            out.append((n, target, (m.group(2) or m.group(1)).strip()))
+        for m in WIKI.finditer(blank(nfc(line), CODE_SPAN)):
+            out.append((n, m.start(), m.end(), m.group(1).strip(), (m.group(2) or m.group(1)).strip()))
     return out
+
+
+def marks(body, first):
+    """[(line, target, text)] for every mark in prose."""
+    return [(n, t, x) for n, _, _, t, x in mark_spans(body, first)]
 
 
 class Page:
@@ -222,7 +226,8 @@ def load(root, folder, stubs=False, quiet=()):
             keys.append(k)
         if stub and not stubs:
             continue
-        entries.append({"term": term, "also": also, "key": match_key(term), "keys": keys,
+        entries.append({"term": term, "also": also, "kind": p.fields.get("kind") or "",
+                        "key": match_key(term), "keys": keys,
                         "anchor": anchor(term), "letter": letter(match_key(term)),
                         "path": p.path, "forms": [f for f in [term] + also if match_key(f) in keys]})
     entries.sort(key=lambda e: e["key"])
@@ -277,22 +282,43 @@ def skipped(page, lines, rules):
     return out
 
 
+def late(page, lines, rules):
+    """Line numbers on a recipe page under an h2 named in
+    rules["sidebar"] (the whole title, any case, a trailing colon
+    dropped), down to the next h2: read after the rest of the page."""
+    if not rules["sidebar"] or not any(page.path.startswith(r.strip("/") + "/") for r in rules["recipes"]):
+        return set()
+    out, inside = set(), False
+    for n, line, kind in lines:
+        if kind == "heading" and len(HEADING.match(line).group(1)) <= 2:
+            title = HEADING_ATTRS.sub("", (HEADING.match(line).group(2) or "")).strip().rstrip(":").strip()
+            inside = len(HEADING.match(line).group(1)) == 2 and title.lower() in rules["sidebar"]
+        elif inside:
+            out.add(n)
+    return out
+
+
 def masked(line):
     for pat in (CODE_SPAN, WIKI, MD_LINK, HTML_A, URL, HTML_TAG):
         line = blank(line, pat)
     return line
 
 
-def first_mention(page, entry, rules):
+def first_mention(page, entry, rules, body=None):
+    """(line, start, end) of the entry's first mention in prose, reading
+    a recipe's sidebar sections last; ingredient lists count only for an
+    entry of kind "ingredient". `body` stands in for the page's own."""
     forms = sorted(entry["forms"], key=len, reverse=True)
     pat = re.compile(r"(?<!\w)(?:" + "|".join(re.escape(nfc(f)) for f in forms) + r")(?!\w)", re.I)
-    lines = list(read_lines(page.body, page.first))
-    skip = skipped(page, lines, rules)
-    for n, line, kind in lines:
-        if kind != "prose" or n in skip:
-            continue
-        if m := pat.search(masked(nfc(line))):
-            return n, m.start(), m.end()
+    lines = list(read_lines(page.body if body is None else body, page.first))
+    skip = set() if entry.get("kind") == "ingredient" else skipped(page, lines, rules)
+    after = late(page, lines, rules)
+    for wanted_late in (False, True):
+        for n, line, kind in lines:
+            if kind != "prose" or n in skip or (n in after) != wanted_late:
+                continue
+            if m := pat.search(masked(nfc(line))):
+                return n, m.start(), m.end()
     return None
 
 
@@ -309,20 +335,41 @@ def read_skip(path):
 
 
 def hit(root, folder, p, e, entries, skip, rules):
-    """(line, start, end) of entry e's unmarked first mention on page p,
-    or None when the page is the entry's own, is marked, or is skipped."""
+    """Where entry e's mark belongs on page p, if it isn't there yet:
+    (line, start, end, moved). `moved` is None for a new mark, or
+    (line, start, end, words) for the page's one existing mark, which
+    the new one replaces; start and end are then on the line with that
+    mark back to plain words. None when there's nothing to do."""
     if p.path == e["path"] or os.path.basename(p.path) == "_index.md" and p.path.startswith(folder + "/"):
         return None
     if (p.path, e["term"]) in skip:
         return None
-    if any(resolve(entries, t) is e for _, t, _ in p.marks()):
+    spans = [m for m in mark_spans(p.body, p.first) if resolve(entries, m[3]) is e]
+    if not spans:
+        h = first_mention(p, e, rules)
+        return h + (None,) if h else None
+    if len(spans) > 1:
         return None
-    return first_mention(p, e, rules)
+    n, ms, me, _, words = spans[0]
+    lines = unmarked(p, (n, ms, me, words))
+    h = first_mention(p, e, rules, body="\n".join(lines[p.first - 1:]))
+    if not h or (h[0], h[1]) == (n, ms):
+        return None
+    return h + ((n, ms, me, words),)
+
+
+def unmarked(p, moved):
+    """The page's lines, with a mark at `moved` back to plain words."""
+    lines = nfc(p.text).split("\n")
+    if moved:
+        n, ms, me, words = moved
+        lines[n - 1] = lines[n - 1][:ms] + words + lines[n - 1][me:]
+    return lines
 
 
 def proposals(root, folder, skip, rules, entries=None):
-    """Yield (entry, [(page, line, start, end), …]) for every entry with an
-    unmarked first mention, A to Z. Each entry's list is read when it's
+    """Yield (entry, [(page, line, start, end, moved), …]) for every entry
+    with a mark to add or move, A to Z. Each entry's list is read when it's
     reached, so it sees the edits made for the entries before it."""
     if entries is None:
         entries, _ = load(root, folder)
@@ -340,8 +387,8 @@ def only_terms(entries, terms):
     return [e for e in entries if keys & set(e["keys"])]
 
 
-def write_mark(p, e, n, s, end):
-    lines = nfc(p.text).split("\n")
+def write_mark(p, e, n, s, end, moved=None):
+    lines = unmarked(p, moved)
     old = lines[n - 1]
     lines[n - 1] = old[:s] + mark_for(e, old[s:end]) + old[end:]
     p.text = "\n".join(lines)
@@ -358,6 +405,8 @@ def write_never(skip_file, skip, p, e):
 
 def skip_rules(a):
     return {"sections": {x.lower() for x in a.skip_section}, "recipes": a.recipes or [],
+            "sidebar": {t.strip().rstrip(":").strip().lower() for x in getattr(a, "sidebar_headings", None) or [] for t in x.split(",")
+                        if t.strip()},
             "not_ingredients": {w for x in a.not_ingredients or [] for w in match_key(x.replace(",", " ")).split()}}
 
 
@@ -407,13 +456,22 @@ def in_context(line, start, end, mark, width, style=None):
 
 
 def tally(c):
-    return f"{c['linked']} linked, {c['never']} never, {c['skipped']} skipped"
+    moved = f", {c['moved']} moved" if c.get("moved") else ""
+    return f"{c['linked']} linked{moved}, {c['never']} never, {c['skipped']} skipped"
 
 
-def context_line(p, e, n, s, end, width, st):
-    old = nfc(p.text).split("\n")[n - 1]
+def context_line(p, e, n, s, end, moved, width, st):
+    old = unmarked(p, moved)[n - 1]
     indent = len(old) - len(old.lstrip())
     return in_context(old.strip(), s - indent, end - indent, mark_for(e, old[s:end]), width, st)
+
+
+def was_line(p, moved, width, st):
+    """Where a moved mark is now, dim."""
+    n, ms, me, _ = moved
+    old = nfc(p.text).split("\n")[n - 1]
+    indent = len(old) - len(old.lstrip())
+    return st.dim(f"{n}: ") + st.dim(in_context(old.strip(), ms - indent, me - indent, old[ms:me], width - len(f"{n}: ")))
 
 
 def ask(prompt):
@@ -430,23 +488,25 @@ def ask(prompt):
 def run_check(a, root, folder, skip, rules, entries):
     found = []
     for e, hits in proposals(root, folder, skip, rules, entries):
-        for p, n, s, end in hits:
-            words = nfc(p.text.split("\n")[n - 1])[s:end]
-            found.append({"path": p.path, "line": n, "term": e["term"], "words": words})
+        for p, n, s, end, moved in hits:
+            words = unmarked(p, moved)[n - 1][s:end]
+            found.append({"path": p.path, "line": n, "term": e["term"], "words": words,
+                          "move": bool(moved), "from": moved[0] if moved else None})
     if a.json:
         print(json.dumps(found, ensure_ascii=False, indent=2))
     else:
         for f in found:
-            print(f'{f["path"]}:{f["line"]}  {f["term"]}  "{f["words"]}"')
+            move = f'  (move from line {f["from"]})' if f["move"] else ""
+            print(f'{f["path"]}:{f["line"]}  {f["term"]}  "{f["words"]}"{move}')
     return 1 if a.strict and found else 0
 
 
 def run_apply(a, root, folder, skip, rules, entries):
-    """Answers from a JSON list of {path, line, term, answer}, written as
-    the interactive run would, skipping any whose mention has moved."""
+    """Answers from a JSON list of {path, line, term, answer, from}, written
+    as the interactive run would, skipping any whose mention has moved."""
     with open(a.apply, encoding="utf-8") as f:
         items = json.load(f)
-    counts = {"linked": 0, "never": 0, "skipped": 0, "stale": 0}
+    counts = {"linked": 0, "moved": 0, "never": 0, "skipped": 0, "stale": 0}
     for item in items:
         e = resolve(entries, item["term"])
         path = os.path.join(root, item["path"])
@@ -455,21 +515,25 @@ def run_apply(a, root, folder, skip, rules, entries):
         if e and os.path.exists(path):
             p = Page(root, path)
             h = hit(root, folder, p, e, entries, skip, rules)
-        if not h or h[0] != item["line"] or answer not in ("yes", "never", "skip"):
+        moved = h[3] if h else None
+        ok = h and h[0] == item["line"] and (
+            answer in ("never", "keep", "skip")
+            or answer == "yes" and not moved
+            or answer == "move" and moved and moved[0] == item.get("from"))
+        if not ok:
             counts["stale"] += 1
             print(f'{item["path"]}:{item["line"]}  {item["term"]}  stale, not changed')
             continue
-        if answer == "yes":
+        if answer in ("yes", "move"):
             write_mark(p, e, *h)
-            counts["linked"] += 1
-            print(f'{p.path}:{h[0]}  {e["term"]}  linked')
-        elif answer == "never":
+            done = "moved" if moved else "linked"
+        elif answer in ("never", "keep"):
             write_never(a.skip, skip, p, e)
-            counts["never"] += 1
-            print(f'{p.path}:{h[0]}  {e["term"]}  never')
+            done = "never"
         else:
-            counts["skipped"] += 1
-            print(f'{p.path}:{h[0]}  {e["term"]}  skipped')
+            done = "skipped"
+        counts[done] += 1
+        print(f'{p.path}:{h[0]}  {e["term"]}  {done}' + (f" from line {moved[0]}" if done == "moved" else ""))
     print(f"\nTotal: {tally(counts)}, {counts['stale']} stale. Review: git diff")
     return 0
 
@@ -492,9 +556,11 @@ def run_link(a):
     stubs = sum(w["code"] == "empty-definition" for w in warnings)
     if stubs:
         print(st.dim(f"{stubs} stub{'s' if stubs != 1 else ''} skipped (not written yet)") + "\n")
-    prompt = "  " + "  ".join(f"{st.bold(k)} {word}" for k, word in
-                              (("y", "yes"), ("n", "never here"), ("s", "skip"), ("a", "all"), ("q", "quit"))) + " › "
-    echoes = {"y": ("✓ linked", "32"), "n": ("✗ never", "33"), "s": ("– skipped", "2")}
+
+    def prompt(moved):
+        keys = (("y", "move here"), ("n", "keep where it is")) if moved else (("y", "yes"), ("n", "never here"))
+        keys += (("s", "skip"), ("a", "all"), ("q", "quit"))
+        return "  " + "  ".join(f"{st.bold(k)} {word}" for k, word in keys) + " › "
 
     def echo(text, code, extra=""):
         if tty:
@@ -504,7 +570,7 @@ def run_link(a):
     counts, quit_ = {}, False
     for k, (e, hits) in enumerate(proposals(root, folder, skip, rules, entries)):
         term = e["term"]
-        counts[term] = c = {"linked": 0, "never": 0, "skipped": 0}
+        counts[term] = c = {"linked": 0, "moved": 0, "never": 0, "skipped": 0}
         if k:
             print("\n")
         heading = f"{term} · {len(hits)} page{'s' if len(hits) != 1 else ''}"
@@ -512,12 +578,16 @@ def run_link(a):
         print(st.dim("─" * min(max(len(heading), 20), width)) + "\n")
         i = 0
         while i < len(hits):
-            p, n, s, end = hits[i]
+            p, n, s, end, moved = hits[i]
             if i:
                 print("\n")
-            print(f"  {st.dim(f'{i + 1}/{len(hits)}')}  {p.path}:{n}\n")
-            print("    " + context_line(p, e, n, s, end, width - 4, st) + "\n")
-            ans = ask(prompt)
+            print(f"  {st.dim(f'{i + 1}/{len(hits)}')}  {p.path}:{n}" + (st.dim(f"  move from {moved[0]}") if moved else "") + "\n")
+            if moved:
+                print("    " + was_line(p, moved, width - 4, st))
+                print("    " + f"{n}: " + context_line(p, e, n, s, end, moved, width - 4 - len(f"{n}: "), st) + "\n")
+            else:
+                print("    " + context_line(p, e, n, s, end, moved, width - 4, st) + "\n")
+            ans = ask(prompt(moved))
             ans = "q" if ans is None else ans.lower()[:1]
             if ans == "q":
                 quit_ = True
@@ -525,35 +595,37 @@ def run_link(a):
             if ans == "a":
                 rest = [h for h in hits[i:] if (h[0].path, term) not in skip]
                 print()
-                for q, qn, qs, qend in rest:
-                    print("  " + st.dim(f"{q.path}:{qn}"))
-                    print("    " + context_line(q, e, qn, qs, qend, width - 4, st))
+                for q, qn, qs, qend, qmoved in rest:
+                    print("  " + st.dim(f"{q.path}:{qn}" + (f"  move from {qmoved[0]}" if qmoved else "")))
+                    print("    " + context_line(q, e, qn, qs, qend, qmoved, width - 4, st))
                 print()
                 typed = ask(f"  Link all {len(rest)} remaining for {term}? "
                             f"Type {len(rest)} to confirm, or Enter to go back › ")
                 if typed == str(len(rest)):
-                    for q, qn, qs, qend in rest:
-                        write_mark(q, e, qn, qs, qend)
-                    c["linked"] += len(rest)
+                    for h in rest:
+                        write_mark(h[0], e, *h[1:])
+                        c["moved" if h[4] else "linked"] += 1
                     echo(f"✓ linked {len(rest)} (all)", "32")
                     break
                 print("\n")
                 continue
             ans = ans if ans in ("y", "n") else "s"
             if ans == "y":
-                write_mark(p, e, n, s, end)
-                c["linked"] += 1
+                write_mark(p, e, n, s, end, moved)
+                c["moved" if moved else "linked"] += 1
+                echo("✓ moved" if moved else "✓ linked", "32")
             elif ans == "n":
                 write_never(a.skip, skip, p, e)
                 c["never"] += 1
+                echo("✗ kept" if moved else "✗ never", "33", st.dim(f"  saved to {a.skip}") if a.skip else "")
             else:
                 c["skipped"] += 1
-            echo(*echoes[ans], st.dim(f"  saved to {a.skip}") if ans == "n" and a.skip else "")
+                echo("– skipped", "2")
             i += 1
         if quit_:
             break
     print("\n")
-    total = {"linked": 0, "never": 0, "skipped": 0}
+    total = {"linked": 0, "moved": 0, "never": 0, "skipped": 0}
     for t, c in counts.items():
         print(f"{t}: {tally(c)}")
         for key in total:
@@ -661,6 +733,8 @@ def main(argv=None):
                        help="a folder under content whose pages are recipes, repeatable")
         s.add_argument("--not-ingredients", action="append", metavar="WORDS",
                        help="comma-separated words that keep a recipe's h2 from being an ingredient section")
+        s.add_argument("--sidebar-headings", action="append", metavar="TITLES",
+                       help="comma-separated h2 titles a recipe page reads last (its sidebar), repeatable")
     c = sub.choices["candidates"]
     c.add_argument("--min-pages", type=int, default=2)
     c.add_argument("--common", default=COMMON, help="common words, one per line")

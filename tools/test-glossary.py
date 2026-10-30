@@ -12,6 +12,7 @@ import importlib.util
 import io
 import json
 import os
+import shlex
 import shutil
 import subprocess
 import sys
@@ -37,7 +38,7 @@ def fixture(name):
 
 def run(*args, stdin=None):
     """glossary.py with the fixture site's options (options.txt) added."""
-    r = subprocess.run([sys.executable, TOOL, *args, *fixture("options.txt").split()], capture_output=True, text=True, input=stdin)
+    r = subprocess.run([sys.executable, TOOL, *args, *shlex.split(fixture("options.txt"))], capture_output=True, text=True, input=stdin)
     return r.returncode, r.stdout
 
 
@@ -47,7 +48,7 @@ class Glossary(unittest.TestCase):
             self.entries, self.warnings = g.load(CONTENT, FOLDER)
 
     def test_entries(self):
-        fields = ("term", "also", "key", "keys", "anchor", "letter")
+        fields = ("term", "also", "kind", "key", "keys", "anchor", "letter")
         want = [{k: e[k] for k in fields} for e in fixture("entries.json")]
         self.assertEqual([{k: e[k] for k in fields} for e in self.entries], want)
 
@@ -89,7 +90,7 @@ class Glossary(unittest.TestCase):
     def test_link_prompt(self):
         env = dict(os.environ, COLUMNS="48")
         r = subprocess.run([sys.executable, TOOL, "link", CONTENT, "--glossary", FOLDER, "--skip",
-                            os.path.join(SITE, "skip.txt"), *fixture("options.txt").split()],
+                            os.path.join(SITE, "skip.txt"), *shlex.split(fixture("options.txt"))],
                            capture_output=True, text=True, input="s\n" * 50, env=env)
         out = r.stdout.split("\n")
         self.assertNotIn("empty-definition", r.stderr)
@@ -97,13 +98,13 @@ class Glossary(unittest.TestCase):
                                    "  1/3  essays/camp-cooking.md:12"])
         self.assertTrue(out[7].startswith("    ") and "[[Deglaze|deglaze]]" in out[7])
         self.assertEqual(out[9:11], ["  y yes  n never here  s skip  a all  q quit › ", "  – skipped"])
-        self.assertEqual(out[11:14], ["", "", "  2/3  recipes/dal.md:18"])
+        self.assertEqual(out[11:14], ["", "", "  2/3  recipes/dal.md:22"])
         self.assertNotIn("\x1b", r.stdout)
         for line in out:
             if line.startswith("    "):
                 self.assertLessEqual(len(line), 48, line)
         self.assertIn("Deglaze: 0 linked, 0 never, 3 skipped", out)
-        self.assertIn("Total: 0 linked, 0 never, 8 skipped. Review: git diff", out)
+        self.assertIn("Total: 0 linked, 0 never, 9 skipped. Review: git diff", out)
 
     def copy(self):
         tmp = tempfile.mkdtemp(prefix="hugo-warped-glossary-")
@@ -140,16 +141,16 @@ class Glossary(unittest.TestCase):
         content, skip = self.copy()
         answers = os.path.join(os.path.dirname(content), "answers.json")
         with open(answers, "w") as f:
-            json.dump([{"path": "recipes/dal.md", "line": 14, "term": "Roux", "answer": "yes"},
+            json.dump([{"path": "recipes/dal.md", "line": 18, "term": "Roux", "answer": "yes"},
                        {"path": "essays/gravy.md", "line": 15, "term": "roux", "answer": "never"},
                        {"path": "recipes/pan-sauce.md", "line": 3, "term": "Deglaze", "answer": "yes"},
-                       {"path": "recipes/dal.md", "line": 22, "term": "Kewpie", "answer": "skip"}], f)
+                       {"path": "recipes/dal.md", "line": 26, "term": "Kewpie", "answer": "skip"}], f)
         code, out = run("link", content, "--glossary", FOLDER, "--skip", skip, "--apply", answers)
         self.assertEqual(out.splitlines(), [
-            "recipes/dal.md:14  Roux  linked",
+            "recipes/dal.md:18  Roux  linked",
             "essays/gravy.md:15  Roux  never",
             "recipes/pan-sauce.md:3  Deglaze  stale, not changed",
-            "recipes/dal.md:22  Kewpie mayonnaise  skipped",
+            "recipes/dal.md:26  Kewpie mayonnaise  skipped",
             "",
             "Total: 1 linked, 1 never, 1 skipped, 1 stale. Review: git diff"])
         self.assertIn("Whisk the [[Roux|roux]] until", self.read(content, "recipes/dal.md"))
@@ -157,6 +158,34 @@ class Glossary(unittest.TestCase):
         # Applying again finds nothing left to do.
         code, out = run("link", content, "--glossary", FOLDER, "--skip", skip, "--apply", answers)
         self.assertIn("Total: 0 linked, 0 never, 1 skipped, 3 stale.", out)
+
+    def test_move(self):
+        content, skip = self.copy()
+        code, out = run("link", content, "--glossary", FOLDER, "--skip", skip, "--check", "--json", "--term", "fond")
+        self.assertEqual(json.loads(out), [{"path": "recipes/stock.md", "line": 12, "term": "Fond", "words": "fond",
+                                            "move": True, "from": 8}])
+        answers = os.path.join(os.path.dirname(content), "answers.json")
+        with open(answers, "w") as f:
+            json.dump([{"path": "recipes/stock.md", "line": 12, "from": 7, "term": "Fond", "answer": "move"}], f)
+        code, out = run("link", content, "--glossary", FOLDER, "--skip", skip, "--apply", answers)
+        self.assertIn("recipes/stock.md:12  Fond  stale, not changed", out)
+        with open(answers, "w") as f:
+            json.dump([{"path": "recipes/stock.md", "line": 12, "from": 8, "term": "Fond", "answer": "move"}], f)
+        code, out = run("link", content, "--glossary", FOLDER, "--skip", skip, "--apply", answers)
+        self.assertIn("recipes/stock.md:12  Fond  moved from line 8", out)
+        text = self.read(content, "recipes/stock.md")
+        self.assertIn("The Fond is where", text)
+        self.assertIn("scrape up the [[Fond|fond]] with", text)
+
+    def test_keep(self):
+        content, skip = self.copy()
+        code, out = run("link", content, "--glossary", FOLDER, "--skip", skip, "--term", "fond", stdin="n\n")
+        self.assertIn("  y move here  n keep where it is  s skip  a all  q quit › ", out)
+        self.assertIn("  ✗ kept", out)
+        self.assertIn("The [[Fond]] is where", self.read(content, "recipes/stock.md"))
+        self.assertTrue(self.read(content, "../skip.txt").endswith("recipes/stock.md | Fond\n"))
+        code, out = run("link", content, "--glossary", FOLDER, "--skip", skip, "--check", "--term", "fond")
+        self.assertEqual(out, "")
 
     def test_link_yes(self):
         tmp = tempfile.mkdtemp(prefix="hugo-warped-glossary-")

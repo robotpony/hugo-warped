@@ -1,8 +1,8 @@
 {{- /*
-  Every glossary entry, sorted by match key: (dict "term" "also" "key"
+  Every glossary entry, sorted by match key: (dict "term" "also" "kind" "key"
   "keys" "anchor" "letter" "def" "url" "page"), with "page" nil for an
   entry the site adds. Takes (dict "glossary" "/reference/glossary"
-  "extra" <slice of (dict "term" "also" "def" "url")>), "extra" optional.
+  "extra" <slice of (dict "term" "also" "kind" "def" "url")>), "extra" optional.
 
     {{ range partial "hugo-warped/glossary/entries.html" (dict "glossary" "/reference/glossary") }}
 

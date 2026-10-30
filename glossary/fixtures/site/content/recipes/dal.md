@@ -5,6 +5,10 @@ date: 2026-10-30
 
 A pot of lentils with a tadka on top, for umami.
 
+## Mechanic
+
+A roux thickens the sauce, so it clings to the lentils.
+
 ## Sauce
 
 - Butter and flour, for a roux

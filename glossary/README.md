@@ -23,8 +23,9 @@ Pour a liquid into a hot pan and scrape, so the browned bits stuck to the bottom
 1. **Term.** `title` is the term, as the list shows it. It MUST be set.
 2. **Other forms.** `also` lists the other forms a mark or a tool may match: plurals, verb forms, a short name ("Kewpie" for "Kewpie mayonnaise"). A YAML list, flow (`[a, b]`) or block (`- a`). It is not `aliases`, which Hugo turns into redirects.
 3. **Date.** `date`, as on any page.
-4. **Definition.** The body is the definition; an entry without one is a stub ("Warnings"), so terms can be named before they're written, in block Markdown, and may mark other terms. Its **short form** is the first sentence of its first paragraph, as plain text: what a hover shows and what `index.json` carries. A sentence ends at the first `.`, `!` or `?` (with any closing quote or bracket) followed by a space or the paragraph's end; a paragraph with none is all one sentence. So the first sentence SHOULD stand alone, and SHOULD avoid abbreviations like "e.g.".
-5. **No page each.** Entries build into the list only. The glossary page's front matter cascades it to them:
+4. **Kind.** `kind: ingredient` for an entry that names something you buy (Katsuobushi, Kewpie), so it may be marked in an ingredient list, where a reader looks for it. Without it, an entry is a concept (Sear, Deglaze) and is marked in prose only. The partials pass `kind` through, so a site can draw the two differently.
+5. **Definition.** The body is the definition; an entry without one is a stub ("Warnings"), so terms can be named before they're written, in block Markdown, and may mark other terms. Its **short form** is the first sentence of its first paragraph, as plain text: what a hover shows and what `index.json` carries. A sentence ends at the first `.`, `!` or `?` (with any closing quote or bracket) followed by a space or the paragraph's end; a paragraph with none is all one sentence. So the first sentence SHOULD stand alone, and SHOULD avoid abbreviations like "e.g.".
+6. **No page each.** Entries build into the list only. The glossary page's front matter cascades it to them:
 
    ```yaml
    cascade:
@@ -79,19 +80,19 @@ A site can add entries that aren't files in the folder, such as Not a Chef's ref
 `index.json`, for other tools and sites, is the list as a JSON array, sorted the same way:
 
 ```json
-[{"term": "Deglaze", "also": ["deglazing", "deglazed"], "def": "Pour a liquid into a hot pan and scrape, so the browned bits stuck to the bottom dissolve into it.", "url": "/reference/glossary/#deglaze"}]
+[{"term": "Deglaze", "also": ["deglazing", "deglazed"], "kind": "", "def": "Pour a liquid into a hot pan and scrape, so the browned bits stuck to the bottom dissolve into it.", "url": "/reference/glossary/#deglaze"}]
 ```
 
 ## The partials
 
-In `layouts/partials/hugo-warped/glossary/`, optional like the fence partials. `glossary` is the glossary page's path (`"/reference/glossary"`), and `extra` the site's added entries, as dicts of `term`, `also`, `def` and `url`; both are taken by every partial.
+In `layouts/partials/hugo-warped/glossary/`, optional like the fence partials. `glossary` is the glossary page's path (`"/reference/glossary"`), and `extra` the site's added entries, as dicts of `term`, `also`, `kind` (optional), `def` and `url`; both are taken by every partial.
 
 | Partial | Takes | Returns |
 |---|---|---|
-| `entries.html` | `(dict "glossary" … "extra" …)` | Every entry, sorted: dicts of `term`, `also`, `key` (the term's match key), `keys` (every key it holds), `anchor`, `letter`, `def`, `url`, and `page` (the entry's page, or nil for an added one). |
+| `entries.html` | `(dict "glossary" … "extra" …)` | Every entry, sorted: dicts of `term`, `also`, `kind`, `key` (the term's match key), `keys` (every key it holds), `anchor`, `letter`, `def`, `url`, and `page` (the entry's page, or nil for an added one). |
 | `resolve.html` | `(dict "glossary" … "extra" … "target" "deglazing")` | The entry whose key matches the target, or `false`. |
 | `list.html` | `(dict "glossary" … "extra" …)` | Letters in order: dicts of `letter` and `entries`, each entry with `used` (its used-in pages) added. |
-| `index.html` | `(dict "glossary" … "extra" …)` | The `index.json` array, ready for `jsonify`. |
+| `index.html` | `(dict "glossary" … "extra" …)` | The `index.json` array (`term`, `also`, `kind`, `def`, `url`), ready for `jsonify`. |
 | `marks.html` | a page | The page's marks, in order: dicts of `target` and `text`. |
 
 `entries.html` caches its work once per build and argument, so a render hook can call `resolve.html` on every mark.
@@ -128,7 +129,13 @@ For each entry, A to Z, and each page that has no mark for it yet, finds the fir
 
 Nor does it look in a recipe's ingredient lists. A site names the folders whose pages are recipes (`--recipes recipes --recipes drinks`) and the words that make a heading something other than an ingredient section (`--not-ingredients method,notes,serve,…`). On a recipe page, every h2 is an ingredient section unless one of its words is on that list, or it's marked `{.article}`; its list items, down to the next h2, are skipped, and the prose under it is read as usual. So a multi-component recipe's `## Tadka` and `## Sauce` lists are skipped, and their method paragraphs aren't. This is Fugu's rule (`render-heading.html`, `params.fugu.headings.notIngredients`). A list item runs on to the next blank line. The entry's own file and the glossary page are left out.
 
-Mentions are grouped by entry, under a heading of its term and page count. Each is shown on one line, with the mark in place and the words either side trimmed to fit the terminal, then asked: `y` yes, `n` never here, `s` skip (for now), `a` all, or `q` quit. All lists the entry's remaining mentions, leaving out any pair already never, and links them once the count is typed back; anything else returns to the same mention. The answer replaces the prompt, so scrolling back shows each decision, and the run ends with a count per entry and a total. Stubs are counted on one line, not warned about one by one. On a terminal the mark is green and the rest dim, unless `NO_COLOR` is set:
+An entry of kind `ingredient` is the exception: Ingredients sections and recipe ingredient lists are read for it like any prose, so its mark can go on the ingredient line.
+
+**Main column first.** A recipe page's sidebar sections are read last (`--sidebar-headings "Mechanic,To serve,Variations,Notes,Equipment"`, matched against an h2's whole title in any case, a trailing colon dropped, down to the next h2): a mention there is taken only when the rest of the page has none. Fugu moves those sections into the sidebar, where a mark sits in small print.
+
+**Moves.** A page with one mark for the entry already, somewhere these rules wouldn't put it (an older rule's choice, or a hand-written one), is offered a move: the old mark goes back to plain words and the new spot is marked. A page with more than one mark for the entry is left alone.
+
+Mentions are grouped by entry, under a heading of its term and page count. Each is shown on one line, with the mark in place and the words either side trimmed to fit the terminal, then asked: `y` yes, `n` never here, `s` skip (for now), `a` all, or `q` quit. A move shows the old line above the new one and asks `y` move here or `n` keep where it is; a keep is a never. All lists the entry's remaining mentions, leaving out any pair already never, and links them once the count is typed back; anything else returns to the same mention. The answer replaces the prompt, so scrolling back shows each decision, and the run ends with a count per entry and a total. Stubs are counted on one line, not warned about one by one. On a terminal the mark is green and the rest dim, unless `NO_COLOR` is set:
 
 ```
 Kewpie mayonnaise · 7 pages
@@ -141,7 +148,7 @@ Kewpie mayonnaise · 7 pages
   ✓ linked
 ```
 
-Yes writes `[[Term]]` when the words match the term exactly, otherwise `[[Term|words]]`. Never adds a line to the skip file, and the pair isn't asked again. Skip asks again next run.
+Yes writes `[[Term]]` when the words match the term exactly, otherwise `[[Term|words]]`. Never adds a line to the skip file, and the pair isn't asked again, to add a mark or to move one. Skip asks again next run.
 
 The skip file is one pair per line, the page's path under `CONTENT`, a space, `|`, a space, and the term; `#` starts a comment:
 
@@ -151,9 +158,9 @@ essays/food-memories/camp-cooking.md | Fond
 
 `--term TERM` (repeatable, a title or `also` form in any case) limits a run or `--check` to those entries.
 
-`--apply FILE` takes the answers instead of asking, for driving a run from elsewhere (a chat, a script): a JSON list of `{"path", "line", "term", "answer"}`, with `path` under `CONTENT`, the line as `--check --json` gives it, and `answer` one of `yes`, `never` or `skip`. Each is written as the interactive run would, unless that entry's first unmarked mention on the page is no longer on that line, when it's reported stale and left alone. It prints one line per item and a total.
+`--apply FILE` takes the answers instead of asking, for driving a run from elsewhere (a chat, a script): a JSON list of `{"path", "line", "term", "answer"}`, with `path` under `CONTENT`, the line as `--check --json` gives it, and `answer` one of `yes`, `never` or `skip`; for a move, `move` or `keep`, with `from` the old mark's line. Each is written as the interactive run would, unless that entry's first unmarked mention on the page is no longer on that line, when it's reported stale and left alone. It prints one line per item and a total.
 
-`--check` lists every first mention not yet marked or skipped, as `path:line  Term  "words"`, and writes nothing, for a site's lint. It exits 0, or 1 with `--strict` when it finds any.
+`--check` lists every first mention not yet marked or skipped, as `path:line  Term  "words"`, with `  (move from line N)` after a move (`"move": true, "from": N` in `--json`), and writes nothing, for a site's lint. It exits 0, or 1 with `--strict` when it finds any.
 
 It matches words, not meaning, which is why it asks: Camp cooking's "fond memories" matches Fond.
 

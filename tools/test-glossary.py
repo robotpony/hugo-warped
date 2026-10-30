@@ -83,21 +83,27 @@ class Glossary(unittest.TestCase):
         self.assertEqual(got, "…nine ten [[Fond]] eleven twelve…")
         self.assertLessEqual(len(got), 40)
         self.assertEqual(g.in_context("A fond start.", 2, 6, "[[Fond|fond]]", 40), "A [[Fond|fond]] start.")
-        self.assertEqual(g.in_context("fond", 0, 4, "[[Fond]]", 40, style=True), "\x1b[2m\x1b[0m\x1b[1m[[Fond]]\x1b[0m\x1b[2m\x1b[0m")
+        self.assertEqual(g.in_context("fond", 0, 4, "[[Fond]]", 40, g.Style(True)),
+                         "\x1b[2;32m[[\x1b[0m\x1b[1;32mFond\x1b[0m\x1b[2;32m]]\x1b[0m")
 
     def test_link_prompt(self):
-        env = dict(os.environ, COLUMNS="44")
+        env = dict(os.environ, COLUMNS="48")
         r = subprocess.run([sys.executable, TOOL, "link", CONTENT, "--glossary", FOLDER, "--skip",
                             os.path.join(SITE, "skip.txt"), *fixture("options.txt").split()],
                            capture_output=True, text=True, input="s\n" * 50, env=env)
         out = r.stdout.split("\n")
-        self.assertEqual(out[0], "Deglaze · 1 of 8 · essays/camp-cooking.md:12")
-        self.assertTrue(out[1].startswith("    ") and "[[Deglaze|deglaze]]" in out[1])
+        self.assertNotIn("empty-definition", r.stderr)
+        self.assertEqual(out[:6], ["1 stub skipped (not written yet)", "", "Deglaze · 3 pages", "─" * 20, "",
+                                   "  1/3  essays/camp-cooking.md:12"])
+        self.assertTrue(out[7].startswith("    ") and "[[Deglaze|deglaze]]" in out[7])
+        self.assertEqual(out[9:11], ["  y yes  n never here  s skip  q quit › ", "  – skipped"])
+        self.assertEqual(out[11:14], ["", "", "  2/3  recipes/dal.md:18"])
         self.assertNotIn("\x1b", r.stdout)
         for line in out:
             if line.startswith("    "):
-                self.assertLessEqual(len(line), 44, line)
-        self.assertIn("0 linked, 0 never, 8 skipped.", r.stdout)
+                self.assertLessEqual(len(line), 48, line)
+        self.assertIn("Deglaze: 0 linked, 0 never, 3 skipped", out)
+        self.assertIn("Total: 0 linked, 0 never, 8 skipped. Review: git diff", out)
 
     def test_link_yes(self):
         tmp = tempfile.mkdtemp(prefix="hugo-warped-glossary-")

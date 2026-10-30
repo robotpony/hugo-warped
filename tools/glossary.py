@@ -180,16 +180,18 @@ def warn(code, path, detail=""):
     print(f"WARN  glossary [{code}]: {detail + ' ' if detail else ''}in \"{path}\"", file=sys.stderr)
 
 
-def load(root, folder, stubs=False):
+def load(root, folder, stubs=False, quiet=()):
     """(entries sorted by key, warnings). Each entry is a dict of term,
     also, key, keys, anchor, letter and path. A stub (an entry with no
-    body) holds its keys but is left out, unless `stubs`."""
+    body) holds its keys but is left out, unless `stubs`. Warnings with a
+    code in `quiet` are returned but not printed."""
     folder = folder.strip("/")
     entries, seen, warnings = [], {}, []
 
     def w(code, path, detail=""):
         warnings.append({"path": path, "code": code})
-        warn(code, path, detail)
+        if code not in quiet:
+            warn(code, path, detail)
 
     for p in pages(root, folder, inside=True):
         if os.path.basename(p.path) == "_index.md":
@@ -304,10 +306,11 @@ def read_skip(path):
     return out
 
 
-def proposals(root, folder, skip, rules):
+def proposals(root, folder, skip, rules, entries=None):
     """Yield (entry, page, line, start, end) for every unmarked first
     mention, entry by entry, re-reading each page as it changes."""
-    entries, _ = load(root, folder)
+    if entries is None:
+        entries, _ = load(root, folder)
     for e in entries:
         for p in pages(root):
             if p.path == e["path"] or os.path.basename(p.path) == "_index.md" and p.path.startswith(folder + "/"):
@@ -329,10 +332,31 @@ def mark_for(entry, words):
     return f"[[{entry['term']}]]" if words == entry["term"] else f"[[{entry['term']}|{words}]]"
 
 
-def in_context(line, start, end, mark, width, style=False):
+class Style:
+    """ANSI styles for the link prompt, or none for NO_COLOR or a pipe."""
+
+    def __init__(self, on):
+        self.on = on
+
+    def __call__(self, text, *codes):
+        return f"\x1b[{';'.join(codes)}m{text}\x1b[0m" if self.on and text else text
+
+    def dim(self, text):
+        return self(text, "2")
+
+    def bold(self, text):
+        return self(text, "1")
+
+    def mark(self, mark):
+        """Bold green, with its brackets a dimmer green."""
+        return self(mark[:2], "2", "32") + self(mark[2:-2], "1", "32") + self(mark[-2:], "2", "32")
+
+
+def in_context(line, start, end, mark, width, style=None):
     """The line with line[start:end] replaced by `mark`, trimmed at word
     boundaries to fit `width`, with about as many words each side and an
-    ellipsis where it's cut. `style` makes the mark bold and the rest dim."""
+    ellipsis where it's cut. With a Style, the mark is green and the rest
+    dim."""
     left, right = line[:start], line[end:]
     room = max(width - len(mark), 2)
     if len(left) + len(right) > room:
@@ -346,8 +370,11 @@ def in_context(line, start, end, mark, width, style=False):
             right = (cut.rsplit(" ", 1)[0] if " " in cut[1:] else cut) + "…"
     if not style:
         return left + mark + right
-    dim, bold, reset = "\x1b[2m", "\x1b[1m", "\x1b[0m"
-    return f"{dim}{left}{reset}{bold}{mark}{reset}{dim}{right}{reset}"
+    return style.dim(left) + style.mark(mark) + style.dim(right)
+
+
+def tally(c):
+    return f"{c['linked']} linked, {c['never']} never, {c['skipped']} skipped"
 
 
 def run_link(a):
@@ -366,42 +393,76 @@ def run_link(a):
                 print(f'{f["path"]}:{f["line"]}  {f["term"]}  "{f["words"]}"')
         return 1 if a.strict and found else 0
 
-    counts = {"linked": 0, "never": 0, "skipped": 0}
-    total = sum(1 for _ in proposals(root, folder, skip, rules))
-    style = sys.stdout.isatty() and "NO_COLOR" not in os.environ
-    width = shutil.get_terminal_size().columns - 4
-    for i, (e, p, n, s, end) in enumerate(proposals(root, folder, skip, rules), start=1):
+    tty = sys.stdout.isatty() and sys.stdin.isatty()
+    st = Style(sys.stdout.isatty() and "NO_COLOR" not in os.environ)
+    width = shutil.get_terminal_size().columns
+    entries, warnings = load(root, folder, quiet={"empty-definition"})
+    stubs = sum(w["code"] == "empty-definition" for w in warnings)
+    per_term = {}
+    for e, *_ in proposals(root, folder, skip, rules, entries):
+        per_term[e["term"]] = per_term.get(e["term"], 0) + 1
+    if stubs:
+        print(st.dim(f"{stubs} stub{'s' if stubs != 1 else ''} skipped (not written yet)") + "\n")
+    prompt = "  " + "  ".join(f"{st.bold(k)} {word}" for k, word in
+                              (("y", "yes"), ("n", "never here"), ("s", "skip"), ("q", "quit"))) + " › "
+    echoes = {"y": ("✓ linked", "32"), "n": ("✗ never", "33"), "s": ("– skipped", "2")}
+
+    counts, term, i = {}, None, 0
+    for e, p, n, s, end in proposals(root, folder, skip, rules, entries):
+        if e["term"] != term:
+            if term is not None:
+                print("\n")
+            term, i = e["term"], 0
+            counts[term] = {"linked": 0, "never": 0, "skipped": 0}
+            pages_n = per_term.get(term, 0)
+            heading = f"{term} · {pages_n} page{'s' if pages_n != 1 else ''}"
+            print(st.bold(heading))
+            print(st.dim("─" * min(max(len(heading), 20), width)) + "\n")
+        else:
+            print("\n")
+        i += 1
         lines = nfc(p.text).split("\n")
         old = lines[n - 1]
         mark = mark_for(e, old[s:end])
         new = old[:s] + mark + old[end:]
-        print(f"{e['term']} · {i} of {total} · {p.path}:{n}")
-        print("    " + in_context(old.strip(), s - (len(old) - len(old.lstrip())), end - (len(old) - len(old.lstrip())),
-                                  mark, width, style))
+        indent = len(old) - len(old.lstrip())
+        print(f"  {st.dim(f'{i}/{per_term.get(term, i)}')}  {p.path}:{n}\n")
+        print("    " + in_context(old.strip(), s - indent, end - indent, mark, width - 4, st) + "\n")
         try:
-            ans = input("Link? [y]es [n]ever here [s]kip [q]uit › ").strip().lower()[:1]
+            ans = input(prompt).strip().lower()[:1]
         except EOFError:
-            print()
             ans = "q"
-        if ans == "q":
             print()
+        else:
+            if not sys.stdin.isatty():
+                print()
+        if ans == "q":
             break
+        ans = ans if ans in ("y", "n") else "s"
         if ans == "y":
             lines[n - 1] = new
             with open(p.file, "w", encoding="utf-8") as f:
                 f.write("\n".join(lines))
-            counts["linked"] += 1
+            counts[term]["linked"] += 1
         elif ans == "n":
             if a.skip:
                 with open(a.skip, "a", encoding="utf-8") as f:
                     f.write(f"{p.path} | {e['term']}\n")
-                print(f"  Saved to {a.skip}; won't ask again.")
             skip.add((p.path, e["term"]))
-            counts["never"] += 1
+            counts[term]["never"] += 1
         else:
-            counts["skipped"] += 1
-        print()
-    print(f"{counts['linked']} linked, {counts['never']} never, {counts['skipped']} skipped. Review: git diff")
+            counts[term]["skipped"] += 1
+        text, code = echoes[ans]
+        if tty:
+            print("\x1b[1A\x1b[2K", end="")  # the prompt line gives way to its answer
+        print("  " + st(text, code) + (st.dim(f"  saved to {a.skip}") if ans == "n" and a.skip else ""))
+    print("\n")
+    total = {"linked": 0, "never": 0, "skipped": 0}
+    for t, c in counts.items():
+        print(f"{t}: {tally(c)}")
+        for k in total:
+            total[k] += c[k]
+    print(f"\nTotal: {tally(total)}. Review: git diff")
     return 0
 
 

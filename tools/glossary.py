@@ -226,20 +226,44 @@ def resolve(entries, target):
 
 # link
 
-def skip_sections(lines, names):
-    """Line numbers inside a section headed by one of `names`."""
-    out, level = set(), None
+LIST_ITEM = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
+HEADING_ATTRS = re.compile(r"\s*\{([^}]*)\}\s*$")
+
+
+def skipped(page, lines, rules):
+    """Line numbers never read: each section headed by one of
+    rules["sections"], down to the next heading at its level or above;
+    and on a recipe page (under one of rules["recipes"]), the list items
+    under any h2 none of whose words is in rules["not_ingredients"], or
+    marked {.article}, down to the next h2."""
+    recipe = any(page.path.startswith(r.strip("/") + "/") for r in rules["recipes"])
+    out, level, ingredients, in_item = set(), None, False, False
     for n, line, kind in lines:
         if kind == "heading":
             m = HEADING.match(line)
             depth, title = len(m.group(1)), (m.group(2) or "").strip()
+            attrs = HEADING_ATTRS.search(title)
+            title = HEADING_ATTRS.sub("", title)
             if level is not None and depth <= level:
                 level = None
-            if level is None and title.lower() in names:
+            if depth <= 2:
+                article = bool(attrs) and ".article" in attrs.group(1).split()
+                ingredients = recipe and depth == 2 and not article \
+                    and not set(match_key(title).split()) & rules["not_ingredients"]
+            in_item = False
+            if level is None and title.lower() in rules["sections"]:
                 level = depth
                 continue
         if level is not None:
             out.add(n)
+        elif ingredients and kind == "prose":
+            # A list item runs on to the next blank line.
+            if LIST_ITEM.match(line):
+                in_item = True
+            elif not line.strip():
+                in_item = False
+            if in_item:
+                out.add(n)
     return out
 
 
@@ -249,11 +273,11 @@ def masked(line):
     return line
 
 
-def first_mention(page, entry, sections):
+def first_mention(page, entry, rules):
     forms = sorted(entry["forms"], key=len, reverse=True)
     pat = re.compile(r"(?<!\w)(?:" + "|".join(re.escape(nfc(f)) for f in forms) + r")(?!\w)", re.I)
     lines = list(read_lines(page.body, page.first))
-    skip = skip_sections(lines, sections)
+    skip = skipped(page, lines, rules)
     for n, line, kind in lines:
         if kind != "prose" or n in skip:
             continue
@@ -274,7 +298,7 @@ def read_skip(path):
     return out
 
 
-def proposals(root, folder, skip, sections):
+def proposals(root, folder, skip, rules):
     """Yield (entry, page, line, start, end) for every unmarked first
     mention, entry by entry, re-reading each page as it changes."""
     entries, _ = load(root, folder)
@@ -286,8 +310,13 @@ def proposals(root, folder, skip, sections):
                 continue
             if any(resolve(entries, t) is e for _, t, _ in p.marks()):
                 continue
-            if hit := first_mention(p, e, sections):
+            if hit := first_mention(p, e, rules):
                 yield (e, p) + hit
+
+
+def skip_rules(a):
+    return {"sections": {x.lower() for x in a.skip_section}, "recipes": a.recipes or [],
+            "not_ingredients": {w for x in a.not_ingredients or [] for w in match_key(x.replace(",", " ")).split()}}
 
 
 def mark_for(entry, words):
@@ -297,10 +326,10 @@ def mark_for(entry, words):
 def run_link(a):
     root, folder = a.content, a.glossary.strip("/")
     skip = read_skip(a.skip)
-    sections = {s.lower() for s in a.skip_section}
+    rules = skip_rules(a)
     found = []
     if a.check:
-        for e, p, n, s, end in proposals(root, folder, skip, sections):
+        for e, p, n, s, end in proposals(root, folder, skip, rules):
             words = nfc(p.text.split("\n")[n - 1])[s:end]
             found.append({"path": p.path, "line": n, "term": e["term"], "words": words})
         if a.json:
@@ -311,7 +340,7 @@ def run_link(a):
         return 1 if a.strict and found else 0
 
     counts = {"linked": 0, "never": 0, "skipped": 0}
-    for e, p, n, s, end in proposals(root, folder, skip, sections):
+    for e, p, n, s, end in proposals(root, folder, skip, rules):
         lines = nfc(p.text).split("\n")
         old = lines[n - 1]
         new = old[:s] + mark_for(e, old[s:end]) + old[end:]
@@ -368,11 +397,11 @@ def run_candidates(a):
     with open(a.common, encoding="utf-8") as f:
         common = {w.strip() for w in f if w.strip()}
 
-    sections = {s.lower() for s in a.skip_section}
+    rules = skip_rules(a)
     word_pages, lower_seen, italic_pages, phrase_pages = {}, set(), {}, {}
     for p in pages(root, folder, inside=False):
         lines = list(read_lines(p.body, p.first))
-        skip = skip_sections(lines, sections)
+        skip = skipped(p, lines, rules)
         for n, line, kind in lines:
             if kind == "code" or n in skip:
                 continue
@@ -432,19 +461,22 @@ def main(argv=None):
         s.add_argument("content", help="the site's content folder")
         s.add_argument("--glossary", required=True, help="the glossary folder, under content")
         s.add_argument("--json", action="store_true")
+    for s in sub.choices.values():
+        s.add_argument("--skip-section", action="append", default=None,
+                       help='a heading whose section is never read (default "Ingredients")')
+        s.add_argument("--recipes", action="append", metavar="FOLDER",
+                       help="a folder under content whose pages are recipes, repeatable")
+        s.add_argument("--not-ingredients", action="append", metavar="WORDS",
+                       help="comma-separated words that keep a recipe's h2 from being an ingredient section")
     c = sub.choices["candidates"]
     c.add_argument("--min-pages", type=int, default=2)
     c.add_argument("--common", default=COMMON, help="common words, one per line")
-    c.add_argument("--skip-section", action="append", default=None,
-                   help='a heading whose section is never read (default "Ingredients")')
     k = sub.choices["link"]
     k.add_argument("--skip", help="the skip file of never pairs")
-    k.add_argument("--skip-section", action="append", default=None,
-                   help='a heading whose section is never linked (default "Ingredients")')
     k.add_argument("--check", action="store_true", help="list unmarked first mentions; write nothing")
     k.add_argument("--strict", action="store_true", help="with --check, exit 1 when any are found")
     a = ap.parse_args(argv)
-    a.skip_section = getattr(a, "skip_section", None) or ["Ingredients"]
+    a.skip_section = a.skip_section or ["Ingredients"]
     if a.cmd == "link":
         return run_link(a)
     return run_candidates(a)

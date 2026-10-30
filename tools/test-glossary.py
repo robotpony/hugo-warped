@@ -36,7 +36,8 @@ def fixture(name):
 
 
 def run(*args, stdin=None):
-    r = subprocess.run([sys.executable, TOOL, *args], capture_output=True, text=True, input=stdin)
+    """glossary.py with the fixture site's options (options.txt) added."""
+    r = subprocess.run([sys.executable, TOOL, *args, *fixture("options.txt").split()], capture_output=True, text=True, input=stdin)
     return r.returncode, r.stdout
 
 

@@ -104,7 +104,7 @@ In `layouts/partials/hugo-warped/glossary/`, optional like the fence partials. `
 tools/glossary.py candidates CONTENT --glossary reference/glossary
 ```
 
-Suggests words to define: each word or phrase on at least two pages (`--min-pages`), outside the glossary folder, that isn't already a key, and is either rare in everyday English or set in italics. Rare means not in `tools/data/common-en.txt`, the 25,000 most common English words from wordfreq. A common word counts as italic only when it's written lowercase in italics on at least as many pages, so a label like *Notes* doesn't. Phrases come only from italics (*mise en place*), and their words count only as the phrase. A word only ever written capitalised is taken as a name and left out. Words are read from prose as marks are, also skipping link targets, URLs and the Ingredients sections `link` skips (`--skip-section`).
+Suggests words to define: each word or phrase on at least two pages (`--min-pages`), outside the glossary folder, that isn't already a key, and is either rare in everyday English or set in italics. Rare means not in `tools/data/common-en.txt`, the 25,000 most common English words from wordfreq. A common word counts as italic only when it's written lowercase in italics on at least as many pages, so a label like *Notes* doesn't. Phrases come only from italics (*mise en place*), and their words count only as the phrase. A word only ever written capitalised is taken as a name and left out. Words are read from prose as marks are, also skipping link targets, URLs, and the Ingredients sections and recipe ingredient lists `link` skips (the same options).
 
 A word's forms are grouped under the one on the most pages, by a rough stem: one common suffix off (`-s`, `-ed`, `-ing`, `-ion`, `-ify`, …), keeping at least four letters. It's a suggestion, so a stray group (*patties* with *patted*) is fine. It prints a ranked list, by pages and then by word, and `--json` prints the same as data; the site files them where it keeps its review notes:
 
@@ -122,7 +122,9 @@ tools/glossary.py link CONTENT --glossary reference/glossary --skip tools/glossa
 tools/glossary.py link CONTENT --glossary reference/glossary --skip tools/glossary-skip.txt --check
 ```
 
-For each entry, A to Z, and each page that has no mark for it yet, finds the first mention of any of its keys in prose: whole words, any case, the longest key first where two start together. It doesn't look in front matter, headings, links (Markdown, wiki or HTML) or URLs, code spans, fenced blocks (a `tabs` panel is prose), or a section headed "Ingredients" (`--skip-section`, repeatable), down to the next heading at its level or above, so its component lists are skipped too. The entry's own file and the glossary page are left out.
+For each entry, A to Z, and each page that has no mark for it yet, finds the first mention of any of its keys in prose: whole words, any case, the longest key first where two start together. It doesn't look in front matter, headings, links (Markdown, wiki or HTML) or URLs, code spans, fenced blocks (a `tabs` panel is prose), or a section headed "Ingredients" (`--skip-section`, repeatable), down to the next heading at its level or above.
+
+Nor does it look in a recipe's ingredient lists. A site names the folders whose pages are recipes (`--recipes recipes --recipes drinks`) and the words that make a heading something other than an ingredient section (`--not-ingredients method,notes,serve,…`). On a recipe page, every h2 is an ingredient section unless one of its words is on that list, or it's marked `{.article}`; its list items, down to the next h2, are skipped, and the prose under it is read as usual. So a multi-component recipe's `## Tadka` and `## Sauce` lists are skipped, and their method paragraphs aren't. This is Fugu's rule (`render-heading.html`, `params.fugu.headings.notIngredients`). A list item runs on to the next blank line. The entry's own file and the glossary page are left out.
 
 Each mention is shown as a diff and asked: `[y]es`, `[n]ever on this page`, `[s]kip for now`, or `[q]uit`. Yes writes `[[Term]]` when the words match the term exactly, otherwise `[[Term|words]]`. Never adds a line to the skip file, and the pair isn't asked again. Skip asks again next run.
 
@@ -141,6 +143,7 @@ It matches words, not meaning, which is why it asks: Camp cooking's "fond memori
 `glossary/fixtures/` holds the cases every reader of this page is checked against: the tools (`tools/test-glossary.py`) and the partials in Hugo (`tools/test-hugo-glossary.py`).
 
 - `site/`: a small content folder with a glossary, pages and a skip file.
+- `options.txt`: the options the tools run with on it (its recipe folder and non-ingredient words).
 - `extra.json`: an added entry, as a site passes `extra`.
 - `entries.json`: what `entries.html` returns for the site, without `page`. The tools check the fields but `def` and `url`, which only Hugo makes.
 - `list.json`, `index.json`: what `list.html` (used-in as page paths) and `index.html` return, with `extra.json` added.

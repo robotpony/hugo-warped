@@ -1,6 +1,7 @@
 [
   {"letter": "D", "entries": [{"term": "Deglaze", "used": ["essays/gravy.md"]}]},
   {"letter": "F", "entries": [{"term": "Fond", "used": ["recipes/stock.md"]}]},
+  {"letter": "G", "entries": [{"term": "Garam masala", "used": []}, {"term": "Garam masala water", "used": []}]},
   {"letter": "K", "entries": [{"term": "Kewpie mayonnaise", "used": []}]},
   {"letter": "M", "entries": [{"term": "Maillard reaction", "used": []}, {"term": "MSG", "used": ["recipes/pan-sauce.md"]}]},
   {"letter": "R", "entries": [{"term": "Roux", "used": []}]},

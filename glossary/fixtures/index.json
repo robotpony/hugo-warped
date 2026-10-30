@@ -1,6 +1,8 @@
 [
   {"term": "Deglaze", "also": ["deglazing", "deglazed"], "kind": "", "def": "Pour a liquid into a hot pan and scrape, so the browned bits stuck to the bottom dissolve into it.", "url": "/reference/glossary/#deglaze"},
   {"term": "Fond", "also": [], "kind": "", "def": "The browned, sticky bits left in a pan after searing.", "url": "/reference/glossary/#fond"},
+  {"term": "Garam masala", "also": [], "kind": "ingredient", "def": "A warm spice blend of coriander, cumin, cardamom and pepper.", "url": "/reference/glossary/#garam-masala"},
+  {"term": "Garam masala water", "also": [], "kind": "ingredient", "def": "Garam masala steeped in hot water, for curry bases.", "url": "/reference/glossary/#garam-masala-water"},
   {"term": "Kewpie mayonnaise", "also": ["Kewpie"], "kind": "ingredient", "def": "Japanese mayonnaise made with only egg yolks and rice vinegar: richer and tangier than most.", "url": "/reference/glossary/#kewpie-mayonnaise"},
   {"term": "Maillard reaction", "also": ["Maillard"], "kind": "", "def": "Browning of proteins and sugars under dry, high heat", "url": "/reference/glossary/#maillard-reaction"},
   {"term": "MSG", "also": ["monosodium glutamate"], "kind": "", "def": "The sodium salt of glutamic acid, a savoury seasoning used a pinch at a time.", "url": "/reference/glossary/#msg"},

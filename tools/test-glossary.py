@@ -104,7 +104,7 @@ class Glossary(unittest.TestCase):
             if line.startswith("    "):
                 self.assertLessEqual(len(line), 48, line)
         self.assertIn("Deglaze: 0 linked, 0 never, 3 skipped", out)
-        self.assertIn("Total: 0 linked, 0 never, 9 skipped. Review: git diff", out)
+        self.assertIn("Total: 0 linked, 0 never, 11 skipped. Review: git diff", out)
 
     def copy(self):
         tmp = tempfile.mkdtemp(prefix="hugo-warped-glossary-")
@@ -158,6 +158,11 @@ class Glossary(unittest.TestCase):
         # Applying again finds nothing left to do.
         code, out = run("link", content, "--glossary", FOLDER, "--skip", skip, "--apply", answers)
         self.assertIn("Total: 0 linked, 0 never, 1 skipped, 3 stale.", out)
+
+    def test_longer_term_claims(self):
+        # "garam masala water" belongs to Garam masala water, marked or not.
+        code, out = run("link", CONTENT, "--glossary", FOLDER, "--check", "--term", "garam masala")
+        self.assertEqual(out, 'reference/glossary/garam-masala-water.md:7  Garam masala  "Garam masala"\n')
 
     def test_move(self):
         content, skip = self.copy()

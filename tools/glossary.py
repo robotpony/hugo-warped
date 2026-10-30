@@ -313,13 +313,37 @@ def first_mention(page, entry, rules, body=None):
     lines = list(read_lines(page.body if body is None else body, page.first))
     skip = set() if entry.get("kind") == "ingredient" else skipped(page, lines, rules)
     after = late(page, lines, rules)
+    longer = [(f, r) for t, f, r in rules.get("claims", ()) if t != entry["term"]]
     for wanted_late in (False, True):
         for n, line, kind in lines:
             if kind != "prose" or n in skip or (n in after) != wanted_late:
                 continue
-            if m := pat.search(masked(nfc(line))):
-                return n, m.start(), m.end()
+            text = masked(nfc(line))
+            for m in pat.finditer(text):
+                if not claimed(text, m, longer):
+                    return n, m.start(), m.end()
     return None
+
+
+def claimed(text, m, longer):
+    """Whether another entry's longer form covers match m: those words
+    are that entry's, not this one's ("garam masala" in "garam masala
+    water")."""
+    size = m.end() - m.start()
+    for form, regex in longer:
+        if len(form) > size:
+            for c in regex.finditer(text):
+                if c.start() <= m.start() and c.end() >= m.end():
+                    return True
+    return False
+
+
+def claims(root, folder):
+    """(term, form, regex) for every form of every entry, stubs too."""
+    entries, _ = load(root, folder, stubs=True, quiet={"missing-title", "aliases-not-also", "empty-definition",
+                                                        "duplicate-key"})
+    return [(e["term"], nfc(f), re.compile(r"(?<!\w)" + re.escape(nfc(f)) + r"(?!\w)", re.I))
+            for e in entries for f in e["forms"]]
 
 
 def read_skip(path):
@@ -542,6 +566,7 @@ def run_link(a):
     root, folder = a.content, a.glossary.strip("/")
     skip = read_skip(a.skip)
     rules = skip_rules(a)
+    rules["claims"] = claims(root, folder)
     quiet = set() if a.check or a.apply else {"empty-definition"}
     all_entries, warnings = load(root, folder, quiet=quiet)
     entries = only_terms(all_entries, a.term)

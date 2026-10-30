@@ -139,7 +139,9 @@ Kewpie mayonnaise · 7 pages
     …and softens the mustard. [[Kewpie mayonnaise|Kewpie]] adds sweetness and…
 
   ✓ linked
-``` Yes writes `[[Term]]` when the words match the term exactly, otherwise `[[Term|words]]`. Never adds a line to the skip file, and the pair isn't asked again. Skip asks again next run.
+```
+
+Yes writes `[[Term]]` when the words match the term exactly, otherwise `[[Term|words]]`. Never adds a line to the skip file, and the pair isn't asked again. Skip asks again next run.
 
 The skip file is one pair per line, the page's path under `CONTENT`, a space, `|`, a space, and the term; `#` starts a comment:
 

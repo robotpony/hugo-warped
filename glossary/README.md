@@ -128,7 +128,13 @@ For each entry, A to Z, and each page that has no mark for it yet, finds the fir
 
 Nor does it look in a recipe's ingredient lists. A site names the folders whose pages are recipes (`--recipes recipes --recipes drinks`) and the words that make a heading something other than an ingredient section (`--not-ingredients method,notes,serve,…`). On a recipe page, every h2 is an ingredient section unless one of its words is on that list, or it's marked `{.article}`; its list items, down to the next h2, are skipped, and the prose under it is read as usual. So a multi-component recipe's `## Tadka` and `## Sauce` lists are skipped, and their method paragraphs aren't. This is Fugu's rule (`render-heading.html`, `params.fugu.headings.notIngredients`). A list item runs on to the next blank line. The entry's own file and the glossary page are left out.
 
-Each mention is shown as a diff and asked: `[y]es`, `[n]ever on this page`, `[s]kip for now`, or `[q]uit`. Yes writes `[[Term]]` when the words match the term exactly, otherwise `[[Term|words]]`. Never adds a line to the skip file, and the pair isn't asked again. Skip asks again next run.
+Each mention is shown on one line, with the mark in place and the words either side trimmed to fit the terminal, under a header of the term, its count and its place, then asked: `[y]es`, `[n]ever here`, `[s]kip` (for now), or `[q]uit`. On a terminal the mark is bold and the rest dim, unless `NO_COLOR` is set:
+
+```
+Kewpie mayonnaise · 1 of 10 · methods/burgers/parts/sauces.md:17
+    …and softens the mustard. [[Kewpie mayonnaise|Kewpie]] adds sweetness and…
+Link? [y]es [n]ever here [s]kip [q]uit ›
+``` Yes writes `[[Term]]` when the words match the term exactly, otherwise `[[Term|words]]`. Never adds a line to the skip file, and the pair isn't asked again. Skip asks again next run.
 
 The skip file is one pair per line, the page's path under `CONTENT`, a space, `|`, a space, and the term; `#` starts a comment:
 

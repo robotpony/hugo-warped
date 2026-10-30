@@ -21,6 +21,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import sys
 import unicodedata
 
@@ -328,6 +329,27 @@ def mark_for(entry, words):
     return f"[[{entry['term']}]]" if words == entry["term"] else f"[[{entry['term']}|{words}]]"
 
 
+def in_context(line, start, end, mark, width, style=False):
+    """The line with line[start:end] replaced by `mark`, trimmed at word
+    boundaries to fit `width`, with about as many words each side and an
+    ellipsis where it's cut. `style` makes the mark bold and the rest dim."""
+    left, right = line[:start], line[end:]
+    room = max(width - len(mark), 2)
+    if len(left) + len(right) > room:
+        lb = min(len(left), max(room // 2, room - len(right)))
+        rb = min(len(right), room - lb)
+        if lb < len(left):
+            cut = left[len(left) - lb + 1:] if lb > 1 else ""
+            left = "…" + (cut.split(" ", 1)[1] if " " in cut[:-1] else cut)
+        if rb < len(right):
+            cut = right[:rb - 1] if rb > 1 else ""
+            right = (cut.rsplit(" ", 1)[0] if " " in cut[1:] else cut) + "…"
+    if not style:
+        return left + mark + right
+    dim, bold, reset = "\x1b[2m", "\x1b[1m", "\x1b[0m"
+    return f"{dim}{left}{reset}{bold}{mark}{reset}{dim}{right}{reset}"
+
+
 def run_link(a):
     root, folder = a.content, a.glossary.strip("/")
     skip = read_skip(a.skip)
@@ -345,16 +367,24 @@ def run_link(a):
         return 1 if a.strict and found else 0
 
     counts = {"linked": 0, "never": 0, "skipped": 0}
-    for e, p, n, s, end in proposals(root, folder, skip, rules):
+    total = sum(1 for _ in proposals(root, folder, skip, rules))
+    style = sys.stdout.isatty() and "NO_COLOR" not in os.environ
+    width = shutil.get_terminal_size().columns - 4
+    for i, (e, p, n, s, end) in enumerate(proposals(root, folder, skip, rules), start=1):
         lines = nfc(p.text).split("\n")
         old = lines[n - 1]
-        new = old[:s] + mark_for(e, old[s:end]) + old[end:]
-        print(f"\n{p.path}:{n}\n- {old}\n+ {new}")
+        mark = mark_for(e, old[s:end])
+        new = old[:s] + mark + old[end:]
+        print(f"{e['term']} · {i} of {total} · {p.path}:{n}")
+        print("    " + in_context(old.strip(), s - (len(old) - len(old.lstrip())), end - (len(old) - len(old.lstrip())),
+                                  mark, width, style))
         try:
-            ans = input("Link? [y]es [n]ever on this page [s]kip for now [q]uit ").strip().lower()[:1]
+            ans = input("Link? [y]es [n]ever here [s]kip [q]uit › ").strip().lower()[:1]
         except EOFError:
+            print()
             ans = "q"
         if ans == "q":
+            print()
             break
         if ans == "y":
             lines[n - 1] = new
@@ -370,7 +400,8 @@ def run_link(a):
             counts["never"] += 1
         else:
             counts["skipped"] += 1
-    print(f"\n{counts['linked']} linked, {counts['never']} never, {counts['skipped']} skipped. Review: git diff")
+        print()
+    print(f"{counts['linked']} linked, {counts['never']} never, {counts['skipped']} skipped. Review: git diff")
     return 0
 
 

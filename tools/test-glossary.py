@@ -76,6 +76,29 @@ class Glossary(unittest.TestCase):
     def test_candidates(self):
         self.assertEqual(run("candidates", CONTENT, "--glossary", FOLDER), (0, fixture("candidates.txt")))
 
+    def test_in_context(self):
+        line = "one two three four five six seven eight nine ten fond eleven twelve thirteen fourteen fifteen"
+        s = line.index("fond")
+        got = g.in_context(line, s, s + 4, "[[Fond]]", 40)
+        self.assertEqual(got, "…nine ten [[Fond]] eleven twelve…")
+        self.assertLessEqual(len(got), 40)
+        self.assertEqual(g.in_context("A fond start.", 2, 6, "[[Fond|fond]]", 40), "A [[Fond|fond]] start.")
+        self.assertEqual(g.in_context("fond", 0, 4, "[[Fond]]", 40, style=True), "\x1b[2m\x1b[0m\x1b[1m[[Fond]]\x1b[0m\x1b[2m\x1b[0m")
+
+    def test_link_prompt(self):
+        env = dict(os.environ, COLUMNS="44")
+        r = subprocess.run([sys.executable, TOOL, "link", CONTENT, "--glossary", FOLDER, "--skip",
+                            os.path.join(SITE, "skip.txt"), *fixture("options.txt").split()],
+                           capture_output=True, text=True, input="s\n" * 50, env=env)
+        out = r.stdout.split("\n")
+        self.assertEqual(out[0], "Deglaze · 1 of 8 · essays/camp-cooking.md:12")
+        self.assertTrue(out[1].startswith("    ") and "[[Deglaze|deglaze]]" in out[1])
+        self.assertNotIn("\x1b", r.stdout)
+        for line in out:
+            if line.startswith("    "):
+                self.assertLessEqual(len(line), 44, line)
+        self.assertIn("0 linked, 0 never, 8 skipped.", r.stdout)
+
     def test_link_yes(self):
         tmp = tempfile.mkdtemp(prefix="hugo-warped-glossary-")
         try:

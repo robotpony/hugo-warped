@@ -96,7 +96,7 @@ class Glossary(unittest.TestCase):
         self.assertEqual(out[:6], ["1 stub skipped (not written yet)", "", "Deglaze · 3 pages", "─" * 20, "",
                                    "  1/3  essays/camp-cooking.md:12"])
         self.assertTrue(out[7].startswith("    ") and "[[Deglaze|deglaze]]" in out[7])
-        self.assertEqual(out[9:11], ["  y yes  n never here  s skip  q quit › ", "  – skipped"])
+        self.assertEqual(out[9:11], ["  y yes  n never here  s skip  a all  q quit › ", "  – skipped"])
         self.assertEqual(out[11:14], ["", "", "  2/3  recipes/dal.md:18"])
         self.assertNotIn("\x1b", r.stdout)
         for line in out:
@@ -104,6 +104,59 @@ class Glossary(unittest.TestCase):
                 self.assertLessEqual(len(line), 48, line)
         self.assertIn("Deglaze: 0 linked, 0 never, 3 skipped", out)
         self.assertIn("Total: 0 linked, 0 never, 8 skipped. Review: git diff", out)
+
+    def copy(self):
+        tmp = tempfile.mkdtemp(prefix="hugo-warped-glossary-")
+        self.addCleanup(shutil.rmtree, tmp)
+        site = os.path.join(tmp, "site")
+        shutil.copytree(SITE, site)
+        return os.path.join(site, "content"), os.path.join(site, "skip.txt")
+
+    def read(self, content, rel):
+        with open(os.path.join(content, rel), encoding="utf-8") as f:
+            return f.read()
+
+    def test_link_all(self):
+        content, skip = self.copy()
+        # Deglaze: never on the first, then all: a wrong count goes back, the right one links the other two.
+        code, out = run("link", content, "--glossary", FOLDER, "--skip", skip, "--term", "deglazing",
+                        stdin="n\na\n3\na\n2\n")
+        self.assertIn("  Link all 2 remaining for Deglaze? Type 2 to confirm, or Enter to go back › ", out)
+        self.assertIn("  ✓ linked 2 (all)", out)
+        self.assertIn("Deglaze: 2 linked, 1 never, 0 skipped", out)
+        self.assertNotIn("Kewpie", out)
+        self.assertNotIn("[[Deglaze", self.read(content, "essays/camp-cooking.md"))
+        self.assertIn("[[Deglaze]] the pan", self.read(content, "recipes/dal.md"))
+        self.assertIn("[[Deglaze]] with wine", self.read(content, "recipes/pan-sauce.md"))
+        self.assertTrue(self.read(content, "../skip.txt").endswith("essays/camp-cooking.md | Deglaze\n"))
+
+    def test_term_check(self):
+        code, out = run("link", CONTENT, "--glossary", FOLDER, "--skip", os.path.join(SITE, "skip.txt"),
+                        "--check", "--term", "KEWPIE", "--term", "roux")
+        self.assertEqual(out, "".join(l + "\n" for l in fixture("link-check.txt").splitlines()
+                                      if "  Kewpie mayonnaise  " in l or "  Roux  " in l))
+
+    def test_apply(self):
+        content, skip = self.copy()
+        answers = os.path.join(os.path.dirname(content), "answers.json")
+        with open(answers, "w") as f:
+            json.dump([{"path": "recipes/dal.md", "line": 14, "term": "Roux", "answer": "yes"},
+                       {"path": "essays/gravy.md", "line": 15, "term": "roux", "answer": "never"},
+                       {"path": "recipes/pan-sauce.md", "line": 3, "term": "Deglaze", "answer": "yes"},
+                       {"path": "recipes/dal.md", "line": 22, "term": "Kewpie", "answer": "skip"}], f)
+        code, out = run("link", content, "--glossary", FOLDER, "--skip", skip, "--apply", answers)
+        self.assertEqual(out.splitlines(), [
+            "recipes/dal.md:14  Roux  linked",
+            "essays/gravy.md:15  Roux  never",
+            "recipes/pan-sauce.md:3  Deglaze  stale, not changed",
+            "recipes/dal.md:22  Kewpie mayonnaise  skipped",
+            "",
+            "Total: 1 linked, 1 never, 1 skipped, 1 stale. Review: git diff"])
+        self.assertIn("Whisk the [[Roux|roux]] until", self.read(content, "recipes/dal.md"))
+        self.assertTrue(self.read(content, "../skip.txt").endswith("essays/gravy.md | Roux\n"))
+        # Applying again finds nothing left to do.
+        code, out = run("link", content, "--glossary", FOLDER, "--skip", skip, "--apply", answers)
+        self.assertIn("Total: 0 linked, 0 never, 1 skipped, 3 stale.", out)
 
     def test_link_yes(self):
         tmp = tempfile.mkdtemp(prefix="hugo-warped-glossary-")

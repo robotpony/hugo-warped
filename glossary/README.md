@@ -128,7 +128,7 @@ For each entry, A to Z, and each page that has no mark for it yet, finds the fir
 
 Nor does it look in a recipe's ingredient lists. A site names the folders whose pages are recipes (`--recipes recipes --recipes drinks`) and the words that make a heading something other than an ingredient section (`--not-ingredients method,notes,serve,…`). On a recipe page, every h2 is an ingredient section unless one of its words is on that list, or it's marked `{.article}`; its list items, down to the next h2, are skipped, and the prose under it is read as usual. So a multi-component recipe's `## Tadka` and `## Sauce` lists are skipped, and their method paragraphs aren't. This is Fugu's rule (`render-heading.html`, `params.fugu.headings.notIngredients`). A list item runs on to the next blank line. The entry's own file and the glossary page are left out.
 
-Mentions are grouped by entry, under a heading of its term and page count. Each is shown on one line, with the mark in place and the words either side trimmed to fit the terminal, then asked: `y` yes, `n` never here, `s` skip (for now), or `q` quit. The answer replaces the prompt, so scrolling back shows each decision, and the run ends with a count per entry and a total. Stubs are counted on one line, not warned about one by one. On a terminal the mark is green and the rest dim, unless `NO_COLOR` is set:
+Mentions are grouped by entry, under a heading of its term and page count. Each is shown on one line, with the mark in place and the words either side trimmed to fit the terminal, then asked: `y` yes, `n` never here, `s` skip (for now), `a` all, or `q` quit. All lists the entry's remaining mentions, leaving out any pair already never, and links them once the count is typed back; anything else returns to the same mention. The answer replaces the prompt, so scrolling back shows each decision, and the run ends with a count per entry and a total. Stubs are counted on one line, not warned about one by one. On a terminal the mark is green and the rest dim, unless `NO_COLOR` is set:
 
 ```
 Kewpie mayonnaise · 7 pages
@@ -148,6 +148,10 @@ The skip file is one pair per line, the page's path under `CONTENT`, a space, `|
 ```
 essays/food-memories/camp-cooking.md | Fond
 ```
+
+`--term TERM` (repeatable, a title or `also` form in any case) limits a run or `--check` to those entries.
+
+`--apply FILE` takes the answers instead of asking, for driving a run from elsewhere (a chat, a script): a JSON list of `{"path", "line", "term", "answer"}`, with `path` under `CONTENT`, the line as `--check --json` gives it, and `answer` one of `yes`, `never` or `skip`. Each is written as the interactive run would, unless that entry's first unmarked mention on the page is no longer on that line, when it's reported stale and left alone. It prints one line per item and a total.
 
 `--check` lists every first mention not yet marked or skipped, as `path:line  Term  "words"`, and writes nothing, for a site's lint. It exits 0, or 1 with `--strict` when it finds any.
 

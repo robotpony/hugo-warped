@@ -3,14 +3,16 @@
 
     tools/glossary.py candidates ~/writing/not-a-chef/content --glossary reference/glossary
     tools/glossary.py link ~/writing/not-a-chef/content --glossary reference/glossary \\
-        --skip ~/writing/not-a-chef/tools/glossary-skip.txt [--check [--strict]]
+        --skip ~/writing/not-a-chef/tools/glossary-skip.txt [--term Fond] [--check [--strict] | --apply answers.json]
 
 candidates prints words on two or more pages that aren't yet a term or
 an `also` form, and are rare in everyday English (not in
 tools/data/common-en.txt) or set in italics. link finds each term's
 first prose mention on every page without a mark for it, shows it as a
 diff and asks: yes, never on this page (saved to the skip file), skip
-for now, or quit. --check lists those mentions and writes nothing.
+for now, all of the term's remaining ones (after typing their count),
+or quit. --check lists those mentions and writes nothing; --apply takes
+the answers from a JSON file instead of asking.
 
 An entry with no body is a stub: it isn't linked, but its words are
 known, so they aren't suggested either. Entry problems (missing-title,
@@ -306,21 +308,52 @@ def read_skip(path):
     return out
 
 
+def hit(root, folder, p, e, entries, skip, rules):
+    """(line, start, end) of entry e's unmarked first mention on page p,
+    or None when the page is the entry's own, is marked, or is skipped."""
+    if p.path == e["path"] or os.path.basename(p.path) == "_index.md" and p.path.startswith(folder + "/"):
+        return None
+    if (p.path, e["term"]) in skip:
+        return None
+    if any(resolve(entries, t) is e for _, t, _ in p.marks()):
+        return None
+    return first_mention(p, e, rules)
+
+
 def proposals(root, folder, skip, rules, entries=None):
-    """Yield (entry, page, line, start, end) for every unmarked first
-    mention, entry by entry, re-reading each page as it changes."""
+    """Yield (entry, [(page, line, start, end), …]) for every entry with an
+    unmarked first mention, A to Z. Each entry's list is read when it's
+    reached, so it sees the edits made for the entries before it."""
     if entries is None:
         entries, _ = load(root, folder)
     for e in entries:
-        for p in pages(root):
-            if p.path == e["path"] or os.path.basename(p.path) == "_index.md" and p.path.startswith(folder + "/"):
-                continue
-            if (p.path, e["term"]) in skip:
-                continue
-            if any(resolve(entries, t) is e for _, t, _ in p.marks()):
-                continue
-            if hit := first_mention(p, e, rules):
-                yield (e, p) + hit
+        found = [(p,) + h for p in pages(root) if (h := hit(root, folder, p, e, entries, skip, rules))]
+        if found:
+            yield e, found
+
+
+def only_terms(entries, terms):
+    """The entries named by `terms` (a title or also form, any case), or all."""
+    if not terms:
+        return entries
+    keys = {match_key(t) for t in terms}
+    return [e for e in entries if keys & set(e["keys"])]
+
+
+def write_mark(p, e, n, s, end):
+    lines = nfc(p.text).split("\n")
+    old = lines[n - 1]
+    lines[n - 1] = old[:s] + mark_for(e, old[s:end]) + old[end:]
+    p.text = "\n".join(lines)
+    with open(p.file, "w", encoding="utf-8") as f:
+        f.write(p.text)
+
+
+def write_never(skip_file, skip, p, e):
+    if skip_file and (p.path, e["term"]) not in skip:
+        with open(skip_file, "a", encoding="utf-8") as f:
+            f.write(f"{p.path} | {e['term']}\n")
+    skip.add((p.path, e["term"]))
 
 
 def skip_rules(a):
@@ -377,91 +410,154 @@ def tally(c):
     return f"{c['linked']} linked, {c['never']} never, {c['skipped']} skipped"
 
 
+def context_line(p, e, n, s, end, width, st):
+    old = nfc(p.text).split("\n")[n - 1]
+    indent = len(old) - len(old.lstrip())
+    return in_context(old.strip(), s - indent, end - indent, mark_for(e, old[s:end]), width, st)
+
+
+def ask(prompt):
+    try:
+        ans = input(prompt)
+    except EOFError:
+        print()
+        return None
+    if not sys.stdin.isatty():
+        print()
+    return ans.strip()
+
+
+def run_check(a, root, folder, skip, rules, entries):
+    found = []
+    for e, hits in proposals(root, folder, skip, rules, entries):
+        for p, n, s, end in hits:
+            words = nfc(p.text.split("\n")[n - 1])[s:end]
+            found.append({"path": p.path, "line": n, "term": e["term"], "words": words})
+    if a.json:
+        print(json.dumps(found, ensure_ascii=False, indent=2))
+    else:
+        for f in found:
+            print(f'{f["path"]}:{f["line"]}  {f["term"]}  "{f["words"]}"')
+    return 1 if a.strict and found else 0
+
+
+def run_apply(a, root, folder, skip, rules, entries):
+    """Answers from a JSON list of {path, line, term, answer}, written as
+    the interactive run would, skipping any whose mention has moved."""
+    with open(a.apply, encoding="utf-8") as f:
+        items = json.load(f)
+    counts = {"linked": 0, "never": 0, "skipped": 0, "stale": 0}
+    for item in items:
+        e = resolve(entries, item["term"])
+        path = os.path.join(root, item["path"])
+        answer = str(item.get("answer", "")).lower()
+        h = None
+        if e and os.path.exists(path):
+            p = Page(root, path)
+            h = hit(root, folder, p, e, entries, skip, rules)
+        if not h or h[0] != item["line"] or answer not in ("yes", "never", "skip"):
+            counts["stale"] += 1
+            print(f'{item["path"]}:{item["line"]}  {item["term"]}  stale, not changed')
+            continue
+        if answer == "yes":
+            write_mark(p, e, *h)
+            counts["linked"] += 1
+            print(f'{p.path}:{h[0]}  {e["term"]}  linked')
+        elif answer == "never":
+            write_never(a.skip, skip, p, e)
+            counts["never"] += 1
+            print(f'{p.path}:{h[0]}  {e["term"]}  never')
+        else:
+            counts["skipped"] += 1
+            print(f'{p.path}:{h[0]}  {e["term"]}  skipped')
+    print(f"\nTotal: {tally(counts)}, {counts['stale']} stale. Review: git diff")
+    return 0
+
+
 def run_link(a):
     root, folder = a.content, a.glossary.strip("/")
     skip = read_skip(a.skip)
     rules = skip_rules(a)
-    found = []
+    quiet = set() if a.check or a.apply else {"empty-definition"}
+    all_entries, warnings = load(root, folder, quiet=quiet)
+    entries = only_terms(all_entries, a.term)
     if a.check:
-        for e, p, n, s, end in proposals(root, folder, skip, rules):
-            words = nfc(p.text.split("\n")[n - 1])[s:end]
-            found.append({"path": p.path, "line": n, "term": e["term"], "words": words})
-        if a.json:
-            print(json.dumps(found, ensure_ascii=False, indent=2))
-        else:
-            for f in found:
-                print(f'{f["path"]}:{f["line"]}  {f["term"]}  "{f["words"]}"')
-        return 1 if a.strict and found else 0
+        return run_check(a, root, folder, skip, rules, entries)
+    if a.apply:
+        return run_apply(a, root, folder, skip, rules, all_entries)
 
     tty = sys.stdout.isatty() and sys.stdin.isatty()
     st = Style(sys.stdout.isatty() and "NO_COLOR" not in os.environ)
     width = shutil.get_terminal_size().columns
-    entries, warnings = load(root, folder, quiet={"empty-definition"})
     stubs = sum(w["code"] == "empty-definition" for w in warnings)
-    per_term = {}
-    for e, *_ in proposals(root, folder, skip, rules, entries):
-        per_term[e["term"]] = per_term.get(e["term"], 0) + 1
     if stubs:
         print(st.dim(f"{stubs} stub{'s' if stubs != 1 else ''} skipped (not written yet)") + "\n")
     prompt = "  " + "  ".join(f"{st.bold(k)} {word}" for k, word in
-                              (("y", "yes"), ("n", "never here"), ("s", "skip"), ("q", "quit"))) + " › "
+                              (("y", "yes"), ("n", "never here"), ("s", "skip"), ("a", "all"), ("q", "quit"))) + " › "
     echoes = {"y": ("✓ linked", "32"), "n": ("✗ never", "33"), "s": ("– skipped", "2")}
 
-    counts, term, i = {}, None, 0
-    for e, p, n, s, end in proposals(root, folder, skip, rules, entries):
-        if e["term"] != term:
-            if term is not None:
-                print("\n")
-            term, i = e["term"], 0
-            counts[term] = {"linked": 0, "never": 0, "skipped": 0}
-            pages_n = per_term.get(term, 0)
-            heading = f"{term} · {pages_n} page{'s' if pages_n != 1 else ''}"
-            print(st.bold(heading))
-            print(st.dim("─" * min(max(len(heading), 20), width)) + "\n")
-        else:
-            print("\n")
-        i += 1
-        lines = nfc(p.text).split("\n")
-        old = lines[n - 1]
-        mark = mark_for(e, old[s:end])
-        new = old[:s] + mark + old[end:]
-        indent = len(old) - len(old.lstrip())
-        print(f"  {st.dim(f'{i}/{per_term.get(term, i)}')}  {p.path}:{n}\n")
-        print("    " + in_context(old.strip(), s - indent, end - indent, mark, width - 4, st) + "\n")
-        try:
-            ans = input(prompt).strip().lower()[:1]
-        except EOFError:
-            ans = "q"
-            print()
-        else:
-            if not sys.stdin.isatty():
-                print()
-        if ans == "q":
-            break
-        ans = ans if ans in ("y", "n") else "s"
-        if ans == "y":
-            lines[n - 1] = new
-            with open(p.file, "w", encoding="utf-8") as f:
-                f.write("\n".join(lines))
-            counts[term]["linked"] += 1
-        elif ans == "n":
-            if a.skip:
-                with open(a.skip, "a", encoding="utf-8") as f:
-                    f.write(f"{p.path} | {e['term']}\n")
-            skip.add((p.path, e["term"]))
-            counts[term]["never"] += 1
-        else:
-            counts[term]["skipped"] += 1
-        text, code = echoes[ans]
+    def echo(text, code, extra=""):
         if tty:
             print("\x1b[1A\x1b[2K", end="")  # the prompt line gives way to its answer
-        print("  " + st(text, code) + (st.dim(f"  saved to {a.skip}") if ans == "n" and a.skip else ""))
+        print("  " + st(text, code) + extra)
+
+    counts, quit_ = {}, False
+    for k, (e, hits) in enumerate(proposals(root, folder, skip, rules, entries)):
+        term = e["term"]
+        counts[term] = c = {"linked": 0, "never": 0, "skipped": 0}
+        if k:
+            print("\n")
+        heading = f"{term} · {len(hits)} page{'s' if len(hits) != 1 else ''}"
+        print(st.bold(heading))
+        print(st.dim("─" * min(max(len(heading), 20), width)) + "\n")
+        i = 0
+        while i < len(hits):
+            p, n, s, end = hits[i]
+            if i:
+                print("\n")
+            print(f"  {st.dim(f'{i + 1}/{len(hits)}')}  {p.path}:{n}\n")
+            print("    " + context_line(p, e, n, s, end, width - 4, st) + "\n")
+            ans = ask(prompt)
+            ans = "q" if ans is None else ans.lower()[:1]
+            if ans == "q":
+                quit_ = True
+                break
+            if ans == "a":
+                rest = [h for h in hits[i:] if (h[0].path, term) not in skip]
+                print()
+                for q, qn, qs, qend in rest:
+                    print("  " + st.dim(f"{q.path}:{qn}"))
+                    print("    " + context_line(q, e, qn, qs, qend, width - 4, st))
+                print()
+                typed = ask(f"  Link all {len(rest)} remaining for {term}? "
+                            f"Type {len(rest)} to confirm, or Enter to go back › ")
+                if typed == str(len(rest)):
+                    for q, qn, qs, qend in rest:
+                        write_mark(q, e, qn, qs, qend)
+                    c["linked"] += len(rest)
+                    echo(f"✓ linked {len(rest)} (all)", "32")
+                    break
+                print("\n")
+                continue
+            ans = ans if ans in ("y", "n") else "s"
+            if ans == "y":
+                write_mark(p, e, n, s, end)
+                c["linked"] += 1
+            elif ans == "n":
+                write_never(a.skip, skip, p, e)
+                c["never"] += 1
+            else:
+                c["skipped"] += 1
+            echo(*echoes[ans], st.dim(f"  saved to {a.skip}") if ans == "n" and a.skip else "")
+            i += 1
+        if quit_:
+            break
     print("\n")
     total = {"linked": 0, "never": 0, "skipped": 0}
     for t, c in counts.items():
         print(f"{t}: {tally(c)}")
-        for k in total:
-            total[k] += c[k]
+        for key in total:
+            total[key] += c[key]
     print(f"\nTotal: {tally(total)}. Review: git diff")
     return 0
 
@@ -572,6 +668,9 @@ def main(argv=None):
     k.add_argument("--skip", help="the skip file of never pairs")
     k.add_argument("--check", action="store_true", help="list unmarked first mentions; write nothing")
     k.add_argument("--strict", action="store_true", help="with --check, exit 1 when any are found")
+    k.add_argument("--term", action="append", help="only this entry (its title or an also form), repeatable")
+    k.add_argument("--apply", metavar="FILE",
+                   help="answers as a JSON list of {path, line, term, answer: yes|never|skip}; asks nothing")
     a = ap.parse_args(argv)
     a.skip_section = a.skip_section or ["Ingredients"]
     if a.cmd == "link":

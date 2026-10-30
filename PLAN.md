@@ -12,4 +12,4 @@ Open work for hugo-warped. Finished work is in this repo's git log; the spec's h
 
 - [ ] Scorekeep drops `←` notes and rewrites `RulesDocument` to the spec against its vendored fixtures (Scorekeep content agent).
 - [ ] Fugu ports `timeline` and `tabs` when a page needs one (fugu-agent).
-- [ ] Not a Chef, Fugu and w42 delete their merged `hugo-warped-module` branches: Not a Chef's local one, Fugu's local and remote, and w42's local and remote (both merged into w42 main as of 2026-10-30) (Not a Chef content agent, fugu-agent, w42 theme agent).
+- [ ] Fugu and w42 delete their merged `hugo-warped-module` branches: Fugu's on origin (local deleted 2026-10-30; waiting on Bruce's go-ahead in fugu-agent's session), and w42's local and remote (both merged into w42 main as of 2026-10-30) (fugu-agent, w42 theme agent).

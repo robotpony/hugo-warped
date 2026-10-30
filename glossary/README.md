@@ -29,8 +29,10 @@ Pour a liquid into a hot pan and scrape, so the browned bits stuck to the bottom
    ```yaml
    cascade:
      target: {kind: page}
-     build: {render: never, list: always}
+     build: {render: never, list: local}
    ```
+
+   `list: local` keeps the entries in the glossary page's own lists, which is all the partials read, and out of `site.RegularPages`, so they don't land in a site's search index, feeds or page counts with empty urls. (`list: always` did; Fugu found it.)
 
 ### Keys and anchors
 

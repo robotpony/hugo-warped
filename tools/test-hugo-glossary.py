@@ -42,7 +42,7 @@ HOME = """{{- $a := dict "glossary" "/reference/glossary" "extra" hugo.Data.extr
   {{- $resolve = merge $resolve (dict $t $v) -}}
 {{- end -}}
 {{- $marks := dict -}}
-{{- range site.Pages -}}
+{{- range site.Pages | append (site.GetPage "/reference/glossary").RegularPages | uniq -}}
   {{- if not .File }}{{ continue }}{{ end -}}
   {{- $path := .File.Path -}}
   {{- with partial "hugo-warped/glossary/marks.html" . }}{{ $marks = merge $marks (dict $path .) }}{{ end -}}

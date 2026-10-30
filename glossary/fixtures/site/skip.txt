@@ -1,0 +1,2 @@
+# Pages never to link, one "path | Term" per line.
+essays/camp-cooking.md | Fond

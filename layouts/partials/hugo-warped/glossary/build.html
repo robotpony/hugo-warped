@@ -1,0 +1,61 @@
+{{- /*
+  The work behind entries.html, cached by it once per build and
+  argument. Don't call it directly.
+*/ -}}
+{{- $out := slice -}}
+{{- $seen := dict -}}
+{{- $g := site.GetPage .glossary -}}
+{{- $add := slice -}}
+{{- with $g -}}
+  {{- range sort .RegularPagesRecursive "File.Path" -}}
+    {{- $path := .File.Path -}}
+    {{- if not .Title -}}
+      {{- warnf "glossary [missing-title]: in %q" $path -}}
+      {{- continue -}}
+    {{- end -}}
+    {{- if .Params.aliases }}{{ warnf "glossary [aliases-not-also]: in %q" $path }}{{ end -}}
+    {{- $also := slice -}}
+    {{- with .Params.also -}}
+      {{- if reflect.IsSlice . }}{{ range . }}{{ $also = $also | append (string .) }}{{ end }}{{ else }}{{ $also = slice (string .) }}{{ end -}}
+    {{- end -}}
+    {{- $body := strings.TrimSpace .RawContent -}}
+    {{- $def := "" -}}
+    {{- if $body -}}
+      {{- $para := index (split $body "\n\n") 0 -}}
+      {{- $para = replaceRE `\[\[([^\]|]+?)\\?\|([^\]]+)\]\]` "$2" $para -}}
+      {{- $para = replaceRE `\[\[([^\]]+)\]\]` "$1" $para -}}
+      {{- $para = replaceRE `!?\[([^\]]*)\]\([^)]*\)` "$1" $para -}}
+      {{- $plain := $para | markdownify | plainify | htmlUnescape | replaceRE `\s+` " " | strings.TrimSpace -}}
+      {{- $def = $plain -}}
+      {{- with findRE `^.*?[.!?]["'”’)\]]*(\s|$)` $plain 1 }}{{ $def = strings.TrimSpace (index . 0) }}{{ end -}}
+    {{- else -}}
+      {{- warnf "glossary [empty-definition]: in %q" $path -}}
+    {{- end -}}
+    {{- $add = $add | append (dict "term" .Title "also" $also "def" $def "url" "" "page" . "path" $path) -}}
+  {{- end -}}
+{{- end -}}
+{{- range .extra -}}
+  {{- $add = $add | append (dict "term" .term "also" (.also | default slice) "def" .def "url" .url "page" nil "path" .url) -}}
+{{- end -}}
+{{- range $add -}}
+  {{- $e := . -}}
+  {{- $keys := slice -}}
+  {{- range slice .term | append .also -}}
+    {{- $k := partial "hugo-warped/glossary/key.html" . -}}
+    {{- if or (not $k) (in $keys $k) }}{{ continue }}{{ end -}}
+    {{- with index $seen $k -}}
+      {{- warnf "glossary [duplicate-key]: %q is already %s's in %q" $k . $e.path -}}
+      {{- continue -}}
+    {{- end -}}
+    {{- $seen = merge $seen (dict $k $e.term) -}}
+    {{- $keys = $keys | append $k -}}
+  {{- end -}}
+  {{- $key := partial "hugo-warped/glossary/key.html" .term -}}
+  {{- $anchor := strings.Trim (lower .term | replaceRE `[^\p{L}\p{N}]+` "-") "-" -}}
+  {{- $letter := "#" -}}
+  {{- with findRE `^\p{L}` $key 1 }}{{ $letter = upper (index . 0) }}{{ end -}}
+  {{- $url := .url -}}
+  {{- with .page }}{{ $url = printf "%s#%s" $g.RelPermalink $anchor }}{{ end -}}
+  {{- $out = $out | append (dict "term" .term "also" .also "key" $key "keys" $keys "anchor" $anchor "letter" $letter "def" .def "url" $url "page" .page) -}}
+{{- end -}}
+{{- return sort $out "key" -}}

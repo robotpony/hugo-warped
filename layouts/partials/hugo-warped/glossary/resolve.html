@@ -1,0 +1,12 @@
+{{- /*
+  The entry a mark's target resolves to, or false. Takes (dict
+  "glossary" … "extra" … "target" "deglazing").
+
+    {{ with partial "hugo-warped/glossary/resolve.html" (dict "glossary" "/reference/glossary" "target" .Destination) }}…{{ end }}
+*/ -}}
+{{- $k := partial "hugo-warped/glossary/key.html" .target -}}
+{{- $found := false -}}
+{{- range partial "hugo-warped/glossary/entries.html" . -}}
+  {{- if in .keys $k }}{{ $found = . }}{{ break }}{{ end -}}
+{{- end -}}
+{{- return $found -}}

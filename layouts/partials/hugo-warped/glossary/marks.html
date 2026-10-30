@@ -1,0 +1,41 @@
+{{- /*
+  A page's marks, in order: (dict "target" … "text" …), from its
+  Markdown outside front matter. Marks in code spans and fenced blocks
+  don't count, except in a tabs fence, whose panels are prose; a fence
+  closes at a line of its character, at least as long, with nothing
+  after it (glossary/README.md, "Where a mark counts"). Takes a page.
+*/ -}}
+{{- $out := slice -}}
+{{- $stack := slice -}}
+{{- range split .RawContent "\n" -}}
+  {{- $line := . -}}
+  {{- $top := false -}}
+  {{- with $stack }}{{ $top = index (last 1 .) 0 }}{{ end -}}
+  {{- $m := index (findRESubmatch "^( {0,3})(`{3,}|~{3,})(.*)$" $line 1) 0 | default slice -}}
+  {{- $closes := false -}}
+  {{- if and $m $top -}}
+    {{- $f := index $m 2 -}}
+    {{- $closes = and (eq (substr $f 0 1) (substr $top.fence 0 1)) (ge (len $f) (len $top.fence)) (eq (strings.TrimSpace (index $m 3)) "") -}}
+  {{- end -}}
+  {{- if and $top (not $top.tabs) -}}
+    {{- if $closes }}{{ $stack = first (sub (len $stack) 1) $stack }}{{ end -}}
+    {{- continue -}}
+  {{- end -}}
+  {{- if $m -}}
+    {{- if $closes -}}
+      {{- $stack = first (sub (len $stack) 1) $stack -}}
+    {{- else -}}
+      {{- $info := strings.TrimSpace (index $m 3) -}}
+      {{- $word := index (split (printf "%s " $info) " ") 0 -}}
+      {{- $stack = $stack | append (dict "fence" (index $m 2) "tabs" (eq $word "tabs")) -}}
+    {{- end -}}
+    {{- continue -}}
+  {{- end -}}
+  {{- $prose := replaceRE "``[^`]+``|`[^`]+`" "" $line -}}
+  {{- range findRESubmatch `\[\[([^\]|\\]+?)(?:\\?\|([^\]]+))?\]\]` $prose -}}
+    {{- $target := strings.TrimSpace (index . 1) -}}
+    {{- $text := strings.TrimSpace (index . 2) | default $target -}}
+    {{- $out = $out | append (dict "target" $target "text" $text) -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

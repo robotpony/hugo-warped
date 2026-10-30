@@ -1,0 +1,12 @@
+{{- /*
+  The index.json array, ready for jsonify: (dict "term" "also" "def"
+  "url") per entry, sorted as entries.html. Takes (dict "glossary" …
+  "extra" …).
+
+    {{ partial "hugo-warped/glossary/index.html" (dict "glossary" "/reference/glossary") | jsonify }}
+*/ -}}
+{{- $out := slice -}}
+{{- range partial "hugo-warped/glossary/entries.html" . -}}
+  {{- $out = $out | append (dict "term" .term "also" .also "def" .def "url" .url) -}}
+{{- end -}}
+{{- return $out -}}

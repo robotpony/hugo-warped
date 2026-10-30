@@ -1,0 +1,10 @@
+[
+  {"letter": "D", "entries": [{"term": "Deglaze", "used": ["essays/gravy.md"]}]},
+  {"letter": "F", "entries": [{"term": "Fond", "used": []}]},
+  {"letter": "K", "entries": [{"term": "Kewpie mayonnaise", "used": []}]},
+  {"letter": "M", "entries": [{"term": "Maillard reaction", "used": []}, {"term": "MSG", "used": ["recipes/pan-sauce.md"]}]},
+  {"letter": "R", "entries": [{"term": "Roux", "used": []}]},
+  {"letter": "S", "entries": [{"term": "Sucs", "used": []}]},
+  {"letter": "U", "entries": [{"term": "Umami", "used": []}]},
+  {"letter": "W", "entries": [{"term": "Win the fridge", "used": ["essays/camp-cooking.md"]}]}
+]

@@ -1,0 +1,33 @@
+{{- /*
+  The glossary page's list: letters in order, (dict "letter" "D"
+  "entries" …), each entry as entries.html gives it plus "used", the
+  pages outside the glossary with a mark resolving to it, sorted by
+  title. Takes (dict "glossary" … "extra" …).
+*/ -}}
+{{- $g := site.GetPage .glossary -}}
+{{- $entries := partial "hugo-warped/glossary/entries.html" . -}}
+{{- $used := dict -}}
+{{- range site.Pages -}}
+  {{- $p := . -}}
+  {{- if or (not .File) (eq . $g) (and $g (.IsDescendant $g)) }}{{ continue }}{{ end -}}
+  {{- range partial "hugo-warped/glossary/marks.html" . -}}
+    {{- $k := partial "hugo-warped/glossary/key.html" .target -}}
+    {{- range $entries -}}
+      {{- if in .keys $k -}}
+        {{- $used = merge $used (dict .anchor ((index $used .anchor | default slice) | append $p)) -}}
+        {{- break -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $out := slice -}}
+{{- range $entries -}}
+  {{- $e := merge . (dict "used" (sort (uniq (index $used .anchor | default slice)) "Title")) -}}
+  {{- if or (not $out) (ne (index (last 1 $out) 0).letter .letter) -}}
+    {{- $out = $out | append (dict "letter" .letter "entries" (slice $e)) -}}
+  {{- else -}}
+    {{- $l := index (last 1 $out) 0 -}}
+    {{- $out = (first (sub (len $out) 1) $out) | append (dict "letter" $l.letter "entries" ($l.entries | append $e)) -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

@@ -1,0 +1,6 @@
+{{- /*
+  A term's or target's match key (glossary/README.md, "Keys and
+  anchors"): lowercase, every run of non-letters and non-digits one
+  space, trimmed. Takes a string.
+*/ -}}
+{{- return (lower . | replaceRE `[^\p{L}\p{N}]+` " " | strings.TrimSpace) -}}

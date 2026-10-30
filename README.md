@@ -8,7 +8,7 @@ The sites share structure and parsing here. Each keeps its own look, so nothing 
 
 ## Where it stands
 
-*As of 2026-10-29.*
+*As of 2026-10-30.*
 
 | Part | State |
 |---|---|
@@ -16,6 +16,7 @@ The sites share structure and parsing here. Each keeps its own look, so nothing 
 | Fixtures (`fences/fixtures/`) | **Done** for every type. Fugu passes formula, stack and flow; w42 passes timeline, flow and tabs. |
 | Validator (`tools/check-fences.py`) | **Done.** Stdlib Python, run on any project's Markdown. It passes every fixture (`tools/test-check-fences.py`), and Not a Chef, w42 and Scorekeep check clean. |
 | Hugo module (`layouts/partials/hugo-warped/`) | **Done**, and optional. One parse partial per type, returning the same parse as the validator. It passes every block fixture in Hugo (`tools/test-hugo-partials.py`). Fugu and w42 read every fence through it, pinned at 4045b3f. |
+| Glossary (`glossary/`) | **Approved** 2026-10-30, for Not a Chef first. An entry per file, wiki-link marks, partials for the list, lookups and `index.json`, and `tools/glossary.py` to suggest terms and mark them. Fixtures pass in Python and Hugo. |
 | Plumbing and tools | `tools/run-hugo-fixtures.py` runs the fixtures through a theme's hooks. The rest comes as a second site needs each piece. |
 
 The spec and its fixtures are the product. Each theme reads fences with the module's partials and draws them in its own hooks; Scorekeep implements the spec in Swift. `PLAN.md` has the open work.
@@ -43,6 +44,10 @@ Where there's no hook for the type, the block shows as preformatted text. So I w
 | `tabs` | layout | warpedvisions.org |
 
 Start at `fences/README.md` for the shared grammar: lines, cells, notes, attributes, bad lines and warning codes. Each type has its own page beside it.
+
+## The glossary
+
+A site's glossary is a folder of entries, one Markdown file per term, and a word in the text is marked as a plain wiki link, `[[Deglaze|deglaze]]`, so Obsidian follows it too. The partials build the A–Z list, resolve a mark to its entry, and write `index.json`; `tools/glossary.py` suggests terms worth defining and marks first mentions, asking before each one. `glossary/README.md` is the spec. Not a Chef uses it first; w42 has no wiki links and isn't touched by it.
 
 ## Where it's used
 
@@ -129,4 +134,4 @@ Themes, CSS and the look of each site, and browser JS (warped.js).
 
 ## Licence
 
-MIT, like Fugu, so anyone can use it. See `LICENSE`.
+MIT, like Fugu, so anyone can use it. See `LICENSE`. The one exception is `tools/data/common-en.txt`, a word list from wordfreq under CC BY-SA 4.0 (`tools/data/README.md`).

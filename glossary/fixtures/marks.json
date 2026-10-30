@@ -1,0 +1,6 @@
+{
+  "essays/camp-cooking.md": [{"line": 6, "target": "Win the fridge", "text": "winning the fridge"}],
+  "essays/gravy.md": [{"line": 6, "target": "Pan sauce", "text": "Pan sauce"}, {"line": 6, "target": "Nothing here", "text": "nothing at all"}, {"line": 20, "target": "Deglaze", "text": "Deglazed"}],
+  "recipes/pan-sauce.md": [{"line": 19, "target": "MSG", "text": "MSG"}],
+  "reference/glossary/deglaze.md": [{"line": 7, "target": "Fond", "text": "fond"}]
+}

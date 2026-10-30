@@ -1,0 +1,18 @@
+[
+  {
+    "path": "reference/glossary/msg.md",
+    "code": "aliases-not-also"
+  },
+  {
+    "path": "reference/glossary/sucs.md",
+    "code": "duplicate-key"
+  },
+  {
+    "path": "reference/glossary/umami.md",
+    "code": "empty-definition"
+  },
+  {
+    "path": "reference/glossary/untitled.md",
+    "code": "missing-title"
+  }
+]

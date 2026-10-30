@@ -10,6 +10,6 @@ Open work for hugo-warped. Finished work is in this repo's git log; the spec's h
 
 ## Other agents
 
-- [ ] Scorekeep drops `←` notes and rewrites `RulesDocument` to the spec against its vendored fixtures (Scorekeep content agent).
+- [ ] Scorekeep drops `←` notes and rewrites `RulesDocument` to the spec against its vendored fixtures, in five steps: vendor and test the fixtures, rewrite the parser, migrate the 11 pages, read tables by name, and point its README at the spec. Due 2026-10-31, before release work (SCOREKEEP).
 - [ ] Fugu ports `timeline` and `tabs` when a page needs one (fugu-agent).
 - [ ] Fugu and w42 delete their merged `hugo-warped-module` branches: Fugu's on origin (local deleted 2026-10-30; waiting on Bruce's go-ahead in fugu-agent's session), and w42's local and remote (both merged into w42 main as of 2026-10-30) (fugu-agent, w42 theme agent).

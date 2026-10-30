@@ -23,7 +23,7 @@ Pour a liquid into a hot pan and scrape, so the browned bits stuck to the bottom
 1. **Term.** `title` is the term, as the list shows it. It MUST be set.
 2. **Other forms.** `also` lists the other forms a mark or a tool may match: plurals, verb forms, a short name ("Kewpie" for "Kewpie mayonnaise"). A YAML list, flow (`[a, b]`) or block (`- a`). It is not `aliases`, which Hugo turns into redirects.
 3. **Date.** `date`, as on any page.
-4. **Definition.** The body is the definition, in block Markdown, and may mark other terms. Its **short form** is the first sentence of its first paragraph, as plain text: what a hover shows and what `index.json` carries. A sentence ends at the first `.`, `!` or `?` (with any closing quote or bracket) followed by a space or the paragraph's end; a paragraph with none is all one sentence. So the first sentence SHOULD stand alone, and SHOULD avoid abbreviations like "e.g.".
+4. **Definition.** The body is the definition; an entry without one is a stub ("Warnings"), so terms can be named before they're written, in block Markdown, and may mark other terms. Its **short form** is the first sentence of its first paragraph, as plain text: what a hover shows and what `index.json` carries. A sentence ends at the first `.`, `!` or `?` (with any closing quote or bracket) followed by a space or the paragraph's end; a paragraph with none is all one sentence. So the first sentence SHOULD stand alone, and SHOULD avoid abbreviations like "e.g.".
 5. **No page each.** Entries build into the list only. The glossary page's front matter cascades it to them:
 
    ```yaml
@@ -64,7 +64,7 @@ As with fences, a warning names the problem and the file, and never fails a buil
 
 - An entry with no `title`: skipped. `missing-title`
 - An entry with an `aliases` key: built as usual, with a warning, since Hugo makes redirects of it. `aliases-not-also`
-- An entry with an empty body: listed, with no short form. `empty-definition`
+- An entry with an empty body: a **stub**, left out until it's written. It isn't listed, resolved, in `index.json` or linked, so a mark to it is `unresolved-mark`; but it holds its keys, so `duplicate-key` and `candidates` still count them. `empty-definition`
 - Two entries sharing a key: the first by file path keeps it. `duplicate-key`
 - A mark that resolves to nothing: drawn as the site draws a broken link. `unresolved-mark`
 

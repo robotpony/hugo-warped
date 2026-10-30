@@ -29,9 +29,9 @@
       {{- $def = $plain -}}
       {{- with findRE `^.*?[.!?]["'”’)\]]*(\s|$)` $plain 1 }}{{ $def = strings.TrimSpace (index . 0) }}{{ end -}}
     {{- else -}}
-      {{- warnf "glossary [empty-definition]: in %q" $path -}}
+      {{- warnf "glossary [empty-definition]: a stub, left out until it's written, in %q" $path -}}
     {{- end -}}
-    {{- $add = $add | append (dict "term" .Title "also" $also "def" $def "url" "" "page" . "path" $path) -}}
+    {{- $add = $add | append (dict "term" .Title "also" $also "def" $def "url" "" "page" . "path" $path "stub" (not $body)) -}}
   {{- end -}}
 {{- end -}}
 {{- range .extra -}}
@@ -50,6 +50,7 @@
     {{- $seen = merge $seen (dict $k $e.term) -}}
     {{- $keys = $keys | append $k -}}
   {{- end -}}
+  {{- if .stub }}{{ continue }}{{ end -}}
   {{- $key := partial "hugo-warped/glossary/key.html" .term -}}
   {{- $anchor := strings.Trim (lower .term | replaceRE `[^\p{L}\p{N}]+` "-") "-" -}}
   {{- $letter := "#" -}}

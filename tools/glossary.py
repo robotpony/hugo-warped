@@ -12,8 +12,9 @@ first prose mention on every page without a mark for it, shows it as a
 diff and asks: yes, never on this page (saved to the skip file), skip
 for now, or quit. --check lists those mentions and writes nothing.
 
-Entry problems (missing-title, aliases-not-also, empty-definition,
-duplicate-key) print as warnings on stderr and never stop a run.
+An entry with no body is a stub: it isn't linked, but its words are
+known, so they aren't suggested either. Entry problems (missing-title,
+aliases-not-also, empty-definition, duplicate-key) print as warnings on stderr and never stop a run.
 --json prints a run's results as data. Stdlib only.
 """
 import argparse
@@ -178,9 +179,10 @@ def warn(code, path, detail=""):
     print(f"WARN  glossary [{code}]: {detail + ' ' if detail else ''}in \"{path}\"", file=sys.stderr)
 
 
-def load(root, folder):
+def load(root, folder, stubs=False):
     """(entries sorted by key, warnings). Each entry is a dict of term,
-    also, key, keys, anchor, letter and path."""
+    also, key, keys, anchor, letter and path. A stub (an entry with no
+    body) holds its keys but is left out, unless `stubs`."""
     folder = folder.strip("/")
     entries, seen, warnings = [], {}, []
 
@@ -197,8 +199,9 @@ def load(root, folder):
             continue
         if "aliases" in p.fields:
             w("aliases-not-also", p.path)
-        if not p.body.strip():
-            w("empty-definition", p.path)
+        stub = not p.body.strip()
+        if stub:
+            w("empty-definition", p.path, "a stub, left out until it's written,")
         also = p.fields.get("also") or []
         if isinstance(also, str):
             also = [also]
@@ -212,6 +215,8 @@ def load(root, folder):
                 continue
             seen[k] = term
             keys.append(k)
+        if stub and not stubs:
+            continue
         entries.append({"term": term, "also": also, "key": match_key(term), "keys": keys,
                         "anchor": anchor(term), "letter": letter(match_key(term)),
                         "path": p.path, "forms": [f for f in [term] + also if match_key(f) in keys]})
@@ -392,7 +397,7 @@ def prose_text(line):
 
 def run_candidates(a):
     root, folder = a.content, a.glossary.strip("/")
-    entries, _ = load(root, folder)
+    entries, _ = load(root, folder, stubs=True)
     keys = {k for e in entries for k in e["keys"]}
     with open(a.common, encoding="utf-8") as f:
         common = {w.strip() for w in f if w.strip()}

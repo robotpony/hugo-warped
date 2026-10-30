@@ -3,7 +3,7 @@ title: Dal
 date: 2026-10-30
 ---
 
-A pot of lentils with a tadka on top.
+A pot of lentils with a tadka on top, for umami.
 
 ## Sauce
 

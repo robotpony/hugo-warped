@@ -237,8 +237,7 @@ def load(root, folder, stubs=False, quiet=()):
         if stub and not stubs:
             continue
         params = p.fields.get("params")
-        # Top-level kind is the old form, read until Not a Chef has moved.
-        kind = (params.get("kind") if isinstance(params, dict) else None) or p.fields.get("kind") or ""
+        kind = (params.get("kind") if isinstance(params, dict) else None) or ""
         entries.append({"term": term, "also": also, "kind": kind,
                         "key": match_key(term), "keys": keys,
                         "anchor": anchor(term), "letter": letter(match_key(term)),

@@ -61,7 +61,19 @@ My other sites (space-command.ca, brucealderson.ca, robotpony.ca, w31, w32, warp
 
 ## The Hugo module
 
-A theme can read fences with the module's partials and draw them its own way. Hugo 0.168 is what I test with.
+A theme can read fences with the module's partials and draw them its own way. Hugo 0.169 is what I test with.
+
+### Checking a machine's Hugo
+
+Working across machines, one falls behind without saying so: 4 weeks on a laptop left this Mac on Hugo 0.163, and it couldn't build a site the laptop had published. So each site keeps a `.hugo-version` at its root, and its `preview.sh` and `publish.sh` run `tools/check-hugo.sh` from there, before Hugo:
+
+```
+min = 0.165.0      # refuse anything older
+tested = 0.169.0   # warn on anything else
+extended = true    # optional: refuse a build that isn't extended
+```
+
+Set `extended` only if the site needs it (Blowfish does). When you move a site to a newer Hugo, raise `tested`, and raise `min` when the site stops building on older ones. The script exits 1 on a refusal and prints nothing when all is well. It only warns on `tested`, because Homebrew can't install a specific older version. `tools/test-check-hugo.py` is its test.
 
 ### Adding it to a project
 

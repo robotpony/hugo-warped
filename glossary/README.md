@@ -184,4 +184,4 @@ It matches words, not meaning, which is why it asks: Camp cooking's "fond memori
 
 Not a Chef's glossary began as one page, `content/reference/glossary.md`, with an entry per `## ` heading, which Fugu's link hook split on. This spec replaces it with a file per entry (decided 2026-10-30).
 
-Kind began as a top-level `kind`, and moved under `params` on 2026-11-03, agreed by Bruce and Not a Chef, once a machine on Hugo 0.163 couldn't build the site. What Hugo returns and `index.json` carries didn't change.
+Kind began as a top-level `kind`, and moved under `params` on 2026-11-03, agreed by Bruce, Not a Chef and Fugu, once a machine on Hugo 0.163 couldn't build the site. What Hugo returns and `index.json` carries didn't change.

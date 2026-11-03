@@ -1,6 +1,6 @@
 ---
 title: Garam masala water
-kind: ingredient
+params: {kind: ingredient}
 date: 2026-10-30
 ---
 

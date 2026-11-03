@@ -72,7 +72,8 @@ def scalar(v):
 
 
 def front_matter(text):
-    """(fields, body, body's first line number). Lists are flow or block."""
+    """(fields, body, body's first line number). Lists and one-level maps
+    are flow or block; anything nested deeper is left out."""
     lines = text.split("\n")
     if not lines or lines[0].strip() != "---":
         return {}, text, 1
@@ -81,18 +82,27 @@ def front_matter(text):
             break
     else:
         return {}, text, 1
-    fields, last = {}, None
+    fields, last, child = {}, None, None
     for raw in lines[1:end]:
         if m := re.match(r"^([A-Za-z_][\w-]*):\s*(.*)$", raw):
-            last, v = m.group(1), m.group(2).strip()
+            last, child, v = m.group(1), None, m.group(2).strip()
             if v.startswith("[") and v.endswith("]"):
                 fields[last] = [scalar(x) for x in v[1:-1].split(",") if x.strip()]
+            elif v.startswith("{") and v.endswith("}"):
+                pairs = (x.split(":", 1) for x in v[1:-1].split(",") if ":" in x)
+                fields[last] = {k.strip(): scalar(x) for k, x in pairs}
             else:
                 fields[last] = scalar(v) if v else None
         elif (m := re.match(r"^\s+-\s+(.*)$", raw)) and last:
             if not isinstance(fields.get(last), list):
                 fields[last] = []
             fields[last].append(scalar(m.group(1)))
+        elif (m := re.match(r"^(\s+)([A-Za-z_][\w-]*):\s*(.*)$", raw)) and last:
+            child = child or m.group(1)
+            if m.group(1) == child and not isinstance(fields.get(last), list):
+                if not isinstance(fields.get(last), dict):
+                    fields[last] = {}
+                fields[last][m.group(2)] = scalar(m.group(3))
         elif raw.strip() and not raw.startswith((" ", "\t")):
             last = None
     return fields, "\n".join(lines[end + 1:]), end + 2
@@ -226,7 +236,10 @@ def load(root, folder, stubs=False, quiet=()):
             keys.append(k)
         if stub and not stubs:
             continue
-        entries.append({"term": term, "also": also, "kind": p.fields.get("kind") or "",
+        params = p.fields.get("params")
+        # Top-level kind is the old form, read until Not a Chef has moved.
+        kind = (params.get("kind") if isinstance(params, dict) else None) or p.fields.get("kind") or ""
+        entries.append({"term": term, "also": also, "kind": kind,
                         "key": match_key(term), "keys": keys,
                         "anchor": anchor(term), "letter": letter(match_key(term)),
                         "path": p.path, "forms": [f for f in [term] + also if match_key(f) in keys]})

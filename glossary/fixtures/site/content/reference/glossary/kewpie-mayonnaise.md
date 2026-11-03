@@ -2,7 +2,8 @@
 title: Kewpie mayonnaise
 also:
   - Kewpie
-kind: ingredient
+params:
+  kind: ingredient
 date: 2026-10-30
 ---
 

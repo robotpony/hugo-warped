@@ -23,7 +23,7 @@ Pour a liquid into a hot pan and scrape, so the browned bits stuck to the bottom
 1. **Term.** `title` is the term, as the list shows it. It MUST be set.
 2. **Other forms.** `also` lists the other forms a mark or a tool may match: plurals, verb forms, a short name ("Kewpie" for "Kewpie mayonnaise"). A YAML list, flow (`[a, b]`) or block (`- a`). It is not `aliases`, which Hugo turns into redirects.
 3. **Date.** `date`, as on any page.
-4. **Kind.** `kind: ingredient` for an entry that names something you buy (Katsuobushi, Kewpie), so it may be marked in an ingredient list, where a reader looks for it. Without it, an entry is a concept (Sear, Deglaze) and is marked in prose only. The partials pass `kind` through, so a site can draw the two differently.
+4. **Kind.** `params: {kind: ingredient}` (or as a block, `params:` then an indented `kind: ingredient`) for an entry that names something you buy (Katsuobushi, Kewpie), so it may be marked in an ingredient list, where a reader looks for it. Without it, an entry is a concept (Sear, Deglaze) and is marked in prose only. The partials pass `kind` through, so a site can draw the two differently. It MUST NOT be a top-level `kind`: Hugo 0.159 to 0.164 fail the build on one.
 5. **Definition.** The body is the definition; an entry without one is a stub ("Warnings"), so terms can be named before they're written, in block Markdown, and may mark other terms. Its **short form** is the first sentence of its first paragraph, as plain text: what a hover shows and what `index.json` carries. A sentence ends at the first `.`, `!` or `?` (with any closing quote or bracket) followed by a space or the paragraph's end; a paragraph with none is all one sentence. So the first sentence SHOULD stand alone, and SHOULD avoid abbreviations like "e.g.".
 6. **No page each.** Entries build into the list only. The glossary page's front matter cascades it to them:
 
@@ -183,3 +183,5 @@ It matches words, not meaning, which is why it asks: Camp cooking's "fond memori
 ## History
 
 Not a Chef's glossary began as one page, `content/reference/glossary.md`, with an entry per `## ` heading, which Fugu's link hook split on. This spec replaces it with a file per entry (decided 2026-10-30).
+
+Kind began as a top-level `kind`, and moved under `params` on 2026-11-03, agreed by Bruce and Not a Chef, once a machine on Hugo 0.163 couldn't build the site. What Hugo returns and `index.json` carries didn't change.

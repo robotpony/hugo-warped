@@ -254,6 +254,8 @@ def resolve(entries, target):
 # link
 
 LIST_ITEM = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
+# A **bold** span opening a list item's text: a step label ("- **Deglaze.** …").
+LABEL = re.compile(r"^(\s*(?:[-*+]|\d+[.)])\s+)(\*\*.+?\*\*)")
 HEADING_ATTRS = re.compile(r"\s*\{([^}]*)\}\s*$")
 
 
@@ -311,6 +313,7 @@ def late(page, lines, rules):
 
 
 def masked(line):
+    line = LABEL.sub(lambda m: m.group(1) + "\0" * len(m.group(2)), line)
     for pat in (CODE_SPAN, WIKI, MD_LINK, HTML_A, URL, HTML_TAG):
         line = blank(line, pat)
     return line

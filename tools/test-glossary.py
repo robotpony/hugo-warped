@@ -104,7 +104,7 @@ class Glossary(unittest.TestCase):
             if line.startswith("    "):
                 self.assertLessEqual(len(line), 48, line)
         self.assertIn("Deglaze: 0 linked, 0 never, 3 skipped", out)
-        self.assertIn("Total: 0 linked, 0 never, 11 skipped. Review: git diff", out)
+        self.assertIn("Total: 0 linked, 0 never, 12 skipped. Review: git diff", out)
 
     def copy(self):
         tmp = tempfile.mkdtemp(prefix="hugo-warped-glossary-")
@@ -163,6 +163,16 @@ class Glossary(unittest.TestCase):
         # "garam masala water" belongs to Garam masala water, marked or not.
         code, out = run("link", CONTENT, "--glossary", FOLDER, "--check", "--term", "garam masala")
         self.assertEqual(out, 'reference/glossary/garam-masala-water.md:7  Garam masala  "Garam masala"\n')
+
+    def test_label(self):
+        # Bold text opening a list item is a step label, never a first mention: the next plain one is.
+        page = next(p for p in g.pages(CONTENT) if p.path == "recipes/pan-sauce.md")
+        roux = g.resolve(self.entries, "Roux")
+        rules = {"sections": {"ingredients"}, "recipes": [], "not_ingredients": set(), "sidebar": set()}
+        self.assertEqual(g.first_mention(page, roux, rules)[0], 26)
+        self.assertEqual(g.first_mention(page, roux, rules, body="1. **Roux.** Whisk it.\nThe roux, then.")[:2],
+                         (page.first + 1, 4))
+        self.assertEqual(g.first_mention(page, roux, rules, body="- Whisk the **roux**.")[:2], (page.first, 14))
 
     def test_move(self):
         content, skip = self.copy()

@@ -19,3 +19,8 @@ A sauce made in the pan the meat cooked in, with gochujang for heat and umami. K
 Sear the steak, then pour off the fat. The `fond` stays behind, and [deglazing](https://example.org/deglaze) lifts it. Fondue is another thing. The Maillard reaction does the browning, and a little kewpie or [[MSG]] rounds it out.
 
 Deglaze with wine, scrape, and reduce. Deglaze again if it sticks. Add monosodium glutamate to taste.
+
+## Method
+
+- **Roux.** Stir in a spoon of butter and flour, if it needs body.
+- Cook the roux until it smells of toast.

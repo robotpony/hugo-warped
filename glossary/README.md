@@ -129,6 +129,8 @@ For each entry, A to Z, and each page that has no mark for it yet, finds the fir
 
 Nor does it look in a recipe's ingredient lists. A site names the folders whose pages are recipes (`--recipes recipes --recipes drinks`) and the words that make a heading something other than an ingredient section (`--not-ingredients method,notes,serve,…`). On a recipe page, every h2 is an ingredient section unless one of its words is on that list, or it's marked `{.article}`; its list items, down to the next h2, are skipped, and the prose under it is read as usual. So a multi-component recipe's `## Tadka` and `## Sauce` lists are skipped, and their method paragraphs aren't. This is Fugu's rule (`render-heading.html`, `params.fugu.headings.notIngredients`). A list item runs on to the next blank line. The entry's own file and the glossary page are left out.
 
+Nor is bold text that opens a list item's text a mention: `- **Deglaze.** Pour in the wine…` is a step label, a heading inside the list, and a mark there would read as navigation. The term's next plain mention is its first instead. This holds for proposing, `--check` and moves alike, and on every page, recipe or not.
+
 An entry of kind `ingredient` is the exception: Ingredients sections and recipe ingredient lists are read for it like any prose, so its mark can go on the ingredient line.
 
 **Main column first.** A recipe page's sidebar sections are read last (`--sidebar-headings "Mechanic,To serve,Variations,Notes,Equipment"`, matched against an h2's whole title in any case, a trailing colon dropped, down to the next h2): a mention there is taken only when the rest of the page has none. Fugu moves those sections into the sidebar, where a mark sits in small print.
